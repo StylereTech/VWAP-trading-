@@ -1,0 +1,7 @@
+{
+  "sigma_level": 2.5,
+  "retest_count": 3,
+  "atr_cap_mult": 2.0,
+  "trail_pct": 0.01,
+  "session_filter": 0
+}

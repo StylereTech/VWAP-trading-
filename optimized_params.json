@@ -1,0 +1,23 @@
+{
+  "GBPJPY": {
+    "sigma_multiplier": 2.0669632452878535,
+    "lookback_periods": 27.150920599873963,
+    "vwma_period": 10.747557664554577,
+    "volatility_threshold": 3.029003923479513,
+    "trailing_stop_pct": 0.009687495794344615
+  },
+  "BTCUSD": {
+    "sigma_multiplier": 2.355051326616788,
+    "lookback_periods": 32.155282609136975,
+    "vwma_period": 10.161552017870205,
+    "volatility_threshold": 2.6881394783478654,
+    "trailing_stop_pct": 0.014181271309980478
+  },
+  "XAUUSD": {
+    "sigma_multiplier": 2.0637619052349194,
+    "lookback_periods": 34.67417607836771,
+    "vwma_period": 11.389169771847701,
+    "volatility_threshold": 2.8404259266331198,
+    "trailing_stop_pct": 0.005435767518665401
+  }
+}

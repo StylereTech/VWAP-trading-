@@ -1,0 +1,64 @@
+{
+  "risk_management": {
+    "risk_per_trade_frac": 0.003,
+    "atr_mult_stop": 2.0,
+    "enable_drawdown_governor": true,
+    "enable_enhanced_exits": true
+  },
+  "drawdown_governor": {
+    "max_daily_loss_frac": 0.02,
+    "max_total_loss_frac": 0.05,
+    "peak_trailing_dd_hard": 0.045,
+    "dd_soft": 0.02,
+    "dd_hard": 0.045
+  },
+  "enhanced_exits": {
+    "time_stop_bars": 20,
+    "break_even_r": 1.0,
+    "partial_tp_r": 1.0,
+    "partial_tp_pct": 0.4,
+    "loss_duration_cap_bars": 30
+  },
+  "position_sizing": {
+    "risk_frac_per_trade": 0.003,
+    "atr_mult_stop": 2.0,
+    "min_stop_price": 0.0,
+    "round_down_to": 1
+  },
+  "instrument_specs": {
+    "XAUUSD": {
+      "dollar_per_price_unit": 1.0,
+      "min_units": 0,
+      "max_units": null
+    },
+    "GBPJPY": {
+      "dollar_per_price_unit": 0.01,
+      "min_units": 0,
+      "max_units": null
+    },
+    "BTCUSD": {
+      "dollar_per_price_unit": 1.0,
+      "min_units": 0,
+      "max_units": null
+    }
+  },
+  "optimizer_penalties": {
+    "dd_lambda": 2.5,
+    "cvar_lambda": 1.0,
+    "breach_lambda": 6.0,
+    "dur_lambda": 0.2,
+    "min_trades": 20,
+    "max_dd_hard_gate": 0.05,
+    "breach_prob_hard_gate": 0.05
+  },
+  "notes": {
+    "description": "Prop-firm-safe configuration defaults",
+    "risk_per_trade": "0.30% per trade (prop-safe range 0.25-0.50%)",
+    "max_daily_loss": "2% daily loss => halt trading",
+    "max_total_loss": "5% overall loss => halt trading",
+    "peak_trailing_dd": "4.5% peak-to-trough => halt trading",
+    "expected_roi_after_fixes": "18-35% (lower but real)",
+    "expected_max_dd_after_fixes": "<25-35%",
+    "expected_win_rate": "70-80%"
+  }
+}
