@@ -209,6 +209,7 @@ tr:hover td{background:var(--bg3)}
 <div class="tab" data-page="journal">📒 Journal</div>
 <div class="tab" data-page="analytics">📈 Analytics</div>
 <div class="tab" data-page="vwap">🎯 VWAP</div>
+<div class="tab" data-page="schwab">🏦 Schwab Account</div>
 </div>
 <div class="nav-right">
 <span class="status"><span class="dot"></span>Bots Running</span>
@@ -280,6 +281,12 @@ tr:hover td{background:var(--bg3)}
 <div class="page" id="page-vwap">
 <h2 style="font-size:18px;margin-bottom:16px;font-weight:700">🎯 VWAP Analysis</h2>
 <div id="vwap-content"></div>
+</div>
+
+<!-- SCHWAB ACCOUNT PAGE -->
+<div class="page" id="page-schwab">
+<h2 style="font-size:18px;margin-bottom:16px;font-weight:700">🏦 Schwab Account</h2>
+<div id="schwab-content"></div>
 </div>
 </main>
 
@@ -466,6 +473,22 @@ const CONFIG = {
   }
 };
 const LIVE = {"fetched_at": "2026-02-13T17:02:16.782028", "connected": true, "account": {"id": 684012, "name": "GATESFX#88853a7a-6f7b-494e-8ead-2d424a86df9e#1#1", "currency": "USD", "accNum": 1, "accountBalance": 2.77, "status": "ACTIVE"}, "state": {"balance": 2.77, "projectedBalance": 2.77, "availableFunds": 2.77, "blockedBalance": 0.0, "cashBalance": 2.77, "unsettledCash": 0.0, "withdrawalAvailable": 2.77, "stocksValue": 0.0, "optionValue": 0.0, "initialMarginReq": 0.0, "maintMarginReq": 0.0, "marginWarningLevel": 250.0, "blockedForStocks": 0.0, "stockOrdersReq": 0.0, "stopOutLevel": 500.0, "warningMarginReq": 0.0, "marginBeforeWarning": 2.77, "todayGross": 0.0, "todayNet": 0.0, "todayFees": 0.0, "todayVolume": 0.0, "todayTradesCount": 0.0, "openGrossPnL": 0.0, "openNetPnL": 0.0, "positionsCount": 0.0, "ordersCount": 0.0}, "positions": [], "orders": [], "executions": []};
+
+const SCHWAB = {
+  updated: "2026-02-13 17:04 ET",
+  account: { value: 1956.86, dayChange: 165.41, dayChangePct: 9.23, totalCash: -1572.97, totalMarketValue: 3529.83, totalCostBasis: 4790.34, totalGainLoss: -1260.51, totalGainLossPct: -26.31 },
+  positions: [
+    { symbol: "IREN", name: "IREN LTD", type: "Equity", qty: 50, price: 42.22, dayChg: 2.19, dayChgPct: 5.47, mktVal: 2111.00, costBasis: 2901.99, gainLoss: -790.99, gainLossPct: -27.26, rating: "-", pctOfAcct: 59.8 },
+    { symbol: "FLNC", name: "FLUENCE ENERGY INC", type: "Equity", qty: 29, price: 18.46, dayChg: 1.02, dayChgPct: 5.85, mktVal: 535.34, costBasis: 541.91, gainLoss: -6.57, gainLossPct: -1.21, rating: "D", pctOfAcct: 15.17 },
+    { symbol: "AIQ", name: "GLOBAL X AI & TECH ETF", type: "ETF", qty: 5, price: 49.45, dayChg: 0.24, dayChgPct: 0.49, mktVal: 247.25, costBasis: 240.10, gainLoss: 7.15, gainLossPct: 2.98, rating: "-", pctOfAcct: 7.0 },
+    { symbol: "EOSE", name: "EOS ENERGY ENTERPRISES", type: "Equity", qty: 21, price: 11.10, dayChg: 0.31, dayChgPct: 2.87, mktVal: 233.10, costBasis: 381.57, gainLoss: -148.47, gainLossPct: -38.91, rating: "F", pctOfAcct: 6.6 },
+    { symbol: "BITX", name: "2X BITCOIN STRATEGY ETF", type: "ETF", qty: 10, price: 15.84, dayChg: 1.45, dayChgPct: 10.08, mktVal: 158.40, costBasis: 290.00, gainLoss: -131.60, gainLossPct: -45.38, rating: "-", pctOfAcct: 4.49 },
+    { symbol: "ARKG", name: "ARK GENOMIC REVOLUTION ETF", type: "ETF", qty: 4, price: 28.36, dayChg: 0.51, dayChgPct: 1.83, mktVal: 113.44, costBasis: 124.36, gainLoss: -10.92, gainLossPct: -8.78, rating: "-", pctOfAcct: 3.21 },
+    { symbol: "HIMS", name: "HIMS & HERS HEALTH INC", type: "Equity", qty: 5, price: 16.30, dayChg: 0.50, dayChgPct: 3.16, mktVal: 81.50, costBasis: 229.70, gainLoss: -148.20, gainLossPct: -64.52, rating: "C", pctOfAcct: 2.31 },
+    { symbol: "NVTS", name: "NAVITAS SEMICONDUCTOR", type: "Equity", qty: 6, price: 8.30, dayChg: -0.07, dayChgPct: -0.84, mktVal: 49.80, costBasis: 80.71, gainLoss: -30.91, gainLossPct: -38.30, rating: "D", pctOfAcct: 1.41 }
+  ],
+  targets: { IREN: { sell1: 89, sell2: 105, note: "Primary exit — sell and restock portfolio" } }
+};
 
 // ===== UTILITIES =====
 const fmt = (n,d=2) => n!=null ? Number(n).toFixed(d) : '—';
@@ -965,6 +988,99 @@ data:{labels:bins.map(function(b){return fmt(b.x,2)}),datasets:[{data:bins.map(f
 options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{title:{display:true,text:'P&L'}},y:{title:{display:true,text:'Frequency'},grid:{color:'#1c2333'}}}},
 });
 },200);
+})();
+
+// ===== SCHWAB ACCOUNT =====
+(function renderSchwab(){
+const el = document.getElementById('schwab-content');
+if(!el) return;
+const a = SCHWAB.account;
+const p = SCHWAB.positions;
+const gc = (v) => v >= 0 ? 'var(--green)' : 'var(--red)';
+const f$ = (v) => '$' + Math.abs(v).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+const sign = (v) => v >= 0 ? '+' : '-';
+
+let html = `<p style="color:var(--text2);font-size:12px;margin-bottom:12px">Updated: ${SCHWAB.updated}</p>`;
+
+// KPIs
+html += `<div class="kpi-grid">
+<div class="kpi-card"><div class="kpi-label">Total Value</div><div class="kpi-value">\$${a.value.toLocaleString('en-US',{minimumFractionDigits:2})}</div></div>
+<div class="kpi-card"><div class="kpi-label">Today's P&L</div><div class="kpi-value" style="color:${gc(a.dayChange)}">${sign(a.dayChange)}${f$(a.dayChange)} (${sign(a.dayChangePct)}${Math.abs(a.dayChangePct)}%)</div></div>
+<div class="kpi-card"><div class="kpi-label">Cash Status</div><div class="kpi-value" style="color:var(--red)">${sign(a.totalCash)}${f$(a.totalCash)} <span style="font-size:11px">(margin)</span></div></div>
+<div class="kpi-card"><div class="kpi-label">Market Value</div><div class="kpi-value">\$${a.totalMarketValue.toLocaleString('en-US',{minimumFractionDigits:2})}</div></div>
+<div class="kpi-card"><div class="kpi-label">Cost Basis</div><div class="kpi-value">\$${a.totalCostBasis.toLocaleString('en-US',{minimumFractionDigits:2})}</div></div>
+<div class="kpi-card"><div class="kpi-label">Total G/L</div><div class="kpi-value" style="color:${gc(a.totalGainLoss)}">${sign(a.totalGainLoss)}${f$(a.totalGainLoss)} (${a.totalGainLossPct}%)</div></div>
+</div>`;
+
+// Positions table
+html += `<div class="card" style="margin-top:16px;overflow-x:auto"><div class="card-header"><span class="card-title">📋 Positions</span></div>
+<table class="journal-table" style="width:100%"><thead><tr><th>Symbol</th><th>Name</th><th>Qty</th><th>Price</th><th>Day Chg</th><th>Day %</th><th>Mkt Val</th><th>Cost</th><th>G/L $</th><th>G/L %</th><th>% Acct</th></tr></thead><tbody>`;
+p.forEach(pos => {
+const rowStyle = pos.symbol === 'IREN' ? 'border-left:3px solid #d4a017;' : '';
+html += `<tr style="${rowStyle}">
+<td><strong>${pos.symbol}</strong>${pos.type==='ETF'?' <span style="font-size:10px;color:var(--blue)">[ETF]</span>':''}</td>
+<td style="font-size:12px;color:var(--text2)">${pos.name}</td>
+<td>${pos.qty}</td>
+<td>\$${pos.price.toFixed(2)}</td>
+<td style="color:${gc(pos.dayChg)}">${sign(pos.dayChg)}${Math.abs(pos.dayChg).toFixed(2)}</td>
+<td style="color:${gc(pos.dayChgPct)}">${sign(pos.dayChgPct)}${Math.abs(pos.dayChgPct).toFixed(2)}%</td>
+<td>\$${pos.mktVal.toFixed(2)}</td>
+<td>\$${pos.costBasis.toFixed(2)}</td>
+<td style="color:${gc(pos.gainLoss)}">${sign(pos.gainLoss)}${Math.abs(pos.gainLoss).toFixed(2)}</td>
+<td style="color:${gc(pos.gainLossPct)}">${sign(pos.gainLossPct)}${Math.abs(pos.gainLossPct).toFixed(2)}%</td>
+<td>${pos.pctOfAcct}%</td></tr>`;
+});
+html += `</tbody></table></div>`;
+
+// Allocation chart + Outlook side by side
+html += `<div style="display:grid;grid-template-columns:250px 1fr;gap:16px;margin-top:16px">`;
+html += `<div class="card"><div class="card-header"><span class="card-title">📊 Allocation</span></div><div style="max-width:200px;margin:0 auto"><canvas id="chart-schwab-alloc"></canvas></div></div>`;
+
+// Performance Outlook
+html += `<div class="card"><div class="card-header"><span class="card-title">📈 Performance Outlook</span></div><div style="font-size:13px;color:var(--text2);line-height:1.7">
+<div>⚠️ Portfolio heavily concentrated in <strong style="color:#d4a017">IREN (59.8%)</strong> — high single-stock risk</div>
+<div style="color:var(--red)">📉 Overall down <strong>-26.31%</strong> from cost basis — in the red</div>
+<div style="color:var(--green)">📈 Today was a strong green day: <strong>+9.23%</strong> (+$165.41)</div>
+<div>🎯 IREN target: $89-$105 (currently $42.22, needs <strong>111%-149% upside</strong>)</div>
+<div style="color:var(--red)">💳 Risk: margin used (-$1,573 cash), 5 of 8 positions in double-digit losses</div>
+<div style="color:var(--green)">✅ Bright spots: AIQ up +2.98%, FLNC nearly breakeven (-1.21%)</div>
+</div></div></div>`;
+
+// Alerts
+html += `<div class="card" style="margin-top:16px"><div class="card-header"><span class="card-title">🚨 Alerts</span></div><div style="font-size:13px;line-height:2">
+<div>🔴 <strong>CRITICAL:</strong> Heavy margin usage (-$1,573 cash balance)</div>
+<div>🟡 <strong>WARNING:</strong> 59.8% concentrated in single stock (IREN)</div>
+<div>🟡 <strong>WARNING:</strong> HIMS down -64.52% — consider tax-loss harvesting</div>
+<div>🔵 <strong>INFO:</strong> IREN target $89/$105 — current $42.22 (111%/149% upside needed)</div>
+</div></div>`;
+
+// Watchlist
+html += `<div class="watchlist-grid" style="margin-top:16px">`;
+[{s:'IREN',p:42.22,t:'Target: $89 / $105',c:'#d4a017'},{s:'FLNC',p:18.46,t:'Near breakeven (-1.21%)',c:'var(--green)'},{s:'HIMS',p:16.30,t:'Down -64.52% — TLH candidate',c:'var(--red)'}].forEach(w => {
+html += `<div class="card" style="border-left:3px solid ${w.c}"><div class="card-header"><span class="card-title">${w.s}</span><span style="font-size:14px;font-weight:700">\$${w.p.toFixed(2)}</span></div><div style="font-size:12px;color:var(--text2)">${w.t}</div></div>`;
+});
+html += `</div>`;
+
+// Strategy
+html += `<div class="card" style="margin-top:16px"><div class="card-header"><span class="card-title">🎯 007 Trading Strategy — Awaiting IREN Catalyst</span><span style="background:var(--blue);color:#fff;padding:2px 10px;border-radius:8px;font-size:11px;font-weight:700">WAITING</span></div>
+<div style="font-size:13px;color:var(--text2);line-height:1.8">
+<div><strong>Phase 1:</strong> HOLD — Wait for IREN to hit $89 or $105</div>
+<div><strong>Phase 2:</strong> SELL IREN — Lock in profits at target</div>
+<div><strong>Phase 3:</strong> RESTOCK — Redeploy capital into diversified winners</div>
+<div style="margin-top:8px;padding:8px;background:rgba(255,255,255,0.03);border-radius:6px;font-style:italic">Once IREN hits target, 007 takes over active trading on Schwab account</div>
+</div></div>`;
+
+el.innerHTML = html;
+
+// Doughnut chart
+setTimeout(function(){
+const colors = ['#d4a017','#4dabf7','#51cf66','#ff6b6b','#ffa94d','#bc8cff','#e599f7','#868e96'];
+new Chart(document.getElementById('chart-schwab-alloc'),{
+type:'doughnut',
+data:{labels:p.map(x=>x.symbol),datasets:[{data:p.map(x=>x.pctOfAcct),backgroundColor:colors,borderWidth:0}]},
+options:{responsive:true,plugins:{legend:{position:'bottom',labels:{color:'#8b949e',font:{size:10}}}}}
+});
+},300);
 })();
 
 // ===== VWAP ANALYSIS =====
