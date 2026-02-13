@@ -149,8 +149,9 @@ tr:hover td{background:var(--bg3)}
 .live-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px}
 
 /* Analytics */
-.analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.analytics-grid .card{min-height:250px}
+.analytics-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.analytics-grid .card{min-height:auto}
+.analytics-grid .card canvas{max-height:200px}
 
 /* Export buttons */
 .btn{background:var(--bg3);border:1px solid var(--border);color:var(--text);padding:8px 16px;border-radius:6px;cursor:pointer;font-size:12px;font-family:inherit;font-weight:500;transition:all .2s;display:inline-flex;align-items:center;gap:6px}
@@ -175,7 +176,7 @@ tr:hover td{background:var(--bg3)}
 
 /* Responsive */
 @media(max-width:900px){
-.charts-grid,.analytics-grid,.vwap-grid{grid-template-columns:1fr}
+.charts-grid,.analytics-grid,.vwap-grid{grid-template-columns:1fr!important}
 .strat-grid{grid-template-columns:1fr}
 .kpi-grid{grid-template-columns:repeat(auto-fit,minmax(120px,1fr))}
 .topnav{padding:0 12px;flex-wrap:wrap;height:auto;min-height:56px}
@@ -950,7 +951,7 @@ el.innerHTML = '<div class="card"><div class="card-header"><span class="card-tit
 const distCard = document.createElement('div');
 distCard.className = 'card';
 distCard.style.gridColumn = '1/-1';
-distCard.innerHTML = '<div class="card-header"><span class="card-title">📊 P&L Distribution</span></div><canvas id="chart-dist" style="height:250px"></canvas>';
+distCard.innerHTML = '<div class="card-header"><span class="card-title">📊 P&L Distribution</span></div><div style="height:200px"><canvas id="chart-dist"></canvas></div>';
 el.appendChild(distCard);
 setTimeout(function(){
 const pnls = TRADES.map(function(t){return t.pnl});
