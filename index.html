@@ -60,9 +60,10 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 .kpi-sub{font-size:11px;color:var(--text3);margin-top:4px}
 
 /* Charts Grid */
-.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px}
-.charts-grid .card{min-height:300px}
-.chart-full{grid-column:1/-1}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px}
+.charts-grid .card{min-height:auto}
+.charts-grid .card canvas{max-height:180px}
+.chart-full{grid-column:1/3}
 
 /* Alerts */
 .alerts-panel{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
@@ -80,14 +81,22 @@ body{font-family:'Inter',system-ui,-apple-system,sans-serif;background:var(--bg)
 .watchlist-sub{font-size:11px;color:var(--text3)}
 .watchlist-badge{font-size:10px;padding:2px 8px;border-radius:4px;display:inline-block;margin-top:6px}
 
-/* Calendar Heatmap */
-.heatmap-wrap{overflow-x:auto;padding:8px 0}
-.heatmap{display:flex;gap:3px}
-.heatmap-week{display:flex;flex-direction:column;gap:3px}
-.heatmap-day{width:14px;height:14px;border-radius:3px;cursor:pointer;position:relative}
-.heatmap-day:hover{outline:2px solid var(--blue);outline-offset:1px}
-.heatmap-day .tip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--bg4);border:1px solid var(--border2);border-radius:6px;padding:6px 10px;font-size:11px;white-space:nowrap;z-index:10;pointer-events:none}
-.heatmap-day:hover .tip{display:block}
+/* Calendar - TradeZilla Monthly Grid */
+.cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.cal-nav{display:flex;align-items:center;gap:12px}
+.cal-nav button{background:var(--bg3);border:1px solid var(--border);color:var(--text);width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
+.cal-nav button:hover{background:var(--bg4)}
+.cal-month{font-size:15px;font-weight:600;min-width:140px;text-align:center}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal-dow{font-size:10px;color:var(--text3);text-align:center;padding:4px 0;font-weight:600;text-transform:uppercase}
+.cal-day{aspect-ratio:1;border-radius:6px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:11px;cursor:pointer;position:relative;min-height:44px;transition:transform .15s}
+.cal-day:hover{transform:scale(1.08);z-index:2}
+.cal-day .day-num{font-weight:600;font-size:12px}
+.cal-day .day-pnl{font-size:9px;font-weight:500;margin-top:2px}
+.cal-day.empty{background:transparent;cursor:default}
+.cal-day.empty:hover{transform:none}
+.cal-day .tip{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:var(--bg4);border:1px solid var(--border2);border-radius:6px;padding:6px 10px;font-size:11px;white-space:nowrap;z-index:10;pointer-events:none}
+.cal-day:hover .tip{display:block}
 
 /* Strategy Cards */
 .strat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(380px,1fr));gap:16px}
@@ -216,21 +225,21 @@ tr:hover td{background:var(--bg3)}
 <div class="card">
 <div class="card-header">
 <span class="card-title">📅 Daily P&L Calendar</span>
-<span class="card-subtitle" id="cal-range"></span>
+<div class="cal-nav"><button id="cal-prev">◀</button><span class="cal-month" id="cal-month"></span><button id="cal-next">▶</button></div>
 </div>
-<div class="heatmap-wrap"><div id="heatmap" class="heatmap"></div></div>
+<div class="cal-grid" id="cal-grid"></div>
 </div>
 <div class="charts-grid">
 <div class="card chart-full">
 <div class="card-header"><span class="card-title">Cumulative P&L</span>
 <div><select class="filter-select" id="cum-strat-filter"><option value="">All Strategies</option></select></div>
 </div>
-<canvas id="chart-cumPnl"></canvas>
+<div style="height:200px"><canvas id="chart-cumPnl"></canvas></div>
 </div>
-<div class="card"><div class="card-header"><span class="card-title">P&L by Day of Week</span></div><canvas id="chart-dow"></canvas></div>
-<div class="card"><div class="card-header"><span class="card-title">P&L by Hour</span></div><canvas id="chart-hour"></canvas></div>
-<div class="card"><div class="card-header"><span class="card-title">P&L by Strategy</span></div><canvas id="chart-strat"></canvas></div>
-<div class="card"><div class="card-header"><span class="card-title">Running Balance</span></div><canvas id="chart-balance"></canvas></div>
+<div class="card"><div class="card-header"><span class="card-title">P&L by Day of Week</span></div><div style="height:180px"><canvas id="chart-dow"></canvas></div></div>
+<div class="card"><div class="card-header"><span class="card-title">P&L by Hour</span></div><div style="height:180px"><canvas id="chart-hour"></canvas></div></div>
+<div class="card"><div class="card-header"><span class="card-title">P&L by Strategy</span></div><div style="height:200px"><canvas id="chart-strat"></canvas></div></div>
+<div class="card"><div class="card-header"><span class="card-title">Running Balance</span></div><div style="height:180px"><canvas id="chart-balance"></canvas></div></div>
 </div>
 <div style="text-align:right;margin-bottom:16px">
 <button class="btn" onclick="window.print()">🖨️ Print / PDF</button>
@@ -589,35 +598,41 @@ const kpis = [
 ];
 document.getElementById('kpi-row').innerHTML = kpis.map(k=>'<div class="kpi"><div class="kpi-label">'+k.label+'</div><div class="kpi-value '+k.cls+'">'+k.value+'</div></div>').join('');
 
-// ===== DASHBOARD: Calendar Heatmap =====
+// ===== DASHBOARD: Monthly Calendar (TradeZilla style) =====
 (function(){
 const daily = allMetrics.daily;
 const dates = Object.keys(daily).sort();
 if(!dates.length) return;
-const start = new Date(dates[0]);
-const end = new Date(dates[dates.length-1]);
-document.getElementById('cal-range').textContent = dates[0]+' → '+dates[dates.length-1];
 const maxAbs = Math.max(...Object.values(daily).map(Math.abs),1);
-let html = '';
-let cur = new Date(start);
-cur.setDate(cur.getDate()-cur.getDay());
-let weekHtml = '';
-let weekDay = 0;
-while(cur<=end||weekDay>0){
-const ds = cur.toISOString().slice(0,10);
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DOWS = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+let curMonth = new Date(dates[dates.length-1]);
+curMonth.setDate(1);
+
+function renderCal(){
+const year = curMonth.getFullYear();
+const month = curMonth.getMonth();
+document.getElementById('cal-month').textContent = MONTHS[month]+' '+year;
+const firstDay = new Date(year,month,1).getDay();
+const daysInMonth = new Date(year,month+1,0).getDate();
+let html = DOWS.map(function(d){return '<div class="cal-dow">'+d+'</div>'}).join('');
+for(let i=0;i<firstDay;i++) html += '<div class="cal-day empty"></div>';
+for(let d=1;d<=daysInMonth;d++){
+const ds = year+'-'+String(month+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
 const val = daily[ds]||0;
 const intensity = Math.min(Math.abs(val)/maxAbs,1);
-let color;
-if(val>0) color = 'rgba(63,185,80,'+(0.15+intensity*0.85)+')';
-else if(val<0) color = 'rgba(248,81,73,'+(0.15+intensity*0.85)+')';
-else color = 'var(--bg3)';
-weekHtml += '<div class="heatmap-day" style="background:'+color+'" title="'+ds+': '+fmtMoney(val)+'"><div class="tip">'+ds+'<br>'+fmtMoney(val)+'</div></div>';
-weekDay++;
-if(weekDay===7){html += '<div class="heatmap-week">'+weekHtml+'</div>';weekHtml='';weekDay=0;}
-cur.setDate(cur.getDate()+1);
+let bg;
+if(val>0) bg='rgba(63,185,80,'+(0.2+intensity*0.8)+')';
+else if(val<0) bg='rgba(248,81,73,'+(0.2+intensity*0.8)+')';
+else bg='var(--bg3)';
+const pnlColor = val>0?'var(--green)':val<0?'var(--red)':'var(--text3)';
+html += '<div class="cal-day" style="background:'+bg+'"><span class="day-num">'+d+'</span>'+(val!==0?'<span class="day-pnl" style="color:'+pnlColor+'">'+fmtMoney(val)+'</span>':'')+'<div class="tip">'+ds+'<br>'+fmtMoney(val)+'</div></div>';
 }
-if(weekHtml) html += '<div class="heatmap-week">'+weekHtml+'</div>';
-document.getElementById('heatmap').innerHTML = html;
+document.getElementById('cal-grid').innerHTML = html;
+}
+renderCal();
+document.getElementById('cal-prev').addEventListener('click',function(){curMonth.setMonth(curMonth.getMonth()-1);renderCal()});
+document.getElementById('cal-next').addEventListener('click',function(){curMonth.setMonth(curMonth.getMonth()+1);renderCal()});
 })();
 
 // ===== CHART DEFAULTS =====
