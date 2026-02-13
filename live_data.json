@@ -1,0 +1,15 @@
+{
+  "fetched_at": "2026-02-13T16:34:20.349311",
+  "error": "Failed to fetch authentication tokens: Received response: '{\"message\":\"Incorrect email or password\",\"status\":\"badRequest\",\"statusCode\":400,\"requestId\":\"f3670ca1-d3d6-4949-9a45-24d93f610d43\"}' from https://live.tradelocker.com/backend-api/auth/jwt/token?ref=py_c&v=0.56.1: '400 Client Error: Bad Request for url: https://live.tradelocker.com/backend-api/auth/jwt/token?ref=py_c&v=0.56.1'",
+  "account": {
+    "balance": 0,
+    "equity": 0,
+    "margin": 0,
+    "free_margin": 0,
+    "margin_level": 0
+  },
+  "positions": [],
+  "orders": [],
+  "order_history": [],
+  "position_history": []
+}
