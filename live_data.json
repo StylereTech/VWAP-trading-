@@ -1,15 +1,43 @@
 {
-  "fetched_at": "2026-02-13T16:34:20.349311",
-  "error": "Failed to fetch authentication tokens: Received response: '{\"message\":\"Incorrect email or password\",\"status\":\"badRequest\",\"statusCode\":400,\"requestId\":\"f3670ca1-d3d6-4949-9a45-24d93f610d43\"}' from https://live.tradelocker.com/backend-api/auth/jwt/token?ref=py_c&v=0.56.1: '400 Client Error: Bad Request for url: https://live.tradelocker.com/backend-api/auth/jwt/token?ref=py_c&v=0.56.1'",
+  "fetched_at": "2026-02-13T17:02:16.782028",
+  "connected": true,
   "account": {
-    "balance": 0,
-    "equity": 0,
-    "margin": 0,
-    "free_margin": 0,
-    "margin_level": 0
+    "id": 684012,
+    "name": "GATESFX#88853a7a-6f7b-494e-8ead-2d424a86df9e#1#1",
+    "currency": "USD",
+    "accNum": 1,
+    "accountBalance": 2.77,
+    "status": "ACTIVE"
+  },
+  "state": {
+    "balance": 2.77,
+    "projectedBalance": 2.77,
+    "availableFunds": 2.77,
+    "blockedBalance": 0.0,
+    "cashBalance": 2.77,
+    "unsettledCash": 0.0,
+    "withdrawalAvailable": 2.77,
+    "stocksValue": 0.0,
+    "optionValue": 0.0,
+    "initialMarginReq": 0.0,
+    "maintMarginReq": 0.0,
+    "marginWarningLevel": 250.0,
+    "blockedForStocks": 0.0,
+    "stockOrdersReq": 0.0,
+    "stopOutLevel": 500.0,
+    "warningMarginReq": 0.0,
+    "marginBeforeWarning": 2.77,
+    "todayGross": 0.0,
+    "todayNet": 0.0,
+    "todayFees": 0.0,
+    "todayVolume": 0.0,
+    "todayTradesCount": 0.0,
+    "openGrossPnL": 0.0,
+    "openNetPnL": 0.0,
+    "positionsCount": 0.0,
+    "ordersCount": 0.0
   },
   "positions": [],
   "orders": [],
-  "order_history": [],
-  "position_history": []
+  "executions": []
 }
