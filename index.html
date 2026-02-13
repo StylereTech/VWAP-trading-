@@ -1137,7 +1137,7 @@ renderSwing();
 tbody.innerHTML = sorted.map(function(t){
 var rc = t.win==='Y'?'row-win':t.win==='N'?'row-loss':'';
 var dateStr = t.date ? t.date.slice(0,10) : '';
-return '<tr class="'+rc+'"><td>'+dateStr+'</td><td>'+(t.time||'')+'</td><td>'+(t.week||'')+'</td><td>'+(t.pair||'')+'</td><td>'+(t.session||'')+'</td><td style="color:'+(t.side==='B'?'var(--green)':'var(--red)')+'">'+(t.side||'')+'</td><td>'+(t.entry!=null?t.entry:'')+'</td><td>'+(t.stop!=null?t.stop:'')+'</td><td>'+(t.stopSize!=null?t.stopSize:'')+'</td><td>'+(t.exit!=null?t.exit:'')+'</td><td>'+(t.move!=null?t.move:'')+'</td><td style="color:'+(t.win==='Y'?'var(--green)':t.win==='N'?'var(--red)':'')+'">'+( t.win||'')+'</td><td>'+(t.r!=null?t.r:'')+'</td><td>'+(t.pnl!=null?t.pnl:'')+'</td><td>'+(t.lots!=null?t.lots:'')+'</td><td>'+(t.balance!=null?t.balance:'')+'</td><td class="note-cell" onclick="this.classList.toggle(&quot;expanded&quot;)">'+(t.notes||'')+'</td></tr>';
+return '<tr class="'+rc+'"><td>'+dateStr+'</td><td>'+(t.time||'')+'</td><td>'+(t.week||'')+'</td><td>'+(t.pair||'')+'</td><td>'+(t.session||'')+'</td><td style="color:'+(t.side==='B'?'var(--green)':'var(--red)')+'">'+(t.side||'')+'</td><td>'+(t.entry!=null?t.entry:'')+'</td><td>'+(t.stop!=null?t.stop:'')+'</td><td>'+(t.stopSize!=null?t.stopSize:'')+'</td><td>'+(t.exit!=null?t.exit:'')+'</td><td>'+(t.move!=null?t.move:'')+'</td><td style="color:'+(t.win==='Y'?'var(--green)':t.win==='N'?'var(--red)':'')+'">'+( t.win||'')+'</td><td>'+(t.r!=null?t.r:'')+'</td><td>'+(t.pnl!=null?t.pnl:'')+'</td><td>'+(t.lots!=null?t.lots:'')+'</td><td>'+(t.balance!=null?t.balance:'')+'</td><td class="note-cell" onclick="this.classList.toggle(\"expanded\")">'+(t.notes||'')+'</td></tr>';
 }).join('');
 }
 renderSwing();
@@ -1167,7 +1167,7 @@ thead.innerHTML = '<tr>'+cols.map(function(c){return '<th>'+c.l+'</th>'}).join('
 tbody.innerHTML = trades.map(function(t){
 var rc = (t.win==='Y'||t.win==='y')?'row-win':(t.win==='N'||t.win==='n')?'row-loss':'';
 var dateStr = t.date ? t.date.slice(0,10) : '';
-return '<tr class="'+rc+'"><td>'+dateStr+'</td><td>'+(t.time||'')+'</td><td>'+(t.side||'')+'</td><td>'+(t.vwap||'')+'</td><td>'+(t.ma200||'')+'</td><td>'+(t.fib!=null?t.fib:'')+'</td><td>'+(t.entry!=null?t.entry:'')+'</td><td>'+(t.highLow!=null?t.highLow:'')+'</td><td>'+(t.pullback||'')+'</td><td>'+(t.win||'')+'</td><td>'+(t.sr||'')+'</td><td>'+(t.exit!=null?t.exit:'')+'</td><td>'+(t.totalPips!=null?t.totalPips:'')+'</td><td>'+(t.r!=null?t.r:'')+'</td><td class="note-cell" onclick="this.classList.toggle(&quot;expanded&quot;)">'+(t.notes||'')+'</td><td>'+(t.lots!=null?t.lots:'')+'</td><td>'+(t.balance!=null?t.balance:'')+'</td></tr>';
+return '<tr class="'+rc+'"><td>'+dateStr+'</td><td>'+(t.time||'')+'</td><td>'+(t.side||'')+'</td><td>'+(t.vwap||'')+'</td><td>'+(t.ma200||'')+'</td><td>'+(t.fib!=null?t.fib:'')+'</td><td>'+(t.entry!=null?t.entry:'')+'</td><td>'+(t.highLow!=null?t.highLow:'')+'</td><td>'+(t.pullback||'')+'</td><td>'+(t.win||'')+'</td><td>'+(t.sr||'')+'</td><td>'+(t.exit!=null?t.exit:'')+'</td><td>'+(t.totalPips!=null?t.totalPips:'')+'</td><td>'+(t.r!=null?t.r:'')+'</td><td class="note-cell" onclick="this.classList.toggle(\"expanded\")">'+(t.notes||'')+'</td><td>'+(t.lots!=null?t.lots:'')+'</td><td>'+(t.balance!=null?t.balance:'')+'</td></tr>';
 }).join('');
 })();
 
