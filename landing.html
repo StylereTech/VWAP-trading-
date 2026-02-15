@@ -720,14 +720,23 @@
       e.preventDefault();
       var email = document.getElementById('lead-email').value;
       var zip = document.getElementById('lead-zip').value;
+      var btn = document.getElementById('hero-cta');
+      btn.disabled = true;
+      btn.textContent = 'Submitting...';
       // Track conversion
       if (typeof gtag === 'function') gtag('event', 'lead_capture', {email: email, zip: zip});
       if (typeof fbq === 'function') fbq('track', 'Lead', {content_name: 'landing_signup'});
-      // Store lead locally (will POST to API when backend endpoint is ready)
-      try { var leads = JSON.parse(localStorage.getItem('stylere_leads')||'[]'); leads.push({email:email,zip:zip,ts:Date.now()}); localStorage.setItem('stylere_leads',JSON.stringify(leads)); } catch(err){}
-      // Show success
-      var form = document.getElementById('lead-capture');
-      form.outerHTML = '<div class="lead-form-success"><h3>🎉 You\'re in!</h3><p>Your code:</p><p class="code">STYLERE1</p><p>Use it at <a href="https://stylere.app" style="color:var(--orange);font-weight:700">stylere.app</a> for $10 off</p></div>';
+      if (typeof ttq !== 'undefined') ttq.track('SubmitForm', {content_name: 'landing_signup'});
+      // POST to backend API
+      fetch('https://api.stylere.app/api/leads', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({email: email, zip: zip, source: 'shop-landing'})
+      }).then(function(r){ return r.json(); }).catch(function(){}).finally(function(){
+        // Show success regardless (don't block on API failure)
+        var form = document.getElementById('lead-capture');
+        form.outerHTML = '<div class="lead-form-success"><h3>🎉 You\'re in!</h3><p>Check your email for your code:</p><p class="code">STYLERE1</p><p>Use it at <a href="https://stylere.app" style="color:var(--orange);font-weight:700">stylere.app</a> for $10 off your first delivery</p></div>';
+      });
       return false;
     }
 
