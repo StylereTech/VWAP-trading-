@@ -122,6 +122,36 @@
       animation: fadeInUp 0.6s ease 0.3s both;
     }
     
+    .lead-form {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+      max-width: 520px;
+      width: 100%;
+    }
+    .lead-form input {
+      flex: 1;
+      min-width: 140px;
+      padding: 0.9rem 1.2rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .lead-form input:focus { border-color: var(--orange); }
+    .lead-form input[type="text"] { max-width: 120px; flex: 0 0 auto; }
+    .lead-form .btn-primary { width: 100%; justify-content: center; }
+    .lead-form-success {
+      background: #ecfdf5; border: 2px solid #10b981; border-radius: 14px;
+      padding: 1.25rem 2rem; text-align: center; max-width: 520px;
+    }
+    .lead-form-success h3 { color: #065f46; margin-bottom: 0.5rem; font-size: 1.2rem; }
+    .lead-form-success p { color: #047857; }
+    .lead-form-success .code { font-size: 1.5rem; font-weight: 900; color: var(--orange); letter-spacing: 2px; }
+
     .btn-primary {
       display: inline-flex;
       align-items: center;
@@ -513,14 +543,16 @@
 
   <!-- ═══════════ HERO ═══════════ -->
   <section class="hero">
-    <div class="badge"><span>⚡</span> Now live in Dallas, TX</div>
-    <h1>Your Favorite Stores.<br><span class="highlight">Delivered in 1 Hour.</span></h1>
-    <p>Shop at Nordstrom, Macy's, Old Navy, Zara & more — we pick it up and bring it straight to your door. No waiting. No hassle.</p>
+    <div class="badge"><span>⚡</span> Limited to first 500 Dallas sign-ups this week</div>
+    <h1>Dallas Shoppers:<br><span class="highlight">Grab $10 Off Your Next Order</span></h1>
+    <p>Your friend gets $10 too. Shop at Nordstrom, Macy's, Old Navy, Zara & more — delivered to your door in under 1 hour.</p>
     <div class="cta-group">
-      <a href="https://stylere.app" class="btn-primary" id="hero-cta">
-        Order Now — It's Free to Try →
-      </a>
-      <p class="subtext">Use code <strong>STYLERE1</strong> for free delivery on your first order</p>
+      <form id="lead-capture" class="lead-form" onsubmit="return handleLeadSubmit(event)">
+        <input type="email" id="lead-email" placeholder="Your email" required>
+        <input type="text" id="lead-zip" placeholder="ZIP code" maxlength="5" pattern="[0-9]{5}" required>
+        <button type="submit" class="btn-primary" id="hero-cta">Unlock Your $10 Code →</button>
+      </form>
+      <p class="subtext"><strong>467 spots remaining</strong> · Free delivery on your first order</p>
     </div>
   </section>
 
@@ -660,6 +692,22 @@
   </footer>
 
   <script>
+    // Lead capture form
+    function handleLeadSubmit(e) {
+      e.preventDefault();
+      var email = document.getElementById('lead-email').value;
+      var zip = document.getElementById('lead-zip').value;
+      // Track conversion
+      if (typeof gtag === 'function') gtag('event', 'lead_capture', {email: email, zip: zip});
+      if (typeof fbq === 'function') fbq('track', 'Lead', {content_name: 'landing_signup'});
+      // Store lead locally (will POST to API when backend endpoint is ready)
+      try { var leads = JSON.parse(localStorage.getItem('stylere_leads')||'[]'); leads.push({email:email,zip:zip,ts:Date.now()}); localStorage.setItem('stylere_leads',JSON.stringify(leads)); } catch(err){}
+      // Show success
+      var form = document.getElementById('lead-capture');
+      form.outerHTML = '<div class="lead-form-success"><h3>🎉 You\'re in!</h3><p>Your code:</p><p class="code">STYLERE1</p><p>Use it at <a href="https://stylere.app" style="color:var(--orange);font-weight:700">stylere.app</a> for $10 off</p></div>';
+      return false;
+    }
+
     // Copy promo code
     function copyCode() {
       navigator.clipboard.writeText('STYLERE1').then(() => {
