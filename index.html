@@ -205,7 +205,7 @@ tr:hover td{background:var(--bg3)}
 <button class="hamburger" onclick="document.querySelector('.tabs').classList.toggle('open')">☰</button>
 <div class="tabs">
 <div class="tab active" data-page="dashboard">📊 Overview</div>
-<div class="tab" data-page="demo">🧪 Strategies <span class="badge">4</span></div>
+<div class="tab" data-page="demo">🧪 Demo Accounts <span class="badge">21</span></div>
 <div class="tab" data-page="live">💰 Live</div>
 <div class="tab" data-page="journal">📒 Journal</div>
 <div class="tab" data-page="analytics">📈 Analytics</div>
@@ -292,7 +292,7 @@ tr:hover td{background:var(--bg3)}
 </main>
 
 <footer class="footer">
-TradingLand &copy; 2026 | Last updated: 2026-02-13 09:43:21 PST
+TradingLand &copy; 2026 | Last updated: 2026-02-15 11:20:00 PST
 </footer>
 </div>
 
@@ -747,45 +747,25 @@ options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:fals
 });
 })();
 
-// ===== DEMO ACCOUNTS =====
+// ===== DEMO ACCOUNTS (21 demos) =====
 (function(){
-const stratDefs = [
-{key:'hft_momentum',name:'HFT Momentum',icon:'⚡',instrument:'GBPJPY'},
-{key:'vwap_reversion',name:'VWAP Reversion',icon:'📊',instrument:'BTCUSD'},
-{key:'range_scalper',name:'Range Scalper',icon:'📐',instrument:'EURUSD'},
-{key:'gold_momentum',name:'Gold Momentum',icon:'🥇',instrument:'XAUUSD'},
-{key:'trend_follower',name:'Trend Follower',icon:'📈',instrument:'TBD',coming:true},
-];
+const DEMO_DATA = [{"id":"demo-1","label":"S3+S4 · 1H · Original","instruments":["GBPJPY","BTCUSD","EURUSD","XAUUSD"],"systems":["S3","S4"],"timeframe":"1H","balance":485.36,"pnl":-14.64,"trades":122,"win_rate":"0%","open":0,"max_dd":14.64},{"id":"demo-2","label":"S3+S4 · 30m · Original","instruments":["GBPJPY","BTCUSD","EURUSD","XAUUSD"],"systems":["S3","S4"],"timeframe":"30m","balance":495.92,"pnl":-4.08,"trades":34,"win_rate":"0%","open":0,"max_dd":4.08},{"id":"demo-3","label":"S3+S4 · 15m · Original","instruments":["GBPJPY","BTCUSD","EURUSD","XAUUSD"],"systems":["S3","S4"],"timeframe":"15m","balance":485.40,"pnl":-14.60,"trades":137,"win_rate":"1%","open":0,"max_dd":14.60},{"id":"demo-4","label":"S3+S4 · 5m · Original","instruments":["GBPJPY","BTCUSD","EURUSD","XAUUSD"],"systems":["S3","S4"],"timeframe":"5m","balance":485.40,"pnl":-14.60,"trades":137,"win_rate":"1%","open":0,"max_dd":14.60},{"id":"demo-5","label":"USDJPY · S3+S4","instruments":["USDJPY"],"systems":["S3","S4"],"timeframe":"15m","balance":500,"pnl":0,"trades":0,"win_rate":"N/A","open":0,"max_dd":0},{"id":"demo-6","label":"AUDJPY · S3+S4","instruments":["AUDJPY"],"systems":["S3","S4"],"timeframe":"15m","balance":500,"pnl":0,"trades":0,"win_rate":"N/A","open":0,"max_dd":0},{"id":"demo-7","label":"XMRUSD · S4 Only","instruments":["XMRUSD"],"systems":["S4"],"timeframe":"15m","balance":500,"pnl":0,"trades":0,"win_rate":"N/A","open":0,"max_dd":0},{"id":"demo-8","label":"BTCEUR · S4 Only","instruments":["BTCEUR"],"systems":["S4"],"timeframe":"15m","balance":500,"pnl":0,"trades":0,"win_rate":"N/A","open":0,"max_dd":0},{"id":"demo-9","label":"GBPTRY · S4 Only","instruments":["GBPTRY"],"systems":["S4"],"timeframe":"15m","balance":500,"pnl":0,"trades":0,"win_rate":"N/A","open":0,"max_dd":0},{"id":"demo-10","label":"BCHUSD · S4 Only","instruments":["BCHUSD"],"systems":["S4"],"timeframe":"15m","balance":500,"pnl":0,"trades":0,"win_rate":"N/A","open":0,"max_dd":0},{"id":"demo-11","label":"EURTRY · S4 Only","instruments":["EURTRY"],"systems":["S4"],"timeframe":"15m","balance":500,"pnl":0,"trades":0,"win_rate":"N/A","open":0,"max_dd":0},{"id":"demo-12","label":"CHFJPY · S4 Only","instruments":["CHFJPY"],"systems":["S4"],"timeframe":"15m","balance":500,"pnl":0,"trades":0,"win_rate":"N/A","open":0,"max_dd":0},{"id":"demo-13","label":"EURJPY · S4 Only","instruments":["EURJPY"],"systems":["S4"],"timeframe":"15m","balance":500,"pnl":0,"trades":0,"win_rate":"N/A","open":0,"max_dd":0},{"id":"demo-14","label":"GBPZAR · S4 Only","instruments":["GBPZAR"],"systems":["S4"],"timeframe":"15m","balance":500,"pnl":0,"trades":0,"win_rate":"N/A","open":0,"max_dd":0},{"id":"demo-15","label":"JP225 · S4 Only","instruments":["JP225"],"systems":["S4"],"timeframe":"15m","balance":500,"pnl":0,"trades":0,"win_rate":"N/A","open":0,"max_dd":0},{"id":"demo-16","label":"EURZAR · S4 Only","instruments":["EURZAR"],"systems":["S4"],"timeframe":"15m","balance":500,"pnl":0,"trades":0,"win_rate":"N/A","open":0,"max_dd":0},{"id":"demo-17","label":"XPTUSD · S4 Only","instruments":["XPTUSD"],"systems":["S4"],"timeframe":"15m","balance":500,"pnl":0,"trades":0,"win_rate":"N/A","open":0,"max_dd":0},{"id":"demo-18","label":"USDTRY · S4 Only","instruments":["USDTRY"],"systems":["S4"],"timeframe":"15m","balance":500,"pnl":0,"trades":0,"win_rate":"N/A","open":0,"max_dd":0},{"id":"demo-19","label":"USDZAR · S4 Only","instruments":["USDZAR"],"systems":["S4"],"timeframe":"15m","balance":500,"pnl":0,"trades":0,"win_rate":"N/A","open":0,"max_dd":0},{"id":"demo-20","label":"XPDUSD · S4 Only","instruments":["XPDUSD"],"systems":["S4"],"timeframe":"15m","balance":500,"pnl":0,"trades":0,"win_rate":"N/A","open":0,"max_dd":0},{"id":"demo-21","label":"CADJPY · S4 Only","instruments":["CADJPY"],"systems":["S4"],"timeframe":"15m","balance":500,"pnl":0,"trades":0,"win_rate":"N/A","open":0,"max_dd":0}];
 const container = document.getElementById('strat-cards');
-stratDefs.forEach((sd,idx)=>{
-const trades = TRADES.filter(t=>t.strategy===sd.key).sort((a,b)=>a.time.localeCompare(b.time));
-const m = computeMetrics(trades);
-const cfg = CONFIG.strategies[sd.key];
-const recent = trades.slice(-5).reverse();
-let bannerHtml = '';
-if(m.trades>0){
-if(m.winRate<0.45) bannerHtml = '<div class="strat-banner warn">⚠️ Win rate '+fmtPct(m.winRate)+' — consider tuning signals</div>';
-else if(m.profitFactor<1) bannerHtml = '<div class="strat-banner warn">⚠️ Profit factor '+fmt(m.profitFactor)+' — strategy losing money</div>';
-else if(m.profitFactor>1.5) bannerHtml = '<div class="strat-banner good">✅ Strong PF '+fmt(m.profitFactor)+' — strategy performing well</div>';
-}
-const signalHtml = cfg? Object.entries(cfg.signals||{}).map(([k,v])=>'<span class="signal-tag '+(v.enabled?'on':'off')+'">'+k+'</span>').join('') : '';
-const configHtml = cfg? '<div style="font-size:11px;color:var(--text3);margin-top:8px">TP: '+cfg.tp_pips+' | SL: '+cfg.sl_pips+' | Max Pos: '+cfg.max_positions+'</div>' : '';
-const recentHtml = recent.length? '<div class="strat-recent"><div class="strat-recent-title">Recent Trades</div>'+recent.map(t=>'<div class="strat-recent-row"><span>'+t.time.slice(5,16)+'</span><span>'+t.side+'</span><span>'+t.signal+'</span>'+pnlTd(t.pnl)+'<span style="color:var(--text3)">'+t.reason+'</span></div>').join('')+'</div>' : '';
-
-container.innerHTML += '<div class="strat-card '+(sd.coming?'strat-coming':'')+'"><div class="strat-card-head"><span class="strat-name">'+sd.icon+' '+sd.name+'</span><span class="strat-instrument">'+sd.instrument+'</span></div><div class="strat-card-body"><div class="strat-chart"><canvas id="strat-chart-'+idx+'"></canvas></div><div class="strat-metrics"><div><div class="strat-metric-label">Win Rate</div><div class="strat-metric-value" style="color:'+(m.winRate>=0.5?'var(--green)':'var(--red)')+'">'+fmtPct(m.winRate||0)+'</div></div><div><div class="strat-metric-label">Net P&L</div><div class="strat-metric-value" style="color:'+((m.totalPnl||0)>=0?'var(--green)':'var(--red)')+'">'+fmtMoney(m.totalPnl||0)+'</div></div><div><div class="strat-metric-label">Trades</div><div class="strat-metric-value">'+(m.trades||0)+'</div></div><div><div class="strat-metric-label">Profit Factor</div><div class="strat-metric-value">'+fmt(m.profitFactor||0)+'</div></div><div><div class="strat-metric-label">Max DD</div><div class="strat-metric-value" style="color:var(--red)">'+fmtMoney(-(m.maxDrawdown||0))+'</div></div><div><div class="strat-metric-label">Avg W/L</div><div class="strat-metric-value">'+(m.avgLoss?fmt(m.avgWin/m.avgLoss):'—')+'</div></div></div><div class="strat-signals">'+signalHtml+'</div>'+configHtml+recentHtml+'</div>'+bannerHtml+'</div>';
-
-if(trades.length && !sd.coming){
-setTimeout(()=>{
-let cum=0;
-const data = trades.map(t=>{cum+=t.pnl;return cum});
-new Chart(document.getElementById('strat-chart-'+idx),{
-type:'line',
-data:{labels:trades.map((_,i)=>i),datasets:[{data,borderColor:data[data.length-1]>=0?'#3fb950':'#f85149',backgroundColor:data[data.length-1]>=0?'rgba(63,185,80,0.1)':'rgba(248,81,73,0.1)',fill:true,pointRadius:0,borderWidth:1.5,tension:0.1}]},
-options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}}},
-});
-},100*(idx+1));
-}
-});
+// Summary row
+const totalPnl = DEMO_DATA.reduce((s,d)=>s+d.pnl,0);
+const totalTrades = DEMO_DATA.reduce((s,d)=>s+d.trades,0);
+const totalBal = DEMO_DATA.reduce((s,d)=>s+d.balance,0);
+const origCount = DEMO_DATA.filter(d=>d.systems.length>1).length;
+const s4Count = DEMO_DATA.filter(d=>d.systems.length===1).length;
+container.innerHTML = '<div class="card" style="margin-bottom:16px"><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;text-align:center"><div><div style="font-size:11px;color:var(--text3)">Total Demos</div><div style="font-size:20px;font-weight:700;color:var(--blue)">'+DEMO_DATA.length+'</div><div style="font-size:10px;color:var(--text3)">'+origCount+' S3+S4 · '+s4Count+' S4-only</div></div><div><div style="font-size:11px;color:var(--text3)">Total Balance</div><div style="font-size:20px;font-weight:700">$'+fmt(totalBal)+'</div></div><div><div style="font-size:11px;color:var(--text3)">Total P&L</div><div style="font-size:20px;font-weight:700;color:'+(totalPnl>=0?"var(--green)":"var(--red)")+'">'+fmtMoney(totalPnl)+'</div></div><div><div style="font-size:11px;color:var(--text3)">Total Trades</div><div style="font-size:20px;font-weight:700">'+totalTrades+'</div></div></div></div>';
+// Demo cards grid
+container.innerHTML += '<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px">' +
+DEMO_DATA.map(function(d){
+  var pnlColor = d.pnl > 0 ? 'var(--green)' : d.pnl < 0 ? 'var(--red)' : 'var(--text3)';
+  var sysTag = d.systems.length > 1 ? '<span style="background:#1f6feb;color:white;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600">S3+S4</span>' : '<span style="background:#8b5cf6;color:white;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600">S4 Only</span>';
+  var statusDot = d.trades > 0 ? '<span style="width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block"></span>' : '<span style="width:8px;height:8px;border-radius:50%;background:var(--text3);display:inline-block" title="Waiting for market open"></span>';
+  return '<div class="card" style="padding:14px"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><div style="display:flex;align-items:center;gap:6px">'+statusDot+'<span style="font-weight:700;font-size:13px">'+d.id.toUpperCase()+'</span>'+sysTag+'</div><span style="font-size:11px;color:var(--text3)">'+d.timeframe+'</span></div><div style="font-size:12px;color:var(--text2);margin-bottom:8px">'+d.instruments.join(', ')+'</div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center"><div><div style="font-size:10px;color:var(--text3)">Balance</div><div style="font-size:14px;font-weight:600">$'+fmt(d.balance)+'</div></div><div><div style="font-size:10px;color:var(--text3)">P&L</div><div style="font-size:14px;font-weight:600;color:'+pnlColor+'">'+fmtMoney(d.pnl)+'</div></div><div><div style="font-size:10px;color:var(--text3)">Trades</div><div style="font-size:14px;font-weight:600">'+d.trades+'</div></div><div><div style="font-size:10px;color:var(--text3)">Win Rate</div><div style="font-size:14px;font-weight:600">'+d.win_rate+'</div></div><div><div style="font-size:10px;color:var(--text3)">Open</div><div style="font-size:14px;font-weight:600">'+d.open+'</div></div><div><div style="font-size:10px;color:var(--text3)">Max DD</div><div style="font-size:14px;font-weight:600;color:var(--red)">'+fmtMoney(-d.max_dd)+'</div></div></div></div>';
+}).join('') + '</div>';
 })();
 
 // ===== LIVE ACCOUNT =====
