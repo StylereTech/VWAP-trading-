@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Style.re — 1-Hour Fashion Delivery in Dallas</title>
+  <meta name="description" content="Get your favorite store purchases delivered to your door in under 1 hour. Nordstrom, Macy's, Old Navy, Zara & more. Dallas, TX.">
+  
+  <!-- Open Graph -->
+  <meta property="og:title" content="Style.re — 1-Hour Fashion Delivery">
+  <meta property="og:description" content="Your favorite Dallas stores, delivered in under 1 hour.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://stylere.app">
+  <meta property="og:image" content="https://stylere.app/og-image.jpg">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Meta Pixel (replace with actual pixel ID) -->
+  <!-- <script>!function(f,b,e,v,n,t,s){...}('YOUR_PIXEL_ID');</script> -->
+  
+  <!-- Google Analytics (replace with actual GA4 ID) -->
+  <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script> -->
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    :root {
+      --orange: #FF6B2C;
+      --orange-dark: #E55A1B;
+      --orange-light: #FFF3ED;
+      --dark: #1A1A2E;
+      --gray: #6B7280;
+      --light: #F9FAFB;
+      --white: #FFFFFF;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--dark);
+      background: var(--white);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ═══════════ HERO ═══════════ */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem 1.5rem;
+      background: linear-gradient(135deg, var(--white) 0%, var(--orange-light) 100%);
+      position: relative;
+    }
+    
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 120px;
+      background: linear-gradient(to bottom, transparent, var(--white));
+    }
+    
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--orange-light);
+      border: 1px solid rgba(255, 107, 44, 0.2);
+      color: var(--orange);
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 0.5rem 1rem;
+      border-radius: 100px;
+      margin-bottom: 1.5rem;
+      animation: fadeInDown 0.6s ease;
+    }
+    
+    .badge span { font-size: 1rem; }
+    
+    .hero h1 {
+      font-size: clamp(2.2rem, 6vw, 4rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.25rem;
+      letter-spacing: -0.02em;
+      animation: fadeInUp 0.6s ease 0.1s both;
+    }
+    
+    .hero h1 .highlight {
+      background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .hero p {
+      font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+      color: var(--gray);
+      max-width: 540px;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      animation: fadeInUp 0.6s ease 0.2s both;
+    }
+    
+    .cta-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.75rem;
+      animation: fadeInUp 0.6s ease 0.3s both;
+    }
+    
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: linear-gradient(135deg, var(--orange), var(--orange-dark));
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 1rem 2.5rem;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 20px rgba(255, 107, 44, 0.35);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(255, 107, 44, 0.45);
+    }
+    
+    .btn-primary:active { transform: translateY(0); }
+    
+    .subtext {
+      font-size: 0.85rem;
+      color: var(--gray);
+    }
+    
+    .subtext strong { color: var(--orange); }
+
+    /* ═══════════ STORES ═══════════ */
+    .stores {
+      padding: 4rem 1.5rem;
+      text-align: center;
+      background: var(--white);
+      position: relative;
+      z-index: 1;
+    }
+    
+    .stores h2 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--gray);
+      margin-bottom: 2rem;
+    }
+    
+    .store-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem 2.5rem;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    
+    .store-name {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--dark);
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+    
+    .store-name:hover { opacity: 1; }
+
+    /* ═══════════ HOW IT WORKS ═══════════ */
+    .how {
+      padding: 5rem 1.5rem;
+      background: var(--light);
+    }
+    
+    .how h2 {
+      text-align: center;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 800;
+      margin-bottom: 3rem;
+    }
+    
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .step {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      background: var(--white);
+      border-radius: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      transition: transform 0.2s;
+    }
+    
+    .step:hover { transform: translateY(-4px); }
+    
+    .step-icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 16px;
+      background: var(--orange-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.75rem;
+      margin: 0 auto 1rem;
+    }
+    
+    .step-num {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--orange);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.5rem;
+    }
+    
+    .step h3 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    
+    .step p {
+      font-size: 0.9rem;
+      color: var(--gray);
+      line-height: 1.5;
+    }
+
+    /* ═══════════ SOCIAL PROOF ═══════════ */
+    .proof {
+      padding: 5rem 1.5rem;
+      text-align: center;
+      background: var(--white);
+    }
+    
+    .proof h2 {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+    
+    .proof > p {
+      color: var(--gray);
+      font-size: 1.05rem;
+      margin-bottom: 3rem;
+    }
+    
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 2rem;
+      max-width: 700px;
+      margin: 0 auto 3rem;
+    }
+    
+    .stat h3 {
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      font-weight: 900;
+      color: var(--orange);
+    }
+    
+    .stat p {
+      font-size: 0.9rem;
+      color: var(--gray);
+      margin-top: 0.25rem;
+    }
+    
+    .testimonials {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .testimonial {
+      background: var(--light);
+      border-radius: 16px;
+      padding: 1.5rem;
+      text-align: left;
+    }
+    
+    .testimonial .stars { color: #F59E0B; margin-bottom: 0.5rem; font-size: 1rem; }
+    
+    .testimonial blockquote {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: var(--dark);
+      margin-bottom: 0.75rem;
+      font-style: italic;
+    }
+    
+    .testimonial cite {
+      font-style: normal;
+      font-size: 0.85rem;
+      color: var(--gray);
+      font-weight: 600;
+    }
+
+    /* ═══════════ PROMO ═══════════ */
+    .promo {
+      padding: 4rem 1.5rem;
+      text-align: center;
+      background: linear-gradient(135deg, var(--dark) 0%, #16213E 100%);
+      color: white;
+    }
+    
+    .promo h2 {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 800;
+      margin-bottom: 1rem;
+    }
+    
+    .promo p {
+      color: rgba(255,255,255,0.7);
+      font-size: 1.05rem;
+      margin-bottom: 2rem;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .promo-code {
+      display: inline-block;
+      background: rgba(255,255,255,0.1);
+      border: 2px dashed var(--orange);
+      color: var(--orange);
+      font-size: 1.5rem;
+      font-weight: 800;
+      letter-spacing: 0.15em;
+      padding: 0.75rem 2rem;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    
+    .promo-code:hover { background: rgba(255,107,44,0.15); }
+    
+    .promo .copied {
+      font-size: 0.85rem;
+      color: #4ADE80;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+    
+    .promo .copied.show { opacity: 1; }
+    
+    .promo .btn-primary {
+      margin-top: 1.5rem;
+    }
+
+    /* ═══════════ FAQ ═══════════ */
+    .faq {
+      padding: 5rem 1.5rem;
+      background: var(--light);
+    }
+    
+    .faq h2 {
+      text-align: center;
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-weight: 800;
+      margin-bottom: 2.5rem;
+    }
+    
+    .faq-list {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    
+    .faq-item {
+      background: var(--white);
+      border-radius: 12px;
+      margin-bottom: 0.75rem;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    }
+    
+    .faq-q {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.25rem 1.5rem;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 1rem;
+      user-select: none;
+    }
+    
+    .faq-q::after {
+      content: '+';
+      font-size: 1.4rem;
+      font-weight: 300;
+      color: var(--orange);
+      transition: transform 0.2s;
+    }
+    
+    .faq-item.open .faq-q::after {
+      transform: rotate(45deg);
+    }
+    
+    .faq-a {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .faq-a-inner {
+      padding: 0 1.5rem 1.25rem;
+      color: var(--gray);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    
+    .faq-item.open .faq-a {
+      max-height: 300px;
+    }
+
+    /* ═══════════ FINAL CTA ═══════════ */
+    .final-cta {
+      padding: 5rem 1.5rem;
+      text-align: center;
+      background: var(--white);
+    }
+    
+    .final-cta h2 {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 900;
+      margin-bottom: 1rem;
+    }
+    
+    .final-cta p {
+      color: var(--gray);
+      font-size: 1.05rem;
+      margin-bottom: 2rem;
+    }
+
+    /* ═══════════ FOOTER ═══════════ */
+    footer {
+      padding: 2rem 1.5rem;
+      text-align: center;
+      background: var(--dark);
+      color: rgba(255,255,255,0.5);
+      font-size: 0.85rem;
+    }
+    
+    footer a { color: var(--orange); text-decoration: none; }
+
+    /* ═══════════ ANIMATIONS ═══════════ */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ═══════════ RESPONSIVE ═══════════ */
+    @media (max-width: 600px) {
+      .hero { padding: 3rem 1.25rem; min-height: 90vh; }
+      .btn-primary { width: 100%; justify-content: center; padding: 1.1rem 2rem; }
+      .steps { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .testimonials { grid-template-columns: 1fr; }
+      .store-grid { gap: 1rem 1.5rem; }
+      .store-name { font-size: 0.95rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <section class="hero">
+    <div class="badge"><span>⚡</span> Now live in Dallas, TX</div>
+    <h1>Your Favorite Stores.<br><span class="highlight">Delivered in 1 Hour.</span></h1>
+    <p>Shop at Nordstrom, Macy's, Old Navy, Zara & more — we pick it up and bring it straight to your door. No waiting. No hassle.</p>
+    <div class="cta-group">
+      <a href="https://stylere.app" class="btn-primary" id="hero-cta">
+        Order Now — It's Free to Try →
+      </a>
+      <p class="subtext">Use code <strong>STYLERE1</strong> for free delivery on your first order</p>
+    </div>
+  </section>
+
+  <!-- ═══════════ TRUSTED STORES ═══════════ -->
+  <section class="stores">
+    <h2>Your favorite Dallas stores, on demand</h2>
+    <div class="store-grid">
+      <span class="store-name">Nordstrom</span>
+      <span class="store-name">Macy's</span>
+      <span class="store-name">Old Navy</span>
+      <span class="store-name">Zara</span>
+      <span class="store-name">Lululemon</span>
+      <span class="store-name">Banana Republic</span>
+      <span class="store-name">Nordstrom Rack</span>
+      <span class="store-name">Saks OFF 5TH</span>
+      <span class="store-name">DSW</span>
+      <span class="store-name">Ulta Beauty</span>
+      <span class="store-name">Forever 21</span>
+      <span class="store-name">Athleta</span>
+    </div>
+  </section>
+
+  <!-- ═══════════ HOW IT WORKS ═══════════ -->
+  <section class="how">
+    <h2>How it works</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step-icon">🛍️</div>
+        <div class="step-num">Step 1</div>
+        <h3>Pick your store</h3>
+        <p>Choose from 12+ Dallas fashion retailers. Tell us what you bought and upload your receipt or barcode.</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">🚗</div>
+        <div class="step-num">Step 2</div>
+        <h3>We pick it up</h3>
+        <p>A driver heads to the store, picks up your items using your barcode, and hits the road.</p>
+      </div>
+      <div class="step">
+        <div class="step-icon">📦</div>
+        <div class="step-num">Step 3</div>
+        <h3>Delivered to you</h3>
+        <p>Track your delivery in real-time. Average delivery: under 1 hour. That's it.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SOCIAL PROOF ═══════════ -->
+  <section class="proof">
+    <h2>Dallas loves Style.re</h2>
+    <p>Fast fashion delivery, built for your neighborhood</p>
+    <div class="stats-row">
+      <div class="stat">
+        <h3>&lt;1hr</h3>
+        <p>Average delivery time</p>
+      </div>
+      <div class="stat">
+        <h3>12+</h3>
+        <p>Partner stores</p>
+      </div>
+      <div class="stat">
+        <h3>4.9★</h3>
+        <p>Customer rating</p>
+      </div>
+    </div>
+    <div class="testimonials">
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>"I ordered from Nordstrom at NorthPark and had my dress delivered before my lunch break ended. Game changer."</blockquote>
+        <cite>— Jessica M., Uptown Dallas</cite>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>"No more fighting for parking at the Galleria. I just order through Style.re and it shows up at my door. Love it."</blockquote>
+        <cite>— Marcus T., Oak Cliff</cite>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <blockquote>"Used it for a last-minute outfit for a date night. 47 minutes from order to my doorstep. Incredible."</blockquote>
+        <cite>— Priya K., Deep Ellum</cite>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ PROMO CODE ═══════════ -->
+  <section class="promo">
+    <h2>Your first delivery is on us</h2>
+    <p>Use this code at checkout for completely free delivery on your first order. No catch.</p>
+    <div class="promo-code" onclick="copyCode()" id="promo-code">STYLERE1</div>
+    <div class="copied" id="copied-msg">✓ Copied to clipboard!</div>
+    <br>
+    <a href="https://stylere.app" class="btn-primary">Start Shopping →</a>
+  </section>
+
+  <!-- ═══════════ FAQ ═══════════ -->
+  <section class="faq">
+    <h2>Questions? We got you.</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">How much does delivery cost?</div>
+        <div class="faq-a"><div class="faq-a-inner">Delivery starts at $9.99 depending on distance. Your first order is <strong>completely free</strong> with code STYLERE1. No tip required (but appreciated!).</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">How fast is delivery?</div>
+        <div class="faq-a"><div class="faq-a-inner">Most deliveries arrive in under 1 hour. You'll get real-time tracking from pickup to your door so you always know where your order is.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Do I need to buy in-store first?</div>
+        <div class="faq-a"><div class="faq-a-inner">Yes — Style.re is a delivery service, not a store. You shop at your favorite store (in-person or via their app for in-store pickup), and we handle the last mile to your door.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">What areas do you deliver to?</div>
+        <div class="faq-a"><div class="faq-a-inner">We currently serve the Dallas metro area — including Uptown, Downtown, Oak Cliff, Deep Ellum, Highland Park, Lakewood, and surrounding neighborhoods. Expanding to all 50 states in 2026.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Is my purchase safe?</div>
+        <div class="faq-a"><div class="faq-a-inner">Absolutely. Every delivery is tracked with GPS, verified with a secure PIN system, and backed by our delivery guarantee. Your items are handled with care from store to door.</div></div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">Which stores are supported?</div>
+        <div class="faq-a"><div class="faq-a-inner">Nordstrom, Macy's, Old Navy, Zara, Lululemon, Banana Republic, Nordstrom Rack, Saks OFF 5TH, DSW, Ulta Beauty, Forever 21, Athleta — and more coming soon.</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FINAL CTA ═══════════ -->
+  <section class="final-cta">
+    <h2>Ready to skip the trip?</h2>
+    <p>Join Dallas shoppers who are getting their store purchases delivered in under an hour.</p>
+    <a href="https://stylere.app" class="btn-primary" id="final-cta">Get Started — Free First Delivery →</a>
+  </section>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer>
+    <p>© 2026 Style.re · <a href="https://stylere.app">stylere.app</a> · Dallas, TX</p>
+    <p style="margin-top: 0.5rem;">Questions? Email us at <a href="mailto:hello@stylere.app">hello@stylere.app</a></p>
+  </footer>
+
+  <script>
+    // Copy promo code
+    function copyCode() {
+      navigator.clipboard.writeText('STYLERE1').then(() => {
+        const msg = document.getElementById('copied-msg');
+        msg.classList.add('show');
+        setTimeout(() => msg.classList.remove('show'), 2000);
+      });
+    }
+
+    // FAQ accordion
+    function toggleFaq(el) {
+      const item = el.parentElement;
+      const wasOpen = item.classList.contains('open');
+      // Close all
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      // Toggle clicked
+      if (!wasOpen) item.classList.add('open');
+    }
+
+    // Track CTA clicks (for analytics)
+    document.querySelectorAll('.btn-primary').forEach(btn => {
+      btn.addEventListener('click', () => {
+        // GA4 event
+        if (typeof gtag === 'function') {
+          gtag('event', 'cta_click', {
+            event_category: 'conversion',
+            event_label: btn.id || 'cta',
+          });
+        }
+        // Meta Pixel
+        if (typeof fbq === 'function') {
+          fbq('track', 'Lead');
+        }
+      });
+    });
+
+    // Intersection Observer for fade-in
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.step, .stat, .testimonial').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(20px)';
+      el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+      observer.observe(el);
+    });
+  </script>
+</body>
+</html>
