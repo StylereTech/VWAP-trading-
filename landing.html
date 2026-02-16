@@ -735,7 +735,7 @@
       }).then(function(r){ return r.json(); }).catch(function(){}).finally(function(){
         // Show success regardless (don't block on API failure)
         var form = document.getElementById('lead-capture');
-        form.outerHTML = '<div class="lead-form-success"><h3>🎉 You\'re in!</h3><p>Check your email for your code:</p><p class="code">STYLERE1</p><p>Use it at <a href="https://stylere.app" style="color:var(--orange);font-weight:700">stylere.app</a> for $10 off your first delivery</p></div>';
+        form.outerHTML = '<div class="lead-form-success"><h3>🎉 You\'re in!</h3><p>Check your email for your code:</p><p class="code">STYLERE1</p><p>Use it at <a href="https://stylere.app" style="color:var(--orange);font-weight:700">stylere.app</a> for $10 off your first delivery</p><div style="margin-top:16px;padding:16px;background:rgba(255,107,0,0.1);border-radius:12px;border:1px solid rgba(255,107,0,0.3)"><p style="font-weight:700;margin-bottom:8px">🎁 Bonus: Dallas Deal Finder</p><p style="font-size:14px;margin-bottom:12px;color:#ccc">10 insider BOPIS hacks to save even more at your favorite Dallas stores</p><a href="Dallas-Deal-Finder-StyleRe.pdf" download style="display:inline-block;padding:10px 24px;background:var(--orange);color:#fff;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px">📥 Download Free Guide</a></div></div>';
       });
       return false;
     }
