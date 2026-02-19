@@ -211,6 +211,7 @@ tr:hover td{background:var(--bg3)}
 <div class="tab" data-page="analytics">📈 Analytics</div>
 <div class="tab" data-page="vwap">🎯 VWAP</div>
 <div class="tab" data-page="schwab">🏦 Schwab Account</div>
+<div class="tab" data-page="enhanced">🧠 Enhanced Systems <span class="badge">21</span></div>
 </div>
 <div class="nav-right">
 <span class="status"><span class="dot"></span>Bots Running</span>
@@ -288,6 +289,52 @@ tr:hover td{background:var(--bg3)}
 <div class="page" id="page-schwab">
 <h2 style="font-size:18px;margin-bottom:16px;font-weight:700">🏦 Schwab Account</h2>
 <div id="schwab-content"></div>
+</div>
+
+<div class="page" id="page-enhanced">
+<h2 style="font-size:18px;margin-bottom:16px;font-weight:700">🧠 Enhanced Momentum Regime v2.0</h2>
+<p style="color:#8b949e;margin-bottom:16px;font-size:13px">Triple Barrier · Fractional Differentiation · Meta-Labeling · CUSUM · Concurrent Bet Sizing</p>
+
+<div class="grid-3" id="enhanced-summary-cards"></div>
+
+<h3 style="font-size:15px;margin:20px 0 12px;font-weight:600">21 Demo Accounts</h3>
+<div style="overflow-x:auto">
+<table style="width:100%;border-collapse:collapse;font-size:12px">
+<thead>
+<tr style="border-bottom:1px solid #30363d;color:#8b949e">
+<th style="text-align:left;padding:8px">Demo</th>
+<th style="text-align:left;padding:8px">Instrument</th>
+<th style="text-align:right;padding:8px">Trades</th>
+<th style="text-align:right;padding:8px">Win Rate</th>
+<th style="text-align:right;padding:8px">P&L</th>
+<th style="text-align:right;padding:8px">Max DD</th>
+<th style="text-align:center;padding:8px">Position</th>
+</tr>
+</thead>
+<tbody id="enhanced-demos-table"></tbody>
+</table>
+</div>
+
+<h3 style="font-size:15px;margin:20px 0 12px;font-weight:600">7-Day Backtest Results</h3>
+<div style="overflow-x:auto">
+<table style="width:100%;border-collapse:collapse;font-size:12px">
+<thead>
+<tr style="border-bottom:1px solid #30363d;color:#8b949e">
+<th style="text-align:left;padding:8px">Instrument</th>
+<th style="text-align:right;padding:8px">Trades</th>
+<th style="text-align:right;padding:8px">Win%</th>
+<th style="text-align:right;padding:8px">Sharpe</th>
+<th style="text-align:right;padding:8px">Max DD</th>
+<th style="text-align:right;padding:8px">P&L</th>
+<th style="text-align:center;padding:8px">Status</th>
+</tr>
+</thead>
+<tbody id="enhanced-backtest-table"></tbody>
+</table>
+</div>
+
+<h3 style="font-size:15px;margin:20px 0 12px;font-weight:600">Enhancements Applied</h3>
+<div class="grid-3" id="enhanced-features"></div>
 </div>
 </main>
 
@@ -1112,6 +1159,95 @@ data:{labels:sorted.map(function(_,i){return i}),datasets:[{data:data,borderColo
 options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{display:false},y:{grid:{color:'#1c2333'}}}},
 });
 },300);
+}
+})();
+
+// ===== ENHANCED SYSTEMS =====
+(function renderEnhanced(){
+// Backtest results (7-day, all 21 instruments)
+const BT = {
+  AUDJPY:{trades:202,wins:106,wr:52.5,sharpe:0.56,maxdd:-0.04,pnl:0.05},
+  BCHUSD:{trades:274,wins:145,wr:52.9,sharpe:-0.44,maxdd:-0.51,pnl:1.77},
+  BTCEUR:{trades:252,wins:127,wr:50.4,sharpe:-0.55,maxdd:-0.41,pnl:-16.94},
+  BTCUSD:{trades:231,wins:114,wr:49.4,sharpe:-0.68,maxdd:-0.44,pnl:-61.04},
+  CADJPY:{trades:281,wins:144,wr:51.2,sharpe:-0.22,maxdd:-0.06,pnl:0.00},
+  CHFJPY:{trades:208,wins:105,wr:50.5,sharpe:-0.03,maxdd:-0.06,pnl:-0.03},
+  EURJPY:{trades:232,wins:115,wr:49.6,sharpe:-0.09,maxdd:-0.03,pnl:-0.00},
+  EURTRY:{trades:91,wins:37,wr:40.7,sharpe:-0.63,maxdd:-0.06,pnl:-0.01},
+  EURUSD:{trades:203,wins:93,wr:45.8,sharpe:-0.63,maxdd:-0.03,pnl:-0.00},
+  EURZAR:{trades:216,wins:111,wr:51.4,sharpe:-0.45,maxdd:-0.06,pnl:-0.00},
+  GBPJPY:{trades:214,wins:113,wr:52.8,sharpe:0.26,maxdd:-0.04,pnl:0.02},
+  GBPTRY:{trades:125,wins:51,wr:40.8,sharpe:-1.20,maxdd:-0.11,pnl:-0.03},
+  GBPZAR:{trades:178,wins:81,wr:45.5,sharpe:0.22,maxdd:-0.08,pnl:-0.02},
+  JP225:{trades:227,wins:105,wr:46.3,sharpe:-0.57,maxdd:-0.14,pnl:-24.35},
+  USDJPY:{trades:276,wins:136,wr:49.3,sharpe:0.46,maxdd:-0.03,pnl:0.07},
+  USDTRY:{trades:47,wins:19,wr:40.4,sharpe:-0.19,maxdd:-0.03,pnl:0.00},
+  USDZAR:{trades:310,wins:172,wr:55.5,sharpe:-0.87,maxdd:-0.14,pnl:0.01},
+  XAUUSD:{trades:36,wins:22,wr:61.1,sharpe:0.69,maxdd:-0.11,pnl:8.69},
+  XMRUSD:{trades:273,wins:137,wr:50.2,sharpe:0.72,maxdd:-0.38,pnl:0.83},
+  XPDUSD:{trades:223,wins:105,wr:47.1,sharpe:1.18,maxdd:-0.24,pnl:-7.02},
+  XPTUSD:{trades:40,wins:20,wr:50.0,sharpe:0.29,maxdd:-0.21,pnl:0.78}
+};
+
+const totalTrades = Object.values(BT).reduce((s,b)=>s+b.trades,0);
+const totalPnl = Object.values(BT).reduce((s,b)=>s+b.pnl,0);
+const profitable = Object.values(BT).filter(b=>b.pnl>0).length;
+const avgWr = Object.values(BT).reduce((s,b)=>s+b.wr,0)/Object.keys(BT).length;
+
+// Summary cards
+const sc = document.getElementById('enhanced-summary-cards');
+if(sc) sc.innerHTML =
+  '<div class="card" style="border-left:3px solid var(--blue)"><div class="card-header"><span class="card-title">Total Trades</span></div><div style="font-size:24px;font-weight:700">'+totalTrades.toLocaleString()+'</div><div style="font-size:12px;color:var(--text2)">7-day backtest</div></div>'+
+  '<div class="card" style="border-left:3px solid '+(totalPnl>=0?'var(--green)':'var(--red)')+'"><div class="card-header"><span class="card-title">Total P&L</span></div><div style="font-size:24px;font-weight:700;color:'+(totalPnl>=0?'var(--green)':'var(--red)')+'">$'+totalPnl.toFixed(2)+'</div><div style="font-size:12px;color:var(--text2)">'+profitable+'/'+Object.keys(BT).length+' profitable</div></div>'+
+  '<div class="card" style="border-left:3px solid var(--blue)"><div class="card-header"><span class="card-title">Avg Win Rate</span></div><div style="font-size:24px;font-weight:700">'+avgWr.toFixed(1)+'%</div><div style="font-size:12px;color:var(--text2)">Best: XAUUSD 61.1%</div></div>';
+
+// Backtest table
+const bt = document.getElementById('enhanced-backtest-table');
+if(bt){
+  let html = '';
+  Object.keys(BT).sort().forEach(sym=>{
+    const b = BT[sym];
+    const color = b.pnl>=0?'var(--green)':'var(--red)';
+    const icon = b.pnl>=0?'✅':'❌';
+    html += '<tr style="border-bottom:1px solid #21262d">'+
+      '<td style="padding:6px 8px;font-weight:600">'+sym+'</td>'+
+      '<td style="padding:6px 8px;text-align:right">'+b.trades+'</td>'+
+      '<td style="padding:6px 8px;text-align:right">'+b.wr.toFixed(1)+'%</td>'+
+      '<td style="padding:6px 8px;text-align:right;color:'+(b.sharpe>=0?'var(--green)':'var(--red)')+'">'+b.sharpe.toFixed(2)+'</td>'+
+      '<td style="padding:6px 8px;text-align:right">'+b.maxdd.toFixed(2)+'%</td>'+
+      '<td style="padding:6px 8px;text-align:right;color:'+color+';font-weight:600">$'+b.pnl.toFixed(2)+'</td>'+
+      '<td style="padding:6px 8px;text-align:center">'+icon+'</td></tr>';
+  });
+  bt.innerHTML = html;
+}
+
+// Features cards
+const ef = document.getElementById('enhanced-features');
+if(ef) ef.innerHTML = [
+  {icon:'🎯',name:'Triple Barrier',desc:'TP + SL + Time barrier per trade. Eliminates indefinite holds.'},
+  {icon:'📊',name:'Fractional Differentiation',desc:'Memory-preserving stationarity. Keeps mean-reversion signal without losing trend info.'},
+  {icon:'🏷️',name:'Meta-Labeling',desc:'ML confidence overlay. Filters weak signals before entry.'},
+  {icon:'📉',name:'CUSUM Detection',desc:'Structural break detection. Adapts when market regime shifts.'},
+  {icon:'⚖️',name:'Concurrent Bet Sizing',desc:'López de Prado position sizing. Reduces exposure when many signals overlap.'},
+  {icon:'🔬',name:'Regime Classification',desc:'Hurst + ADX + BB Width. Routes to optimal strategy per regime.'}
+].map(f=>'<div class="card" style="margin:0"><div style="font-size:20px;margin-bottom:6px">'+f.icon+'</div><div style="font-weight:600;font-size:13px;margin-bottom:4px">'+f.name+'</div><div style="font-size:11px;color:var(--text2)">'+f.desc+'</div></div>').join('');
+
+// Demo accounts table (will be populated by update_dashboard.py with live data)
+const dt = document.getElementById('enhanced-demos-table');
+if(dt){
+  let html = '';
+  const instruments = ['GBPJPY','BTCUSD','EURUSD','XAUUSD','USDJPY','AUDJPY','CADJPY','CHFJPY','EURJPY','EURTRY','EURZAR','GBPTRY','GBPZAR','JP225','USDTRY','USDZAR','XMRUSD','XPDUSD','XPTUSD','BCHUSD','BTCEUR'];
+  instruments.forEach((sym,i)=>{
+    html += '<tr style="border-bottom:1px solid #21262d">'+
+      '<td style="padding:6px 8px;color:var(--text2)">edemo-'+(i+1)+'</td>'+
+      '<td style="padding:6px 8px;font-weight:600">'+sym+'</td>'+
+      '<td style="padding:6px 8px;text-align:right;color:var(--text2)">—</td>'+
+      '<td style="padding:6px 8px;text-align:right;color:var(--text2)">—</td>'+
+      '<td style="padding:6px 8px;text-align:right;color:var(--text2)">$0.00</td>'+
+      '<td style="padding:6px 8px;text-align:right;color:var(--text2)">0.00%</td>'+
+      '<td style="padding:6px 8px;text-align:center">🔄</td></tr>';
+  });
+  dt.innerHTML = html;
 }
 })();
 </script>
