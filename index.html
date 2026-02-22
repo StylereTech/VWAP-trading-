@@ -206,6 +206,7 @@ tr:hover td{background:var(--bg3)}
 <div class="tabs">
 <div class="tab active" data-page="dashboard">📊 Overview</div>
 <div class="tab" data-page="demo">🧪 Demo Accounts <span class="badge">21</span></div>
+<div class="tab" data-page="midas">🔱 MIDAS <span class="badge">4</span></div>
 <div class="tab" data-page="live">💰 Live</div>
 <div class="tab" data-page="journal">📒 Journal</div>
 <div class="tab" data-page="analytics">📈 Analytics</div>
@@ -254,6 +255,19 @@ tr:hover td{background:var(--bg3)}
 <div class="page" id="page-demo">
 <h2 style="font-size:18px;margin-bottom:16px;font-weight:700">🧪 Demo Strategy Accounts</h2>
 <div id="strat-cards" class="strat-grid"></div>
+</div>
+
+<!-- MIDAS VWAP PAGE -->
+<div class="page" id="page-midas">
+<h2 style="font-size:18px;margin-bottom:8px;font-weight:700">🔱 MIDAS Anchored VWAP — 3-Week Monitor</h2>
+<p style="color:#8b949e;font-size:13px;margin-bottom:16px">Book-informed system (Coles & Hawkins). $500 accounts, 3% risk/trade. Elite pairs from 2yr OOS backtest.</p>
+<div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+<button onclick="createMidasDemos()" style="background:#238636;border:none;color:#fff;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:13px">➕ Create New Demo Accounts</button>
+<button onclick="refreshMidasState()" style="background:#1f6feb;border:none;color:#fff;padding:8px 16px;border-radius:6px;cursor:pointer;font-size:13px">🔄 Refresh</button>
+</div>
+<div id="midas-summary" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:16px"></div>
+<div id="midas-cards" class="strat-grid"></div>
+<div id="midas-trades" style="margin-top:16px"></div>
 </div>
 
 <!-- LIVE ACCOUNT PAGE -->
@@ -1605,6 +1619,167 @@ if(dt){
 })();
 </script>
 <!-- ELITE EIGHT TAB END -->
+
+<!-- MIDAS TAB SCRIPT -->
+<script>
+(function(){
+  const MIDAS_STATE_URL = 'midas-state.json';
+  const MIDAS_INSTRUMENTS = {
+    USDJPY: {name:'USDJPY.B', bt_wr:85.0, bt_trades:20, bt_sharpe:53.01},
+    AUDJPY: {name:'AUDJPY.B', bt_wr:84.6, bt_trades:26, bt_sharpe:43.39},
+    GBPJPY: {name:'GBPJPY.B', bt_wr:77.3, bt_trades:22, bt_sharpe:23.91},
+    EURTRY: {name:'EURTRY.B', bt_wr:79.2, bt_trades:24, bt_sharpe:28.86}
+  };
+
+  window.createMidasDemos = function() {
+    alert('MIDAS demos are created automatically when runner_midas.py starts.\\nRun: python3 runner_midas.py');
+  };
+
+  window.refreshMidasState = function() { loadMidasState(); };
+
+  function loadMidasState() {
+    fetch(MIDAS_STATE_URL + '?t=' + Date.now()).then(r=>r.ok?r.json():null).then(data=>{
+      if(!data) { renderMidasEmpty(); return; }
+      renderMidasSummary(data);
+      renderMidasCards(data);
+      renderMidasTrades(data);
+    }).catch(()=>renderMidasEmpty());
+  }
+
+  function renderMidasEmpty() {
+    const cards = document.getElementById('midas-cards');
+    const summary = document.getElementById('midas-summary');
+    if(!cards) return;
+    
+    let html = '';
+    for(const [inst, info] of Object.entries(MIDAS_INSTRUMENTS)) {
+      html += `<div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <span style="font-weight:700;font-size:15px">🔱 ${inst}</span>
+          <span style="color:#8b949e;font-size:12px">Awaiting data...</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px">
+          <div>Backtest WR: <b style="color:#3fb950">${info.bt_wr}%</b></div>
+          <div>BT Trades: <b>${info.bt_trades}</b></div>
+          <div>BT Sharpe: <b>${info.bt_sharpe}</b></div>
+          <div>Balance: <b>$500.00</b></div>
+        </div>
+        <div style="margin-top:8px;font-size:12px;color:#8b949e">Risk: 3% per trade ($15) | TP: 1× ATR | SL: 3× ATR</div>
+      </div>`;
+    }
+    cards.innerHTML = html;
+    if(summary) summary.innerHTML = '<div style="grid-column:1/-1;color:#8b949e;font-size:13px">⏳ No live data yet. Start runner_midas.py to begin monitoring.</div>';
+  }
+
+  function renderMidasSummary(data) {
+    const el = document.getElementById('midas-summary');
+    if(!el || !data.demos) return;
+    
+    let totalPnl=0, totalTrades=0, totalWins=0;
+    for(const d of Object.values(data.demos)) {
+      totalPnl += d.pnl||0;
+      totalTrades += d.total_trades||0;
+      totalWins += d.wins||0;
+    }
+    const wr = totalTrades>0 ? (totalWins/totalTrades*100).toFixed(0) : 'N/A';
+    const pnlColor = totalPnl>=0 ? '#3fb950' : '#f85149';
+    
+    el.innerHTML = `
+      <div style="background:#161b22;border:1px solid #30363d;border-radius:6px;padding:12px;text-align:center">
+        <div style="color:#8b949e;font-size:11px">Total P&L</div>
+        <div style="font-size:20px;font-weight:700;color:${pnlColor}">$${totalPnl.toFixed(2)}</div>
+      </div>
+      <div style="background:#161b22;border:1px solid #30363d;border-radius:6px;padding:12px;text-align:center">
+        <div style="color:#8b949e;font-size:11px">Win Rate</div>
+        <div style="font-size:20px;font-weight:700">${wr}%</div>
+      </div>
+      <div style="background:#161b22;border:1px solid #30363d;border-radius:6px;padding:12px;text-align:center">
+        <div style="color:#8b949e;font-size:11px">Total Trades</div>
+        <div style="font-size:20px;font-weight:700">${totalTrades}</div>
+      </div>
+      <div style="background:#161b22;border:1px solid #30363d;border-radius:6px;padding:12px;text-align:center">
+        <div style="color:#8b949e;font-size:11px">Accounts</div>
+        <div style="font-size:20px;font-weight:700">${Object.keys(data.demos).length}</div>
+      </div>`;
+  }
+
+  function renderMidasCards(data) {
+    const el = document.getElementById('midas-cards');
+    if(!el || !data.demos) return;
+    
+    let html = '';
+    for(const [inst, d] of Object.entries(data.demos)) {
+      const info = MIDAS_INSTRUMENTS[inst] || {};
+      const pnlColor = (d.pnl||0)>=0 ? '#3fb950' : '#f85149';
+      const wrStr = d.total_trades>0 ? d.win_rate.toFixed(0)+'%' : 'N/A';
+      
+      html += `<div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:16px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <span style="font-weight:700;font-size:15px">🔱 ${inst}</span>
+          <span style="color:${pnlColor};font-weight:700;font-size:15px">$${(d.pnl||0).toFixed(2)}</span>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:13px">
+          <div>Balance: <b>$${(d.balance||500).toFixed(2)}</b></div>
+          <div>Win Rate: <b style="color:${(d.win_rate||0)>=70?'#3fb950':'#d29922'}">${wrStr}</b></div>
+          <div>Trades: <b>${d.total_trades||0}</b> (${d.wins||0}W/${d.losses||0}L)</div>
+          <div>Open: <b>${d.open_positions||0}</b></div>
+          <div>Max DD: <b style="color:${(d.max_drawdown_pct||0)>5?'#f85149':'#8b949e'}">${(d.max_drawdown_pct||0).toFixed(1)}%</b></div>
+          <div>Scans: <b>${(d.scans||0).toLocaleString()}</b></div>
+        </div>
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid #30363d;font-size:12px;color:#8b949e">
+          Backtest: ${info.bt_wr||'?'}% WR | ${info.bt_trades||'?'} trades | Sharpe ${info.bt_sharpe||'?'}
+        </div>
+      </div>`;
+    }
+    el.innerHTML = html;
+  }
+
+  function renderMidasTrades(data) {
+    const el = document.getElementById('midas-trades');
+    if(!el || !data.demos) return;
+    
+    let trades = [];
+    for(const d of Object.values(data.demos)) {
+      if(d.last_trades) trades.push(...d.last_trades);
+    }
+    if(!trades.length) { el.innerHTML='<p style="color:#8b949e;font-size:13px">No closed trades yet.</p>'; return; }
+    
+    trades.sort((a,b)=>(b.close_time||'').localeCompare(a.close_time||''));
+    
+    let html = '<h3 style="font-size:15px;margin-bottom:8px">Recent Trades</h3>';
+    html += '<div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:12px">';
+    html += '<tr style="color:#8b949e;border-bottom:1px solid #30363d"><th style="padding:6px;text-align:left">Time</th><th>Pair</th><th>Side</th><th>Entry</th><th>Exit</th><th>Lots</th><th>Pips</th><th>P&L</th><th>Result</th></tr>';
+    for(const t of trades.slice(0,20)) {
+      const color = t.result==='win' ? '#3fb950' : '#f85149';
+      html += `<tr style="border-bottom:1px solid #21262d">
+        <td style="padding:4px 6px">${(t.close_time||'').slice(11,19)}</td>
+        <td>${t.instrument||''}</td>
+        <td style="color:${t.side==='buy'?'#3fb950':'#f85149'}">${(t.side||'').toUpperCase()}</td>
+        <td>${(t.entry||0).toFixed(5)}</td>
+        <td>${(t.exit||0).toFixed(5)}</td>
+        <td>${t.lots||0.01}</td>
+        <td>${(t.pips||0).toFixed(1)}</td>
+        <td style="color:${color};font-weight:700">$${(t.pnl||0).toFixed(2)}</td>
+        <td style="color:${color}">${t.result==='win'?'✅':'❌'}</td>
+      </tr>`;
+    }
+    html += '</table></div>';
+    el.innerHTML = html;
+  }
+
+  // Auto-load on tab switch
+  const origTabClick = document.querySelectorAll('.tab');
+  origTabClick.forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      if(tab.dataset.page==='midas') loadMidasState();
+    });
+  });
+
+  // Initial load if midas tab visible
+  if(document.getElementById('page-midas')?.style.display!=='none') loadMidasState();
+  else renderMidasEmpty();
+})();
+</script>
 
 </body>
 </html>
