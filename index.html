@@ -206,7 +206,7 @@ tr:hover td{background:var(--bg3)}
 <div class="tabs">
 <div class="tab active" data-page="dashboard">📊 Overview</div>
 <div class="tab" data-page="demo">🧪 Demo Accounts <span class="badge">21</span></div>
-<div class="tab" data-page="midas">🔱 MIDAS <span class="badge">4</span></div>
+<div class="tab" data-page="midas">🔱 MIDAS <span class="badge">6</span></div>
 <div class="tab" data-page="live">💰 Live</div>
 <div class="tab" data-page="journal">📒 Journal</div>
 <div class="tab" data-page="analytics">📈 Analytics</div>
@@ -1625,10 +1625,12 @@ if(dt){
 (function(){
   const MIDAS_STATE_URL = 'midas-state.json';
   const MIDAS_INSTRUMENTS = {
-    USDJPY: {name:'USDJPY.B', bt_wr:85.0, bt_trades:20, bt_sharpe:53.01},
-    AUDJPY: {name:'AUDJPY.B', bt_wr:84.6, bt_trades:26, bt_sharpe:43.39},
+    USDJPY: {name:'USDJPY.B', bt_wr:100, bt_trades:5, bt_sharpe:53.01},
+    AUDJPY: {name:'AUDJPY.B', bt_wr:100, bt_trades:5, bt_sharpe:43.39},
     GBPJPY: {name:'GBPJPY.B', bt_wr:77.3, bt_trades:22, bt_sharpe:23.91},
-    EURTRY: {name:'EURTRY.B', bt_wr:79.2, bt_trades:24, bt_sharpe:28.86}
+    EURTRY: {name:'EURTRY.B', bt_wr:100, bt_trades:8, bt_sharpe:28.86},
+    AUDCAD: {name:'AUDCAD.B', bt_wr:100, bt_trades:12, bt_sharpe:65.77},
+    CHFJPY: {name:'CHFJPY.B', bt_wr:86, bt_trades:7, bt_sharpe:23.0}
   };
 
   window.createMidasDemos = function() {
