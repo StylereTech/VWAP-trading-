@@ -213,6 +213,9 @@ tr:hover td{background:var(--bg3)}
 <div class="tab" data-page="vwap">🎯 VWAP</div>
 <div class="tab" data-page="schwab">🏦 Schwab Account</div>
 <div class="tab" data-page="enhanced">🧠 Enhanced Systems <span class="badge">21</span></div>
+<div class="tab" data-page="virgin">🌿 Virgin VWAP <span class="badge">NEW</span></div>
+<div class="tab" data-page="newdemos">➕ New Demos</div>
+<div class="tab" data-page="archive">📦 Archive</div>
 </div>
 <div class="nav-right">
 <span class="status"><span class="dot"></span>Bots Running</span>
@@ -350,10 +353,153 @@ tr:hover td{background:var(--bg3)}
 <h3 style="font-size:15px;margin:20px 0 12px;font-weight:600">Enhancements Applied</h3>
 <div class="grid-3" id="enhanced-features"></div>
 </div>
+
+<!-- VIRGIN VWAP PAGE -->
+<div class="page" id="page-virgin">
+<div class="card">
+<div class="card-header">
+<div class="card-title">🌿 Virgin VWAP — Clean-Slate Strategy</div>
+<span style="font-size:11px;color:var(--text3)">Built 2026-02-22 | S3 Regime + S4 Signals + Safety Filters</span>
+</div>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-bottom:20px">
+<div style="background:var(--green-bg);border:1px solid var(--green2);border-radius:8px;padding:12px;text-align:center">
+<div style="font-size:11px;color:var(--text2)">Promoted Symbols</div>
+<div style="font-size:28px;font-weight:700;color:var(--green)">12</div>
+</div>
+<div style="background:var(--red-bg);border:1px solid var(--red2);border-radius:8px;padding:12px;text-align:center">
+<div style="font-size:11px;color:var(--text2)">Quarantined</div>
+<div style="font-size:28px;font-weight:700;color:var(--red)">3</div>
+<div style="font-size:10px;color:var(--text3)">BTCUSD, USDJPY, XPDUSD</div>
+</div>
+<div style="background:var(--blue-bg);border:1px solid var(--blue2);border-radius:8px;padding:12px;text-align:center">
+<div style="font-size:11px;color:var(--text2)">Safety Filters</div>
+<div style="font-size:28px;font-weight:700;color:var(--blue)">4</div>
+<div style="font-size:10px;color:var(--text3)">Spread, Hurst, Retry, Idempotent</div>
+</div>
+<div style="background:var(--gold-bg);border:1px solid var(--gold);border-radius:8px;padding:12px;text-align:center">
+<div style="font-size:11px;color:var(--text2)">Pass Criteria</div>
+<div style="font-size:28px;font-weight:700;color:var(--gold)">3wk</div>
+<div style="font-size:10px;color:var(--text3)">MaxDD<40%, Weekly<15%</div>
+</div>
+</div>
+
+<h3 style="color:var(--text);font-size:14px;margin:16px 0 8px">📊 Backtest Results (1H, with spread costs)</h3>
+<div style="overflow-x:auto">
+<table>
+<thead><tr style="border-bottom:2px solid var(--border)">
+<th style="text-align:left;padding:8px">Symbol</th>
+<th style="text-align:center;padding:8px">Tier</th>
+<th style="text-align:right;padding:8px">σ</th>
+<th style="text-align:right;padding:8px">VP</th>
+<th style="text-align:right;padding:8px">2yr Trades</th>
+<th style="text-align:right;padding:8px">2yr WR</th>
+<th style="text-align:right;padding:8px">2yr PF</th>
+<th style="text-align:right;padding:8px">2yr PnL</th>
+<th style="text-align:right;padding:8px">90d PnL</th>
+</tr></thead>
+<tbody id="virgin-table"></tbody>
+</table>
+</div>
+
+<h3 style="color:var(--text);font-size:14px;margin:20px 0 8px">🛡️ Safety Filters</h3>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px">
+<div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px">
+<div style="font-weight:600;color:var(--blue);margin-bottom:4px">📏 Spread Filter</div>
+<div style="font-size:12px;color:var(--text2)">Skip entry when spread > 2.5× rolling 20-bar average. Prevents low-liquidity / news spike entries.</div>
+</div>
+<div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px">
+<div style="font-weight:600;color:var(--red);margin-bottom:4px">₿ BTCUSD Tightening</div>
+<div style="font-size:12px;color:var(--text2)">Hurst < 0.42 + ATR floor → auto-quarantine. Bleeding > 3% balance → quarantine. No consistent edge found.</div>
+</div>
+<div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px">
+<div style="font-weight:600;color:var(--gold);margin-bottom:4px">🔄 Maintenance Retry</div>
+<div style="font-size:12px;color:var(--text2)">Exponential backoff [5, 15, 30, 60, 120]s for TradeLocker maintenance windows. Max 5 retries.</div>
+</div>
+<div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px">
+<div style="font-weight:600;color:var(--green);margin-bottom:4px">🔒 Idempotent Orders</div>
+<div style="font-size:12px;color:var(--text2)">Dedupe window: 60s. Same symbol+side+entry+tp+sl within window = skip. Prevents double entries.</div>
+</div>
+</div>
+
+<h3 style="color:var(--text);font-size:14px;margin:20px 0 8px">🔬 S3 Regime Gate</h3>
+<div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:12px;font-size:12px;color:var(--text2)">
+<div><strong>Hurst < 0.45</strong>: Mean-reverting → S4 reversion trades allowed ✅</div>
+<div><strong>Hurst 0.45-0.55</strong>: Random walk → Skip (no edge) ⏸️</div>
+<div><strong>Hurst > 0.55</strong>: Trending → S4 blocked, momentum only 🚫</div>
+<div><strong>Hurst > 0.60</strong>: Strong trend → ALL entries blocked 🛑</div>
+</div>
+</div>
+</div>
+
+<!-- NEW DEMOS PAGE -->
+<div class="page" id="page-newdemos">
+<div class="card">
+<div class="card-header">
+<div class="card-title">➕ New Demo Account Configuration (v54)</div>
+<span style="font-size:11px;color:var(--text3)">6 Originals (S3+S4) + 15 S4-Only (Pruned by Stability Gates)</span>
+</div>
+<div style="overflow-x:auto">
+<table>
+<thead><tr style="border-bottom:2px solid var(--border)">
+<th style="text-align:left;padding:8px">Demo</th>
+<th style="text-align:left;padding:8px">Label</th>
+<th style="text-align:center;padding:8px">TF</th>
+<th style="text-align:left;padding:8px">Instruments</th>
+<th style="text-align:center;padding:8px">Systems</th>
+<th style="text-align:center;padding:8px">Status</th>
+</tr></thead>
+<tbody id="newdemos-table"></tbody>
+</table>
+</div>
+<div style="margin-top:16px;padding:12px;background:var(--bg3);border:1px solid var(--border);border-radius:8px">
+<h4 style="margin:0 0 8px;color:var(--gold)">📋 3-Week Pass Criteria</h4>
+<ul style="margin:0;padding-left:20px;color:var(--text2);font-size:12px">
+<li>No symbol > <strong>40%</strong> drawdown of balance</li>
+<li>Weekly MaxDD cap: <strong>15%</strong></li>
+<li>Reject rate: < <strong>80%</strong> of signals filtered</li>
+<li>Max <strong>3</strong> process restarts per week</li>
+<li>Min <strong>5</strong> trades per symbol in 3 weeks</li>
+<li>BTCUSD: auto-quarantine if Hurst < 0.42 for 3+ checks OR bleeding > 3%</li>
+</ul>
+</div>
+</div>
+</div>
+
+<!-- ARCHIVE PAGE -->
+<div class="page" id="page-archive">
+<div class="card">
+<div class="card-header">
+<div class="card-title">📦 Archived Losers — Quarantined / Rejected Symbols</div>
+</div>
+<div style="overflow-x:auto">
+<table>
+<thead><tr style="border-bottom:2px solid var(--border)">
+<th style="text-align:left;padding:8px">Symbol</th>
+<th style="text-align:center;padding:8px">Status</th>
+<th style="text-align:right;padding:8px">Live PnL</th>
+<th style="text-align:right;padding:8px">2yr Backtest PnL</th>
+<th style="text-align:left;padding:8px">Reason</th>
+</tr></thead>
+<tbody>
+<tr><td style="padding:8px;color:var(--red)">BTCUSD</td><td style="padding:8px;text-align:center"><span style="background:var(--red-bg);color:var(--red);padding:2px 8px;border-radius:4px;font-size:11px">QUARANTINED</span></td><td style="padding:8px;text-align:right;color:var(--red)">Various</td><td style="padding:8px;text-align:right;color:var(--red)">-$34 to -$491</td><td style="padding:8px;color:var(--text2);font-size:12px">No consistent edge. 40-pip spread destroys R:R. All param combos negative on 2yr.</td></tr>
+<tr><td style="padding:8px;color:var(--red)">USDJPY</td><td style="padding:8px;text-align:center"><span style="background:var(--red-bg);color:var(--red);padding:2px 8px;border-radius:4px;font-size:11px">REJECTED</span></td><td style="padding:8px;text-align:right;color:var(--red)">-$24.75</td><td style="padding:8px;text-align:right;color:var(--red)">All negative</td><td style="padding:8px;color:var(--text2);font-size:12px">No profitable config with 10+ trades on any horizon.</td></tr>
+<tr><td style="padding:8px;color:var(--red)">XPDUSD</td><td style="padding:8px;text-align:center"><span style="background:var(--red-bg);color:var(--red);padding:2px 8px;border-radius:4px;font-size:11px">REJECTED</span></td><td style="padding:8px;text-align:right;color:var(--red)">-$9.71</td><td style="padding:8px;text-align:right;color:var(--red)">-$8 to -$118</td><td style="padding:8px;color:var(--text2);font-size:12px">Negative across all configs and horizons. Palladium: high spread, low volume.</td></tr>
+<tr><td style="padding:8px;color:var(--gold)">USDTRY</td><td style="padding:8px;text-align:center"><span style="background:var(--gold-bg);color:var(--gold);padding:2px 8px;border-radius:4px;font-size:11px">DROPPED</span></td><td style="padding:8px;text-align:right;color:var(--red)">-$28.78</td><td style="padding:8px;text-align:right;color:var(--text3)">N/A</td><td style="padding:8px;color:var(--text2);font-size:12px">0% win rate on 18 trades. Exotic with massive spread.</td></tr>
+<tr><td style="padding:8px;color:var(--gold)">USDZAR</td><td style="padding:8px;text-align:center"><span style="background:var(--gold-bg);color:var(--gold);padding:2px 8px;border-radius:4px;font-size:11px">DROPPED</span></td><td style="padding:8px;text-align:right;color:var(--red)">-$62.08</td><td style="padding:8px;text-align:right;color:var(--text3)">N/A</td><td style="padding:8px;color:var(--text2);font-size:12px">11% win rate, worst performer. ZAR crosses too volatile.</td></tr>
+<tr><td style="padding:8px;color:var(--gold)">GBPZAR</td><td style="padding:8px;text-align:center"><span style="background:var(--gold-bg);color:var(--gold);padding:2px 8px;border-radius:4px;font-size:11px">DROPPED</span></td><td style="padding:8px;text-align:right;color:var(--red)">-$21.45</td><td style="padding:8px;text-align:right;color:var(--text3)">N/A</td><td style="padding:8px;color:var(--text2);font-size:12px">24% WR. ZAR crosses: spread too wide for VWAP reversion.</td></tr>
+<tr><td style="padding:8px;color:var(--gold)">EURZAR</td><td style="padding:8px;text-align:center"><span style="background:var(--gold-bg);color:var(--gold);padding:2px 8px;border-radius:4px;font-size:11px">DROPPED</span></td><td style="padding:8px;text-align:right;color:var(--red)">-$47.27</td><td style="padding:8px;text-align:right;color:var(--text3)">N/A</td><td style="padding:8px;color:var(--text2);font-size:12px">18% WR. Same ZAR issue.</td></tr>
+<tr><td style="padding:8px;color:var(--gold)">GBPTRY</td><td style="padding:8px;text-align:center"><span style="background:var(--gold-bg);color:var(--gold);padding:2px 8px;border-radius:4px;font-size:11px">DROPPED</span></td><td style="padding:8px;text-align:right;color:var(--red)">-$50.53</td><td style="padding:8px;text-align:right;color:var(--text3)">N/A</td><td style="padding:8px;color:var(--text2);font-size:12px">14% WR. TRY crosses: structural carry trade bias defeats mean-reversion.</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
 </main>
 
 <footer class="footer">
-TradingLand &copy; 2026 | Last updated: 2026-02-15 11:20:00 PST
+TradingLand &copy; 2026 | Last updated: 2026-02-22 17:00:00 PST
 </footer>
 </div>
 
@@ -1785,6 +1931,81 @@ if(dt){
 })();
 </script>
 <!-- ELITE EIGHT TAB END -->
+
+<!-- VIRGIN VWAP + NEW DEMOS DATA -->
+<script>
+(function(){
+  const virginData = [
+    {sym:'XPTUSD',tier:'✅ T1',s:1.25,vp:60,t2yr:372,wr2yr:38.4,pf2yr:1.29,pnl2yr:81.81,pnl90d:76.63},
+    {sym:'AUDCAD',tier:'✅ T1',s:1.75,vp:60,t2yr:300,wr2yr:42.0,pf2yr:1.25,pnl2yr:85.53,pnl90d:18.93},
+    {sym:'GBPJPY',tier:'✅ T1',s:1.25,vp:60,t2yr:493,wr2yr:38.9,pf2yr:1.12,pnl2yr:116.95,pnl90d:16.36},
+    {sym:'JP225',tier:'✅ T1',s:1.25,vp:90,t2yr:135,wr2yr:43.7,pf2yr:1.37,pnl2yr:81.32,pnl90d:39.64},
+    {sym:'CHFJPY',tier:'✅ T1',s:1.25,vp:60,t2yr:504,wr2yr:39.5,pf2yr:1.11,pnl2yr:82.90,pnl90d:0},
+    {sym:'AUDJPY',tier:'✅ T2',s:1.50,vp:60,t2yr:365,wr2yr:40.8,pf2yr:1.18,pnl2yr:72.64,pnl90d:1.27},
+    {sym:'EURUSD',tier:'✅ T2',s:1.25,vp:90,t2yr:407,wr2yr:37.6,pf2yr:1.14,pnl2yr:63.56,pnl90d:8.59},
+    {sym:'EURJPY',tier:'✅ T2',s:2.00,vp:90,t2yr:147,wr2yr:38.8,pf2yr:1.16,pnl2yr:39.23,pnl90d:0},
+    {sym:'EURTRY',tier:'✅ T2',s:1.75,vp:30,t2yr:323,wr2yr:40.2,pf2yr:1.12,pnl2yr:4.54,pnl90d:5.06},
+    {sym:'XAUUSD',tier:'✅ T2',s:1.25,vp:90,t2yr:387,wr2yr:35.7,pf2yr:1.00,pnl2yr:0.21,pnl90d:52.23},
+    {sym:'BTCEUR',tier:'⚠️ T3',s:2.00,vp:60,t2yr:146,wr2yr:36.3,pf2yr:1.10,pnl2yr:70.31,pnl90d:-36.91},
+    {sym:'BCHUSD',tier:'⚠️ T3',s:1.25,vp:60,t2yr:489,wr2yr:39.9,pf2yr:1.17,pnl2yr:3.15,pnl90d:0.99},
+    {sym:'BTCUSD',tier:'🔴 Q',s:0,vp:0,t2yr:0,wr2yr:0,pf2yr:0,pnl2yr:-34,pnl90d:-53},
+    {sym:'USDJPY',tier:'🔴 Q',s:0,vp:0,t2yr:0,wr2yr:0,pf2yr:0,pnl2yr:-53,pnl90d:-14},
+    {sym:'XPDUSD',tier:'🔴 Q',s:0,vp:0,t2yr:0,wr2yr:0,pf2yr:0,pnl2yr:-113,pnl90d:-73}
+  ];
+  const vt = document.getElementById('virgin-table');
+  if(vt) vt.innerHTML = virginData.map(r => {
+    const pnlC = v => v>0?'#3fb950':v<0?'#f85149':'#8b949e';
+    const tierC = r.tier.includes('T1')?'#3fb950':r.tier.includes('T2')?'#58a6ff':r.tier.includes('T3')?'#d29922':'#f85149';
+    return `<tr style="border-bottom:1px solid #21262d">
+      <td style="padding:8px;font-weight:600;color:#f0f6fc">${r.sym}</td>
+      <td style="padding:8px;text-align:center"><span style="color:${tierC};font-weight:600">${r.tier}</span></td>
+      <td style="padding:8px;text-align:right">${r.s||'—'}</td>
+      <td style="padding:8px;text-align:right">${r.vp||'—'}</td>
+      <td style="padding:8px;text-align:right">${r.t2yr||'—'}</td>
+      <td style="padding:8px;text-align:right">${r.wr2yr?r.wr2yr+'%':'—'}</td>
+      <td style="padding:8px;text-align:right">${r.pf2yr||'—'}</td>
+      <td style="padding:8px;text-align:right;color:${pnlC(r.pnl2yr)}">${r.pnl2yr>0?'+':''}$${r.pnl2yr.toFixed(2)}</td>
+      <td style="padding:8px;text-align:right;color:${pnlC(r.pnl90d)}">${r.pnl90d>0?'+':''}$${r.pnl90d.toFixed(2)}</td>
+    </tr>`;
+  }).join('');
+
+  const demos = [
+    {id:'demo-1',lbl:'Originals · S3+S4 · 1H',tf:'1H',inst:'GBPJPY, EURUSD, XAUUSD',sys:'S3+S4',st:'🟢'},
+    {id:'demo-2',lbl:'Originals · S3+S4 · 30m',tf:'30m',inst:'GBPJPY, EURUSD, XAUUSD',sys:'S3+S4',st:'🟢'},
+    {id:'demo-3',lbl:'Originals · S3+S4 · 15m',tf:'15m',inst:'GBPJPY, EURUSD, XAUUSD',sys:'S3+S4',st:'🟢'},
+    {id:'demo-4',lbl:'Originals · S3+S4 · 5m',tf:'5m',inst:'GBPJPY, EURUSD, XAUUSD',sys:'S3+S4',st:'🟢'},
+    {id:'demo-5',lbl:'Top Metals · S4 · 1H',tf:'1H',inst:'XPTUSD, XAUUSD',sys:'S4',st:'🟢'},
+    {id:'demo-6',lbl:'Top Crosses · S4 · 1H',tf:'1H',inst:'AUDCAD, AUDJPY, CHFJPY',sys:'S4',st:'🟢'},
+    {id:'demo-7',lbl:'XPTUSD · S4 · 1H',tf:'1H',inst:'XPTUSD',sys:'S4',st:'⭐'},
+    {id:'demo-8',lbl:'AUDCAD · S4 · 1H',tf:'1H',inst:'AUDCAD',sys:'S4',st:'⭐'},
+    {id:'demo-9',lbl:'GBPJPY · S4 · 1H',tf:'1H',inst:'GBPJPY',sys:'S4',st:'🟢'},
+    {id:'demo-10',lbl:'JP225 · S4 · 1H',tf:'1H',inst:'JP225',sys:'S4',st:'🟢'},
+    {id:'demo-11',lbl:'CHFJPY · S4 · 1H',tf:'1H',inst:'CHFJPY',sys:'S4',st:'🟢'},
+    {id:'demo-12',lbl:'EURUSD · S4 · 1H',tf:'1H',inst:'EURUSD',sys:'S4',st:'🟢'},
+    {id:'demo-13',lbl:'AUDJPY · S4 · 1H',tf:'1H',inst:'AUDJPY',sys:'S4',st:'🟢'},
+    {id:'demo-14',lbl:'EURTRY · S4 · 1H',tf:'1H',inst:'EURTRY',sys:'S4',st:'🟡'},
+    {id:'demo-15',lbl:'EURJPY · S4 · 1H',tf:'1H',inst:'EURJPY',sys:'S4',st:'🟢'},
+    {id:'demo-16',lbl:'BCHUSD · S4 · 1H',tf:'1H',inst:'BCHUSD',sys:'S4',st:'🟡'},
+    {id:'demo-17',lbl:'BTCEUR · S4 · 1H',tf:'1H',inst:'BTCEUR',sys:'S4',st:'🟡'},
+    {id:'demo-18',lbl:'Multi-Top · S4 · 15m',tf:'15m',inst:'XPTUSD, AUDCAD, JP225',sys:'S4',st:'🟢'},
+    {id:'demo-19',lbl:'All Promoted · S4 · 1H',tf:'1H',inst:'10 symbols',sys:'S4',st:'🟢'},
+    {id:'demo-20',lbl:'BTCUSD · QUARANTINED',tf:'1H',inst:'BTCUSD',sys:'—',st:'🔴'},
+    {id:'demo-21',lbl:'CADJPY · S4 · 1H',tf:'1H',inst:'CADJPY',sys:'S4',st:'🔵'}
+  ];
+  const dt = document.getElementById('newdemos-table');
+  if(dt) dt.innerHTML = demos.map(d => {
+    const stC = {'🟢':'#3fb950','⭐':'#d29922','🟡':'#f0883e','🔴':'#f85149','🔵':'#58a6ff'}[d.st]||'#8b949e';
+    return `<tr style="border-bottom:1px solid #21262d">
+      <td style="padding:8px;color:var(--blue);font-weight:600">${d.id}</td>
+      <td style="padding:8px;color:#f0f6fc">${d.lbl}</td>
+      <td style="padding:8px;text-align:center">${d.tf}</td>
+      <td style="padding:8px;font-size:11px;color:var(--text2)">${d.inst}</td>
+      <td style="padding:8px;text-align:center"><span style="background:${stC}22;color:${stC};padding:2px 6px;border-radius:4px;font-size:11px">${d.sys}</span></td>
+      <td style="padding:8px;text-align:center;font-size:16px">${d.st}</td>
+    </tr>`;
+  }).join('');
+})();
+</script>
 
 </body>
 </html>
