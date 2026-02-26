@@ -1,0 +1,77 @@
+{
+  "instruments": {
+    "USDJPY": {
+      "demo_id": "demo-22",
+      "balance": 500.0,
+      "pnl": 0.0,
+      "trades": 0,
+      "wins": 0,
+      "win_rate": "N/A",
+      "max_dd": 0,
+      "open_positions": 0,
+      "recent_trades": [],
+      "status": "awaiting"
+    },
+    "AUDJPY": {
+      "demo_id": "demo-23",
+      "balance": 500.0,
+      "pnl": 0.0,
+      "trades": 0,
+      "wins": 0,
+      "win_rate": "N/A",
+      "max_dd": 0,
+      "open_positions": 0,
+      "recent_trades": [],
+      "status": "awaiting"
+    },
+    "GBPJPY": {
+      "demo_id": "demo-24",
+      "balance": 500.0,
+      "pnl": 0.0,
+      "trades": 0,
+      "wins": 0,
+      "win_rate": "N/A",
+      "max_dd": 0,
+      "open_positions": 0,
+      "recent_trades": [],
+      "status": "awaiting"
+    },
+    "EURTRY": {
+      "demo_id": "demo-25",
+      "balance": 500.0,
+      "pnl": 0.0,
+      "trades": 0,
+      "wins": 0,
+      "win_rate": "N/A",
+      "max_dd": 0,
+      "open_positions": 0,
+      "recent_trades": [],
+      "status": "awaiting"
+    },
+    "AUDCAD": {
+      "demo_id": "demo-26",
+      "balance": 500.0,
+      "pnl": 0.0,
+      "trades": 0,
+      "wins": 0,
+      "win_rate": "N/A",
+      "max_dd": 0,
+      "open_positions": 0,
+      "recent_trades": [],
+      "status": "awaiting"
+    },
+    "CHFJPY": {
+      "demo_id": "demo-27",
+      "balance": 500.0,
+      "pnl": 0.0,
+      "trades": 0,
+      "wins": 0,
+      "win_rate": "N/A",
+      "max_dd": 0,
+      "open_positions": 0,
+      "recent_trades": [],
+      "status": "awaiting"
+    }
+  },
+  "updated": "2026-02-26T07:47:02"
+}
