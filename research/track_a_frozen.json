@@ -1,0 +1,31 @@
+{
+  "track": "A",
+  "name": "OPTION_A_XAUUSD_5M_SHADOW_60D",
+  "classification": "PROFITABLE_DEPLOYABLE_CANDIDATE",
+  "status": "FROZEN",
+  "frozen_at": "2026-03-17",
+  "symbol": "XAUUSD",
+  "timeframe": "5m",
+  "entry": {
+    "type": "VWAP_band_touch_crossback",
+    "band_sigma_mult": 0.4,
+    "dist_sigma_max": 1.0,
+    "skip_hours_utc": [22, 0]
+  },
+  "exit": {
+    "tp_atr_mult": 1.0,
+    "sl_atr_mult": 1.5
+  },
+  "cost_model_pct": 0.00025,
+  "validated_metrics": {
+    "is_win_rate_pct": 70.8,
+    "is_profit_factor": 1.37,
+    "is_max_dd_pct": 0.3,
+    "is_trades": 24,
+    "expectancy_sign": "POSITIVE",
+    "note": "Below 80% WR target but economically viable. Best honest result from all XAUUSD research."
+  },
+  "why_not_80pct": "Tight TP needed for 80% WR produces PF<0.50 (negative EV). WR/payoff tradeoff is structurally irresolvable on 5m XAUUSD with VWAP MR.",
+  "modification_lock": true,
+  "promotion_readiness": "READY_FOR_60D_SHADOW_VALIDATION"
+}
