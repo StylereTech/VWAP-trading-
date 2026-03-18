@@ -1,0 +1,44 @@
+{
+  "classifications": [
+    {
+      "branch": "VWAP_MR",
+      "symbol": "XAUUSD",
+      "timeframe": "5m",
+      "wr_pct": 70.8,
+      "pf": 1.37,
+      "max_dd_pct": 0.3,
+      "expectancy": "POSITIVE",
+      "trades_is": 24,
+      "status": "PROFITABLE_DEPLOYABLE",
+      "action": "PROMOTE_TO_SHADOW",
+      "reason": "Best honest result. WR below 80% but economically viable. Frozen."
+    },
+    {
+      "branch": "VWAP_MR",
+      "symbol": "XAUUSD",
+      "timeframe": "1H",
+      "wr_pct": 82.1,
+      "pf": 0.49,
+      "max_dd_pct": 0.3,
+      "expectancy": "NEGATIVE",
+      "trades_is": 106,
+      "status": "HIGH_WR_NEGATIVE_EV",
+      "action": "QUARANTINE",
+      "reason": "80%+ WR exists but PF<0.50. BE_WR=83.3%, actual WR=82.1%. Loses money."
+    },
+    {
+      "branch": "VWAP_MR",
+      "symbol": "XAUUSD",
+      "timeframe": "4H",
+      "wr_pct": null,
+      "pf": null,
+      "expectancy": "UNCONFIRMED",
+      "trades_is": null,
+      "status": "PENDING_VALIDATION",
+      "action": "CLASSIFY_FROM_MULTI_SYMBOL_LOOP",
+      "reason": "Sub-agent OOS had only n=9. Apply same standard as 1H."
+    }
+  ],
+  "structural_finding": "On XAUUSD VWAP MR: 80%+ WR and positive expectancy cannot coexist. Tight TP for 80% WR requires BE_WR of 83-87% but strategy delivers 78-83%. Architecturally blocked.",
+  "best_deployable": "XAUUSD 5m VWAP MR (WR=70.8%, PF=1.37, DD=0.3%)"
+}

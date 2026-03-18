@@ -1,77 +1,23 @@
 # Python
 __pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
+*.pyc
+*.pyo
+.pytest_cache/
 
-# Virtual environments
-venv/
-env/
-ENV/
-.venv
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
-
-# Data files (don't commit large CSV files)
-*.csv
-!example_*.csv
-data/*.csv
-
-# Model files
-*.pth
-*.pt
-*.h5
-*.pkl
-models/
-
-# Logs
-*.log
-logs/
-
-# Environment variables
-.env
-.env.local
-
-# Jupyter
-.ipynb_checkpoints/
-*.ipynb
-
-# OS
-Thumbs.db
-.DS_Store
-
-# Temporary files
-*.tmp
-*.bak
-*.swp
-
-# Optimization outputs (can be large)
-optimization_results/
-backtest_results/
-
-# Keep config files but not sensitive data
-!PROP_FIRM_SAFE_CONFIG.json
-!*.json
+# Node
 node_modules/
+*.log
+
+# Data files (large, don't commit raw data)
+*.csv
+jpy_expansion/*.csv
+jpy_clean/*.csv
+multitrack/*.csv
+integrity_rerun/*.csv
+
+# Temp research scripts
+jpy_expansion_run*.py
+research_loop*.py
+research_final.py
+validate_champion.py
+write_final_report.py
