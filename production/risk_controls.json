@@ -1,0 +1,33 @@
+{
+  "global": {
+    "kill_switch": false,
+    "max_daily_loss_pct": 5,
+    "max_open_positions": 3,
+    "approved_live_only": true,
+    "blocked_in_integrity_reset": true
+  },
+  "account_rules": {
+    "703060": {
+      "dd_10pct_action": "reduce_size_60pct",
+      "dd_12pct_action": "pause_signals",
+      "dd_15pct_action": "full_stop",
+      "max_concurrent_trades": 2
+    },
+    "703062": {
+      "dd_10pct_action": "reduce_size_60pct",
+      "dd_12pct_action": "pause_signals",
+      "dd_15pct_action": "full_stop",
+      "max_concurrent_trades": 1
+    }
+  },
+  "live_approval_gate": {
+    "required_conditions": [
+      "strategy.status == APPROVED",
+      "strategy.backtest.validated == true",
+      "strategy.backtest.oos_n >= 25",
+      "strategy.backtest.oos_pf >= 1.20",
+      "risk_controls.global.kill_switch == false",
+      "risk_controls.global.blocked_in_integrity_reset == false"
+    ]
+  }
+}

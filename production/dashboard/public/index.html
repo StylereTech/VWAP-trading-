@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VWAP-MR Trading Operations</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #0a0e1a; color: #e2e8f0; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; }
+.header { background: #111827; border-bottom: 1px solid #1f2937; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; }
+.header h1 { color: #60a5fa; font-size: 16px; letter-spacing: 2px; }
+.mode-badge { padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: bold; letter-spacing: 1px; }
+.mode-shadow { background: #1e3a5f; color: #60a5fa; border: 1px solid #3b82f6; }
+.mode-live { background: #064e3b; color: #34d399; border: 1px solid #10b981; }
+.mode-blocked { background: #450a0a; color: #f87171; border: 1px solid #ef4444; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; padding: 16px; }
+.card { background: #111827; border: 1px solid #1f2937; border-radius: 8px; padding: 16px; }
+.card-title { color: #9ca3af; font-size: 10px; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 12px; }
+.alert { padding: 8px 12px; border-radius: 4px; margin-bottom: 8px; font-size: 12px; }
+.alert-critical { background: #450a0a; border-left: 3px solid #ef4444; color: #fca5a5; }
+.alert-high { background: #451a03; border-left: 3px solid #f97316; color: #fed7aa; }
+.alert-medium { background: #1c1917; border-left: 3px solid #f59e0b; color: #fde68a; }
+.strategy-row { padding: 10px; border: 1px solid #1f2937; border-radius: 6px; margin-bottom: 8px; }
+.strategy-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.strategy-id { color: #e2e8f0; font-weight: bold; }
+.status-badge { padding: 2px 8px; border-radius: 3px; font-size: 10px; font-weight: bold; }
+.status-shadow { background: #1e3a5f; color: #60a5fa; }
+.status-provisional { background: #451a03; color: #f97316; }
+.status-rejected { background: #1c1917; color: #6b7280; }
+.status-live { background: #064e3b; color: #34d399; }
+.strategy-meta { color: #6b7280; font-size: 11px; }
+.metric { display: inline-block; margin-right: 12px; }
+.metric-val { color: #e2e8f0; }
+.metric-label { color: #6b7280; }
+.account-card { background: #0f172a; border: 1px solid #1f2937; border-radius: 6px; padding: 12px; margin-bottom: 10px; }
+.account-header { display: flex; justify-content: space-between; }
+.account-id { color: #60a5fa; font-size: 14px; font-weight: bold; }
+.unknown-badge { color: #f59e0b; font-size: 11px; }
+.kill-btn { background: #7f1d1d; color: #f87171; border: 1px solid #ef4444; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 11px; font-family: inherit; }
+.kill-btn:hover { background: #991b1b; }
+.timestamp { color: #4b5563; font-size: 10px; text-align: right; padding: 8px 20px; border-top: 1px solid #1f2937; }
+.integrity-banner { background: #1c1f2e; border: 1px solid #3b82f6; border-radius: 6px; padding: 12px 16px; margin: 16px 16px 0; }
+.integrity-banner h3 { color: #60a5fa; font-size: 12px; letter-spacing: 1px; margin-bottom: 6px; }
+.integrity-banner p { color: #9ca3af; font-size: 11px; line-height: 1.6; }
+.parity-badge { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 10px; margin-right: 6px; }
+.parity-confirmed { background: #064e3b; color: #34d399; }
+.parity-buggy { background: #450a0a; color: #f87171; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>⚡ VWAP-MR TRADING OPS</h1>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <span id="engine-mode" class="mode-badge mode-shadow">SHADOW MODE</span>
+    <span id="live-time" style="color:#4b5563;font-size:11px;"></span>
+  </div>
+</div>
+
+<div class="integrity-banner">
+  <h3>⚠ INTEGRITY RESET IN PROGRESS</h3>
+  <p>Backtest engine bug found: vectorized VWAP used expanding window (should be daily-reset) and dist filter was inverted.
+     JPY cross results (CHFJPY PF=5.86, GBPJPY PF=2.81, AUDJPY PF=2.07) are PROVISIONAL until corrected engine re-run completes.
+     No JPY strategy is approved for live execution. XAUUSD-5M is in shadow/demo mode (Track A).</p>
+</div>
+
+<div class="grid">
+
+  <!-- ALERTS -->
+  <div class="card" style="grid-column: 1/-1;">
+    <div class="card-title">🔴 Active Alerts</div>
+    <div id="alerts-container">Loading...</div>
+  </div>
+
+  <!-- ENGINE STATUS -->
+  <div class="card">
+    <div class="card-title">⚙ Engine Status</div>
+    <div id="engine-status">Loading...</div>
+  </div>
+
+  <!-- RISK CONTROLS -->
+  <div class="card">
+    <div class="card-title">🛡 Risk Guardrails</div>
+    <div id="risk-container">Loading...</div>
+  </div>
+
+  <!-- STRATEGY REGISTRY -->
+  <div class="card" style="grid-column: 1/-1;">
+    <div class="card-title">📋 Strategy Registry</div>
+    <div id="strategies-container">Loading...</div>
+  </div>
+
+  <!-- LIVE ACCOUNTS -->
+  <div class="card" style="grid-column: 1/-1;">
+    <div class="card-title">💼 Live Accounts (GatesFX)</div>
+    <div id="accounts-container">Loading...</div>
+  </div>
+
+</div>
+
+<div class="timestamp" id="last-updated"></div>
+
+<script>
+async function fetchAll() {
+  try {
+    const [strategies, runtime, risk] = await Promise.all([
+      fetch('/api/strategies').then(r => r.json()),
+      fetch('/api/runtime').then(r => r.json()),
+      fetch('/api/risk').then(r => r.json())
+    ]);
+
+    // Alerts
+    const alertsEl = document.getElementById('alerts-container');
+    alertsEl.innerHTML = runtime.alerts.map(a =>
+      `<div class="alert alert-${a.level.toLowerCase()}">[${a.level}] ${a.msg}</div>`
+    ).join('');
+
+    // Engine status
+    const eng = runtime.engine;
+    document.getElementById('engine-status').innerHTML = `
+      <div style="margin-bottom:8px;">
+        <span class="metric"><span class="metric-label">Status: </span><span class="metric-val">${eng.status}</span></span>
+        <span class="metric"><span class="metric-label">Mode: </span><span class="metric-val">${eng.mode}</span></span>
+      </div>
+      <div style="margin-bottom:8px;">
+        <span class="metric"><span class="metric-label">Live Approved: </span><span class="metric-val" style="color:#34d399;">${eng.approved_live}</span></span>
+        <span class="metric"><span class="metric-label">Shadow: </span><span class="metric-val" style="color:#60a5fa;">${eng.shadow_count}</span></span>
+        <span class="metric"><span class="metric-label">Provisional: </span><span class="metric-val" style="color:#f97316;">${eng.provisional_count}</span></span>
+        <span class="metric"><span class="metric-label">Rejected: </span><span class="metric-val" style="color:#6b7280;">${eng.rejected_count}</span></span>
+      </div>
+      <div style="margin-top:10px;padding:8px;background:#0a0e1a;border-radius:4px;">
+        <span style="color:#f59e0b;font-size:11px;">⚠ ${eng.note}</span>
+      </div>
+    `;
+
+    // Risk
+    document.getElementById('risk-container').innerHTML = risk.guardrails.map(g =>
+      `<div style="padding:6px 0;border-bottom:1px solid #1f2937;font-size:11px;">
+        <span style="color:#34d399;">✓</span> ${g.rule}
+        <span style="float:right;color:#4b5563;">[${g.account}]</span>
+      </div>`
+    ).join('') + `
+    <div style="margin-top:12px;">
+      <button onclick="globalKill()" style="background:#7f1d1d;color:#f87171;border:1px solid #ef4444;padding:6px 16px;border-radius:4px;cursor:pointer;font-family:inherit;font-size:12px;width:100%;">
+        ⛔ GLOBAL KILL SWITCH
+      </button>
+    </div>`;
+
+    // Strategies
+    const stratMap = {
+      'SHADOW': 'status-shadow',
+      'PROVISIONAL': 'status-provisional',
+      'REJECTED': 'status-rejected',
+      'LIVE': 'status-live'
+    };
+    document.getElementById('strategies-container').innerHTML = strategies.strategies.map(s => `
+      <div class="strategy-row">
+        <div class="strategy-header">
+          <span class="strategy-id">${s.id}</span>
+          <div>
+            <span class="status-badge ${stratMap[s.status] || 'status-provisional'}">${s.status}</span>
+            <span class="parity-badge ${s.backtest && s.backtest.validated ? 'parity-confirmed' : 'parity-buggy'}">
+              ${s.backtest && s.backtest.validated ? 'PARITY OK' : 'PARITY UNVERIFIED'}
+            </span>
+          </div>
+        </div>
+        <div class="strategy-meta">
+          ${s.symbol} | ${s.timeframe || 'N/A'} | ${s.reason}
+        </div>
+        ${s.backtest ? `
+        <div style="margin-top:6px;">
+          ${s.backtest.oos_pf ? `<span class="metric"><span class="metric-label">OOS PF: </span><span class="metric-val">${s.backtest.oos_pf}</span></span>` : ''}
+          ${s.backtest.oos_n ? `<span class="metric"><span class="metric-label">OOS n: </span><span class="metric-val">${s.backtest.oos_n}</span></span>` : ''}
+          ${s.backtest.oos_wr ? `<span class="metric"><span class="metric-label">OOS WR: </span><span class="metric-val">${s.backtest.oos_wr}%</span></span>` : ''}
+          ${s.backtest.is_pf ? `<span class="metric"><span class="metric-label">IS PF: </span><span class="metric-val">${s.backtest.is_pf}</span></span>` : ''}
+          ${s.backtest.is_wr ? `<span class="metric"><span class="metric-label">IS WR: </span><span class="metric-val">${s.backtest.is_wr}%</span></span>` : ''}
+        </div>` : ''}
+      </div>
+    `).join('');
+
+    // Accounts
+    document.getElementById('accounts-container').innerHTML = runtime.accounts.map(a => `
+      <div class="account-card">
+        <div class="account-header">
+          <div>
+            <div class="account-id">${a.id} — ${a.name}</div>
+            <div style="color:#9ca3af;font-size:11px;margin-top:2px;">${a.symbols.join(' | ')} | ${a.broker}</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="unknown-badge">⚠ ${a.status}</div>
+            <button class="kill-btn" style="margin-top:6px;" onclick="killAccount('${a.id}')">PAUSE ACCOUNT</button>
+          </div>
+        </div>
+        <div style="margin-top:8px;font-size:11px;color:#6b7280;">${a.note}</div>
+        <div style="margin-top:8px;font-size:11px;">
+          <span style="color:#34d399;">Kill rules:</span>
+          ${Object.entries(a.kill_switch).map(([k,v]) => `<span style="margin-left:8px;color:#9ca3af;">${k}: ${v}</span>`).join('')}
+        </div>
+      </div>
+    `).join('');
+
+    document.getElementById('last-updated').textContent = `Last updated: ${new Date().toISOString()}`;
+
+  } catch(err) {
+    console.error('Dashboard fetch error:', err);
+    document.getElementById('alerts-container').innerHTML = '<div class="alert alert-critical">[ERROR] Dashboard fetch failed: ' + err.message + '</div>';
+  }
+}
+
+function updateTime() {
+  document.getElementById('live-time').textContent = new Date().toUTCString().replace('GMT', 'UTC');
+}
+
+function globalKill() {
+  if (!confirm('GLOBAL KILL: Pause all strategies on all accounts?')) return;
+  fetch('/api/kill', {method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({account_id: 'ALL', action: 'GLOBAL_KILL'})})
+    .then(r => r.json())
+    .then(d => alert('Kill switch triggered: ' + d.note));
+}
+
+function killAccount(id) {
+  if (!confirm('Pause account ' + id + '?')) return;
+  fetch('/api/kill', {method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({account_id: id, action: 'PAUSE'})})
+    .then(r => r.json())
+    .then(d => alert(d.note));
+}
+
+fetchAll();
+setInterval(fetchAll, 30000);
+setInterval(updateTime, 1000);
+updateTime();
+</script>
+</body>
+</html>

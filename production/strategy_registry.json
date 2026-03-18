@@ -1,0 +1,155 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-03-17",
+  "governance_rules": {
+    "promote_to_live": "OOS PF >= 1.20, EV > 0, n >= 25, MaxDD < 15%, robustness_check_pass",
+    "promote_to_shadow": "OOS PF >= 1.00, EV > 0, n >= 15",
+    "reject": "OOS PF < 1.00 or EV <= 0 or n < 15",
+    "near_miss": "n < 25 but OOS PF >= 1.20 — needs more data"
+  },
+  "strategies": [
+    {
+      "id": "VWAP-MR-XAUUSD-5M",
+      "symbol": "XAUUSD",
+      "timeframe": "5M",
+      "family": "VWAP-MR",
+      "status": "SHADOW",
+      "live_status": "BLOCKED",
+      "reason": "Track A 60-day shadow validation in progress — demo only",
+      "backtest": {
+        "is_wr": 70.8,
+        "is_pf": 1.37,
+        "oos_wr": null,
+        "oos_pf": null,
+        "oos_n": 24,
+        "note": "OOS n=24 below 25 threshold — near-miss, promoting to shadow only",
+        "validated": true,
+        "engine": "strategy_module_direct",
+        "bug_affected": "unknown"
+      },
+      "params": {
+        "tp_mult": 1.0,
+        "sl_mult": 1.5,
+        "band_sigma": 0.4,
+        "rexp_mult": 1.5,
+        "rsi_lo": 25,
+        "rsi_hi": 75,
+        "session": "all",
+        "cost_pct": 0.00025
+      },
+      "live_account": null,
+      "demo_account": "OPTION_A_XAUUSD_5M_SHADOW",
+      "kill_switch": {"max_dd_pct": 15, "consecutive_losses": 10},
+      "created": "2026-03-17"
+    },
+    {
+      "id": "VWAP-MR-CHFJPY-1H",
+      "symbol": "CHFJPY",
+      "timeframe": "1H",
+      "family": "VWAP-MR",
+      "status": "PROVISIONAL",
+      "live_status": "BLOCKED",
+      "reason": "Backtest logic bug found — daily-reset VWAP and dist filter were wrong. Results not re-validated with corrected engine.",
+      "backtest": {
+        "is_wr": null,
+        "is_pf": null,
+        "oos_wr": 65.2,
+        "oos_pf": 5.86,
+        "oos_n": 66,
+        "note": "PROVISIONAL — corrected backtest pending. OOS PF=5.86 may be inflated by engine bug.",
+        "validated": false,
+        "engine": "vectorized_buggy",
+        "bug_affected": true
+      },
+      "params": {
+        "tp_mult": 0.75,
+        "sl_mult": 0.25,
+        "band_sigma": 2.0,
+        "rexp_mult": 2.0,
+        "rsi_lo": 35,
+        "rsi_hi": 65,
+        "session": "asia",
+        "cost_pct": 0.00015
+      },
+      "live_account": null,
+      "demo_account": null,
+      "created": "2026-03-17"
+    },
+    {
+      "id": "VWAP-MR-GBPJPY-1H",
+      "symbol": "GBPJPY",
+      "timeframe": "1H",
+      "family": "VWAP-MR",
+      "status": "PROVISIONAL",
+      "live_status": "BLOCKED",
+      "reason": "Same vectorized engine bug as CHFJPY — re-validation pending",
+      "backtest": {
+        "oos_pf": 2.81,
+        "oos_n": 76,
+        "validated": false,
+        "bug_affected": true
+      },
+      "created": "2026-03-17"
+    },
+    {
+      "id": "VWAP-MR-AUDJPY-1H",
+      "symbol": "AUDJPY",
+      "timeframe": "1H",
+      "family": "VWAP-MR",
+      "status": "PROVISIONAL",
+      "live_status": "BLOCKED",
+      "reason": "Same vectorized engine bug — re-validation pending",
+      "backtest": {
+        "oos_pf": 2.07,
+        "oos_n": 33,
+        "validated": false,
+        "bug_affected": true
+      },
+      "created": "2026-03-17"
+    },
+    {
+      "id": "VWAP-MR-XAUUSD-1H",
+      "symbol": "XAUUSD",
+      "timeframe": "1H",
+      "family": "VWAP-MR",
+      "status": "REJECTED",
+      "live_status": "BLOCKED",
+      "reason": "IS WR=82.1% but OOS PF=0.49 — negative EV, structural deadlock confirmed",
+      "backtest": {
+        "oos_pf": 0.49,
+        "oos_wr": 82.1,
+        "validated": true,
+        "bug_affected": false
+      },
+      "created": "2026-03-17"
+    },
+    {
+      "id": "GFX-LIVE-703060",
+      "symbol": "GBPJPY/EURUSD/XAUUSD",
+      "timeframe": "1H",
+      "family": "GatesFX-Live",
+      "status": "LIVE",
+      "live_status": "ACTIVE",
+      "reason": "Live account — 17+ days without audit. Status UNKNOWN.",
+      "live_account": "703060",
+      "balance": 450,
+      "kill_switch": {"10pct_dd": "reduce 60%", "12pct_dd": "pause", "15pct_dd": "full_stop"},
+      "last_audited": null,
+      "audit_needed": true
+    },
+    {
+      "id": "GFX-LIVE-703062",
+      "symbol": "BTCEUR",
+      "timeframe": "1H",
+      "family": "GatesFX-Live",
+      "status": "LIVE",
+      "live_status": "ACTIVE",
+      "reason": "Live account — 17+ days without audit. Status UNKNOWN.",
+      "live_account": "703062",
+      "balance": 350,
+      "kill_switch": {"10pct_dd": "reduce 60%", "12pct_dd": "pause", "15pct_dd": "full_stop"},
+      "last_audited": null,
+      "audit_needed": true
+    }
+  ]
+}

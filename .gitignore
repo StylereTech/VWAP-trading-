@@ -74,3 +74,4 @@ backtest_results/
 # Keep config files but not sensitive data
 !PROP_FIRM_SAFE_CONFIG.json
 !*.json
+node_modules/
