@@ -45,6 +45,34 @@ body { background: #0a0e1a; color: #e2e8f0; font-family: 'SF Mono', 'Fira Code',
 .parity-badge { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 10px; margin-right: 6px; }
 .parity-confirmed { background: #064e3b; color: #34d399; }
 .parity-buggy { background: #450a0a; color: #f87171; }
+/* Health panel */
+.health-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid #1f2937; font-size: 12px; }
+.health-name { color: #e2e8f0; }
+.health-note { color: #6b7280; font-size: 11px; margin-top: 2px; }
+.hbadge { padding: 2px 8px; border-radius: 3px; font-size: 10px; font-weight: bold; }
+.hbadge-healthy { background: #064e3b; color: #34d399; }
+.hbadge-shadow { background: #1e3a5f; color: #60a5fa; }
+.hbadge-disconnected { background: #450a0a; color: #f87171; }
+.hbadge-stale { background: #451a03; color: #f97316; }
+.hbadge-inprogress { background: #1c1f2e; color: #a78bfa; }
+.hbadge-notcreated { background: #1c1917; color: #f59e0b; }
+/* Event log */
+.event-row { display: flex; gap: 12px; padding: 6px 0; border-bottom: 1px solid #0f172a; font-size: 11px; align-items: flex-start; }
+.event-time { color: #4b5563; white-space: nowrap; min-width: 130px; }
+.event-level-INFO { color: #60a5fa; min-width: 70px; }
+.event-level-WARNING { color: #f59e0b; min-width: 70px; }
+.event-level-CRITICAL { color: #ef4444; min-width: 70px; }
+.event-msg { color: #9ca3af; }
+/* Blocker register */
+.blocker-row { padding: 10px; border: 1px solid #1f2937; border-radius: 6px; margin-bottom: 8px; }
+.blocker-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
+.blocker-title { color: #e2e8f0; font-size: 12px; font-weight: bold; }
+.blocker-detail { color: #6b7280; font-size: 11px; margin-top: 3px; }
+.blocker-release { color: #34d399; font-size: 11px; margin-top: 4px; }
+.blocker-owner { color: #4b5563; font-size: 10px; margin-top: 2px; }
+.sev-CRITICAL { padding: 2px 8px; border-radius: 3px; font-size: 10px; font-weight: bold; background: #450a0a; color: #f87171; }
+.sev-HIGH { padding: 2px 8px; border-radius: 3px; font-size: 10px; font-weight: bold; background: #451a03; color: #f97316; }
+.sev-MEDIUM { padding: 2px 8px; border-radius: 3px; font-size: 10px; font-weight: bold; background: #1c1917; color: #f59e0b; }
 </style>
 </head>
 <body>
@@ -94,6 +122,24 @@ body { background: #0a0e1a; color: #e2e8f0; font-family: 'SF Mono', 'Fira Code',
   <div class="card" style="grid-column: 1/-1;">
     <div class="card-title">💼 Live Accounts (GatesFX)</div>
     <div id="accounts-container">Loading...</div>
+  </div>
+
+  <!-- SYSTEM HEALTH -->
+  <div class="card" style="grid-column: 1/-1;">
+    <div class="card-title">🔬 System Health</div>
+    <div id="health-container">Loading...</div>
+  </div>
+
+  <!-- EVENT LOG -->
+  <div class="card" style="grid-column: 1/-1;">
+    <div class="card-title">📜 Event Log</div>
+    <div id="eventlog-container"></div>
+  </div>
+
+  <!-- BLOCKER REGISTER -->
+  <div class="card" style="grid-column: 1/-1;">
+    <div class="card-title">🚧 Blocker Register</div>
+    <div id="blockers-container"></div>
   </div>
 
 </div>
@@ -227,8 +273,107 @@ function killAccount(id) {
     .then(d => alert(d.note));
 }
 
+// === SYSTEM HEALTH ===
+async function fetchHealth() {
+  try {
+    const data = await fetch('/api/health/detailed').then(r => r.json());
+    const badgeClass = s => {
+      const map = {
+        HEALTHY: 'hbadge-healthy', SHADOW_MODE: 'hbadge-shadow',
+        DISCONNECTED: 'hbadge-disconnected', STALE: 'hbadge-stale',
+        IN_PROGRESS: 'hbadge-inprogress', NOT_CREATED: 'hbadge-notcreated'
+      };
+      return map[s] || 'hbadge-stale';
+    };
+    document.getElementById('health-container').innerHTML = data.components.map(c => `
+      <div class="health-row">
+        <div>
+          <div class="health-name">${c.name}</div>
+          ${c.note ? `<div class="health-note">${c.note}</div>` : ''}
+        </div>
+        <span class="hbadge ${badgeClass(c.status)}">${c.status}</span>
+      </div>
+    `).join('') + `
+    <div style="margin-top:10px;padding:8px;background:#0a0e1a;border-radius:4px;font-size:11px;">
+      <span style="color:#a78bfa;">⚙ Integrity Reset: </span>
+      <span style="color:#9ca3af;">${data.integrity_reset.status} — ${data.integrity_reset.bug_found}</span><br>
+      <span style="color:#6b7280;">Pending symbols: ${data.integrity_reset.symbols_pending.join(', ')}</span>
+    </div>`;
+  } catch(err) {
+    document.getElementById('health-container').innerHTML = `<div class="alert alert-critical">Health fetch failed: ${err.message}</div>`;
+  }
+}
+
+// === EVENT LOG ===
+function renderEventLog() {
+  const events = [
+    {time: '2026-03-17 00:04', level: 'INFO',     msg: 'Deployment stylere-10point0-20260317-190203 deployed to EB production-node'},
+    {time: '2026-03-17 23:58', level: 'WARNING',   msg: 'Backtest engine bug found: expanding VWAP in vectorized loops'},
+    {time: '2026-03-17 23:50', level: 'CRITICAL',  msg: 'JPY cross revalidation job timeout — results unconfirmed'},
+    {time: '2026-03-17 22:00', level: 'INFO',      msg: 'P3 security: 2FA, CAPTCHA, CSP nonce committed (527106e)'},
+    {time: '2026-03-01 00:00', level: 'WARNING',   msg: 'Live accounts 703060 + 703062 last audited — 17+ days ago'},
+    {time: '2026-03-01 00:00', level: 'INFO',      msg: 'Live accounts funded: 703060 $450, 703062 $350 (GatesFX)'},
+  ];
+  document.getElementById('eventlog-container').innerHTML = events.map(e => `
+    <div class="event-row">
+      <span class="event-time">${e.time}</span>
+      <span class="event-level-${e.level}">[${e.level}]</span>
+      <span class="event-msg">${e.msg}</span>
+    </div>
+  `).join('');
+}
+
+// === BLOCKER REGISTER ===
+function renderBlockers() {
+  const blockers = [
+    {id: 'B1', severity: 'CRITICAL', category: 'STRATEGY_INTEGRITY',
+     title: 'JPY cross corrected backtest not complete',
+     detail: 'CHFJPY/GBPJPY/AUDJPY/USDJPY/CADJPY/NZDJPY/EURJPY/AUDCAD results provisional',
+     owner: 'Agent 007', release: 'Run corrected backtest via real strategy module'},
+    {id: 'B2', severity: 'CRITICAL', category: 'BROKER_ACCESS',
+     title: 'TraderLocker API blocked from WSL2',
+     detail: '403 from live.traderlocker.com — DNS/Cloudflare blocking WSL2 egress',
+     owner: 'Infrastructure', release: 'Access from non-WSL environment or TraderLocker API key + VPN'},
+    {id: 'B3', severity: 'HIGH', category: 'ACCOUNT_STATE',
+     title: 'Accounts 703060 + 703062 unaudited 17+ days',
+     detail: 'Current balance, equity, positions unknown. Kill switch rules unenforced.',
+     owner: 'Jefe', release: 'Manual audit at gatesfx.com — login and verify each account'},
+    {id: 'B4', severity: 'HIGH', category: 'VALIDATION',
+     title: 'Track A demo account not created',
+     detail: 'OPTION_A_XAUUSD_5M_SHADOW must be created on GatesFX demo',
+     owner: 'Jefe', release: 'Login to gatesfx.com → new demo account → name: OPTION_A_XAUUSD_5M_SHADOW'},
+    {id: 'B5', severity: 'MEDIUM', category: 'DEPLOYMENT',
+     title: 'RECAPTCHA_SECRET_KEY not set in EB',
+     detail: 'CAPTCHA gate is deployed but inert — register can bypass without key',
+     owner: 'Jefe', release: 'console.cloud.google.com → reCAPTCHA → add key to EB env'},
+    {id: 'B6', severity: 'MEDIUM', category: 'DEPLOYMENT',
+     title: 'MongoDB Atlas network access not restricted',
+     detail: 'EB IP 3.142.142.109 needs to be allowlisted; broad access should be removed',
+     owner: 'Jefe', release: 'Atlas → Network Access → add 3.142.142.109, remove 0.0.0.0/0'},
+  ];
+  document.getElementById('blockers-container').innerHTML = blockers.map(b => `
+    <div class="blocker-row">
+      <div class="blocker-header">
+        <div>
+          <span style="color:#4b5563;font-size:11px;">${b.id}</span>
+          <span style="color:#9ca3af;font-size:11px;margin-left:8px;">[${b.category}]</span>
+          <div class="blocker-title" style="margin-top:3px;">${b.title}</div>
+        </div>
+        <span class="sev-${b.severity}">${b.severity}</span>
+      </div>
+      <div class="blocker-detail">⚠ ${b.detail}</div>
+      <div class="blocker-release">✓ Release: ${b.release}</div>
+      <div class="blocker-owner">Owner: ${b.owner}</div>
+    </div>
+  `).join('');
+}
+
 fetchAll();
+fetchHealth();
+renderEventLog();
+renderBlockers();
 setInterval(fetchAll, 30000);
+setInterval(fetchHealth, 60000);
 setInterval(updateTime, 1000);
 updateTime();
 </script>

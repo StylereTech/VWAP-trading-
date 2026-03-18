@@ -2,207 +2,63 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>TradingLand — VWAP Research Dashboard</title>
+<title>VWAP-MR Trading Dashboard</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0a0e17;--card:#111827;--border:#1e293b;--accent:#3b82f6;--green:#10b981;--red:#ef4444;--amber:#f59e0b;--text:#e2e8f0;--muted:#64748b;--card-hover:#1a2332}
-body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);min-height:100vh}
-.header{background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 100%);border-bottom:1px solid var(--border);padding:24px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
-.header h1{font-size:24px;font-weight:700;letter-spacing:-0.5px}
-.header h1 span{color:var(--accent)}
-.header .meta{color:var(--muted);font-size:13px}
-.container{max-width:1400px;margin:0 auto;padding:24px}
-.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
-.kpi{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;position:relative;overflow:hidden}
-.kpi::before{content:"";position:absolute;top:0;left:0;right:0;height:3px}
-.kpi.green::before{background:var(--green)}.kpi.red::before{background:var(--red)}.kpi.blue::before{background:var(--accent)}.kpi.amber::before{background:var(--amber)}
-.kpi .label{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px}
-.kpi .value{font-size:28px;font-weight:700;font-variant-numeric:tabular-nums}
-.kpi .sub{font-size:12px;color:var(--muted);margin-top:4px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:24px}
-.card h2{font-size:16px;font-weight:600;margin-bottom:16px;color:var(--text);display:flex;align-items:center;gap:8px}
-.card h2 .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
-.dot.green{background:var(--green)}.dot.blue{background:var(--accent)}.dot.amber{background:var(--amber)}.dot.red{background:var(--red)}
-table{width:100%;border-collapse:collapse;font-size:13px}
-th{text-align:left;padding:10px 12px;border-bottom:2px solid var(--border);color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;font-size:11px}
-td{padding:9px 12px;border-bottom:1px solid var(--border);font-variant-numeric:tabular-nums}
-tr:hover td{background:var(--card-hover)}
-.pos{color:var(--green)}.neg{color:var(--red)}.warn{color:var(--amber)}
-.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
-.badge-shadow{background:#10b98120;color:var(--green)}
-.badge-quarantine{background:#ef444420;color:var(--red)}
-.badge-probation{background:#f59e0b20;color:var(--amber)}
-.badge-pass{background:#10b98120;color:var(--green)}
-.badge-fail{background:#ef444420;color:var(--red)}
-.research-box{background:#1e1b4b22;border:1px solid #3b82f640;border-radius:8px;padding:16px 20px;font-size:13px;line-height:1.7;color:#a5b4fc}
-.research-box strong{color:#c7d2fe}
-.footer{text-align:center;padding:32px;color:var(--muted);font-size:12px;border-top:1px solid var(--border);margin-top:8px}
-@media(max-width:700px){.header{flex-direction:column;align-items:flex-start}}
+body { background: #0a0e1a; color: #e2e8f0; font-family: 'SF Mono', monospace; padding: 40px; }
+h1 { color: #60a5fa; margin-bottom: 8px; }
+.badge { display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: bold; margin: 4px; }
+.shadow { background: #1e3a5f; color: #60a5fa; border: 1px solid #3b82f6; }
+.provisional { background: #451a03; color: #f97316; border: 1px solid #f97316; }
+.rejected { background: #1c1917; color: #6b7280; border: 1px solid #6b7280; }
+.unknown { background: #1c1f00; color: #f59e0b; border: 1px solid #f59e0b; }
+.card { background: #111827; border: 1px solid #1f2937; border-radius: 8px; padding: 20px; margin: 16px 0; }
+.warn { background: #1c1f2e; border: 1px solid #3b82f6; padding: 16px; border-radius: 6px; margin: 16px 0; }
+table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+th { color: #9ca3af; font-size: 11px; text-align: left; padding: 6px; border-bottom: 1px solid #1f2937; }
+td { padding: 8px 6px; font-size: 12px; border-bottom: 1px solid #0f172a; }
 </style>
 </head>
 <body>
+<h1>⚡ VWAP-MR Trading Ops</h1>
+<p style="color:#6b7280;">StylereTech | Updated: 2026-03-17</p>
 
-<div class="header">
-  <h1>⚡ Trading<span>Land</span> — VWAP Research</h1>
-  <div class="meta">Last updated: 2026-03-17 &nbsp;|&nbsp; Research: 30 symbol-TF pairs &nbsp;|&nbsp; Active shadow: 5</div>
+<div class="warn">
+  <strong style="color:#60a5fa;">⚠ INTEGRITY RESET IN PROGRESS</strong><br>
+  <span style="color:#9ca3af;font-size:12px;">Backtest engine bug found (expanding VWAP + inverted dist filter). JPY cross results are PROVISIONAL.
+  No JPY strategy approved for live. Corrected re-validation pending.</span>
 </div>
 
-<div class="container">
-
-  <!-- KPIs -->
-  <div class="kpi-row" id="kpis"></div>
-
-  <!-- Demo Accounts Status Table -->
-  <div class="card">
-    <h2><span class="dot green"></span>Demo Account Status — OOS Validated Results</h2>
-    <div style="overflow-x:auto">
-      <table id="demoTable">
-        <thead>
-          <tr>
-            <th>Account</th>
-            <th>Symbol</th>
-            <th>Strategy</th>
-            <th>Phase</th>
-            <th>Equity</th>
-            <th>P&amp;L</th>
-            <th>Win Rate</th>
-            <th>Max DD</th>
-            <th>Kill Switch</th>
-            <th>Shadow Period</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody id="demoBody"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Strategy QC Gates -->
-  <div class="card">
-    <h2><span class="dot amber"></span>Strategy QC Gate Results</h2>
-    <div style="overflow-x:auto">
-      <table id="qcTable">
-        <thead>
-          <tr>
-            <th>Strategy</th>
-            <th>IS WR &gt; BE</th>
-            <th>OOS WR &gt; BE</th>
-            <th>PF &gt; 1.0</th>
-            <th>DD &lt; 2%</th>
-            <th>n &gt; 30</th>
-            <th>Verdict</th>
-            <th>Notes</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>VWAP-MR-Asia</strong><br><span style="color:var(--muted);font-size:11px">JPY crosses, 1H, Asia session</span></td>
-            <td class="pos">✅</td>
-            <td class="pos">✅</td>
-            <td class="pos">✅</td>
-            <td class="pos">✅</td>
-            <td class="pos">✅</td>
-            <td><span class="badge badge-pass">PASS</span></td>
-            <td>Best: CHFJPY 1H (PF=5.86), GBPJPY 1H (PF=2.81), EURTRY 1H (PF=25.70)</td>
-          </tr>
-          <tr>
-            <td><strong>VWAP-MR-1H</strong><br><span style="color:var(--muted);font-size:11px">XAUUSD 1H</span></td>
-            <td class="pos">✅</td>
-            <td class="pos">✅</td>
-            <td class="neg">❌ neg EV</td>
-            <td class="pos">✅</td>
-            <td class="pos">✅</td>
-            <td><span class="badge badge-quarantine">QUARANTINE</span></td>
-            <td>82.1% WR but PF=0.49 — loses money. BE_WR=83.3%. Architecturally blocked.</td>
-          </tr>
-          <tr>
-            <td><strong>VWAP-MR Indices/Crypto</strong><br><span style="color:var(--muted);font-size:11px">JP225, US30, NAS100, BTCUSD, BCHUSD, BTCEUR</span></td>
-            <td class="neg">❌</td>
-            <td class="neg">❌</td>
-            <td class="neg">❌</td>
-            <td class="neg">❌</td>
-            <td>—</td>
-            <td><span class="badge badge-fail">RETIRED</span></td>
-            <td>No edge across all timeframes. Structurally dead.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Research Notes -->
-  <div class="card">
-    <h2><span class="dot blue"></span>Research Notes</h2>
-    <div class="research-box">
-      <strong>Architecture finding (2026-03-17):</strong> VWAP mean-reversion on Asia session JPY crosses shows positive EV at 3:1 R:R.
-      XAUUSD 80%+WR/+EV deadlock confirmed across all timeframes.
-      Best deployable: CHFJPY 1H (PF=5.86), GBPJPY 1H (PF=2.81), XAUUSD 5m (PF=1.37).<br><br>
-      <strong>XAUUSD structural finding:</strong> On XAUUSD VWAP MR, 80%+ WR and positive expectancy cannot coexist. Tight TP for 80% WR requires BE_WR of 83–87% but strategy delivers 78–83%. Architecturally blocked on 1H/4H. Only 5m timeframe achieves honest positive EV (WR=70.8%, PF=1.37).<br><br>
-      <strong>Sigma fix (forex):</strong> Forex pairs from Yahoo Finance have volume≈0. Fixed by using equal-weight expanding VWAP + rolling std as sigma fallback. Results are clean.<br><br>
-      <strong>Near-misses (flagged, not promoted):</strong> AUDCAD 1H (OOS n=15, WR=80%, insufficient sample), EURJPY 4H (OOS n=22, WR=77.3%, insufficient sample). Both need more data before promotion.
-    </div>
-  </div>
-
+<div class="card">
+  <strong>Strategy Governance</strong>
+  <table>
+    <tr><th>ID</th><th>Symbol</th><th>TF</th><th>Status</th><th>OOS PF</th><th>OOS n</th><th>Live OK?</th></tr>
+    <tr><td>VWAP-MR-XAUUSD-5M</td><td>XAUUSD</td><td>5M</td><td><span class="badge shadow">SHADOW</span></td><td>1.37 (IS)</td><td>24</td><td>NO — demo only</td></tr>
+    <tr><td>VWAP-MR-CHFJPY-1H</td><td>CHFJPY</td><td>1H</td><td><span class="badge provisional">PROVISIONAL</span></td><td>5.86 ⚠</td><td>66</td><td>NO — engine bug</td></tr>
+    <tr><td>VWAP-MR-GBPJPY-1H</td><td>GBPJPY</td><td>1H</td><td><span class="badge provisional">PROVISIONAL</span></td><td>2.81 ⚠</td><td>76</td><td>NO — engine bug</td></tr>
+    <tr><td>VWAP-MR-AUDJPY-1H</td><td>AUDJPY</td><td>1H</td><td><span class="badge provisional">PROVISIONAL</span></td><td>2.07 ⚠</td><td>33</td><td>NO — engine bug</td></tr>
+    <tr><td>VWAP-MR-XAUUSD-1H</td><td>XAUUSD</td><td>1H</td><td><span class="badge rejected">REJECTED</span></td><td>0.49</td><td>-</td><td>NO — rejected</td></tr>
+    <tr><td>GFX-LIVE-703060</td><td>GBPJPY/EURUSD/XAUUSD</td><td>1H</td><td><span class="badge unknown">UNAUDITED</span></td><td>-</td><td>-</td><td>NEEDS AUDIT</td></tr>
+    <tr><td>GFX-LIVE-703062</td><td>BTCEUR</td><td>1H</td><td><span class="badge unknown">UNAUDITED</span></td><td>-</td><td>-</td><td>NEEDS AUDIT</td></tr>
+  </table>
 </div>
 
-<div class="footer">TradingLand · StylereTech · VWAP Research Dashboard · 30 symbol-TF pairs surveyed · 2026-03-17</div>
+<div class="card">
+  <strong>Critical Blockers</strong>
+  <table>
+    <tr><th>#</th><th>Severity</th><th>Blocker</th><th>Release Condition</th></tr>
+    <tr><td>B1</td><td style="color:#ef4444;">CRITICAL</td><td>JPY corrected backtest not complete</td><td>Run corrected engine (15-min job)</td></tr>
+    <tr><td>B2</td><td style="color:#ef4444;">CRITICAL</td><td>TraderLocker blocked from WSL2</td><td>Non-WSL environment or VPN</td></tr>
+    <tr><td>B3</td><td style="color:#f97316;">HIGH</td><td>Accounts 703060+703062 unaudited 17+ days</td><td>Manual audit at gatesfx.com</td></tr>
+    <tr><td>B4</td><td style="color:#f97316;">HIGH</td><td>Track A demo not created</td><td>Create OPTION_A_XAUUSD_5M_SHADOW on GatesFX</td></tr>
+    <tr><td>B5</td><td style="color:#f59e0b;">MEDIUM</td><td>RECAPTCHA_SECRET_KEY missing from EB</td><td>Add key from Google Console to EB env</td></tr>
+    <tr><td>B6</td><td style="color:#f59e0b;">MEDIUM</td><td>MongoDB Atlas network not restricted</td><td>Add EB IP 3.142.142.109 to Atlas allowlist</td></tr>
+  </table>
+</div>
 
-<script>
-const demos = [
-  // PROMOTE_TO_SHADOW — real validated results
-  {acct:'XAUUSD-5m',sym:'XAUUSD',strat:'VWAP-MR',phase:'SHADOW',eq:'$500',pnl:'+verified',wr:'70.8%',dd:'0.3%',kill:'OFF',days:'60d shadow',status:'🟢 Shadow Active',pnlVal:0,wrVal:70.8,ddVal:0.3},
-  {acct:'CHFJPY-1H',sym:'CHFJPY',strat:'VWAP-MR',phase:'SHADOW',eq:'$500',pnl:'+OOS valid',wr:'65.2%',dd:'0.0%',kill:'OFF',days:'OOS n=66',status:'🟢 Promoted',pnlVal:0,wrVal:65.2,ddVal:0.0},
-  {acct:'GBPJPY-1H',sym:'GBPJPY',strat:'VWAP-MR',phase:'SHADOW',eq:'$500',pnl:'+OOS valid',wr:'52.6%',dd:'0.0%',kill:'OFF',days:'OOS n=76',status:'🟢 Promoted',pnlVal:0,wrVal:52.6,ddVal:0.0},
-  {acct:'EURTRY-1H',sym:'EURTRY',strat:'VWAP-MR',phase:'SHADOW',eq:'$500',pnl:'+OOS valid',wr:'98.5%',dd:'0.0%',kill:'OFF',days:'OOS n=67',status:'🟢 Promoted ⚠️TRY',pnlVal:0,wrVal:98.5,ddVal:0.0},
-  {acct:'AUDJPY-1H',sym:'AUDJPY',strat:'VWAP-MR',phase:'SHADOW',eq:'$500',pnl:'+OOS valid',wr:'42.4%',dd:'0.0%',kill:'OFF',days:'OOS n=33',status:'🟢 Promoted',pnlVal:0,wrVal:42.4,ddVal:0.0},
-  // QUARANTINE
-  {acct:'XAUUSD-1H',sym:'XAUUSD',strat:'VWAP-MR-1H',phase:'QUARANTINE',eq:'$500',pnl:'-neg EV',wr:'82.1%',dd:'0.3%',kill:'ON',days:'—',status:'🔴 Quarantined',pnlVal:-1,wrVal:82.1,ddVal:0.3},
-  // STRUCTURALLY DEAD
-  {acct:'JP225',sym:'JP225',strat:'VWAP-MR',phase:'QUARANTINE',eq:'$500',pnl:'-no edge',wr:'20%',dd:'0.3%',kill:'ON',days:'—',status:'🔴 Retired',pnlVal:-1,wrVal:20,ddVal:0.3},
-  {acct:'BTCUSD',sym:'BTCUSD',strat:'VWAP-MR',phase:'QUARANTINE',eq:'$500',pnl:'-no edge',wr:'14%',dd:'4.0%',kill:'ON',days:'—',status:'🔴 Retired',pnlVal:-1,wrVal:14,ddVal:4.0},
-  {acct:'EURUSD',sym:'EURUSD',strat:'VWAP-MR',phase:'QUARANTINE',eq:'$500',pnl:'-no edge',wr:'0%',dd:'0.1%',kill:'ON',days:'—',status:'🔴 Retired',pnlVal:-1,wrVal:0,ddVal:0.1},
-  {acct:'NEAR-MISS-AUDCAD',sym:'AUDCAD',strat:'VWAP-MR',phase:'PROBATION',eq:'$500',pnl:'OOS n=15',wr:'80.0%',dd:'0.0%',kill:'OFF',days:'needs data',status:'⚠️ Near-Miss',pnlVal:0,wrVal:80,ddVal:0.0},
-  {acct:'NEAR-MISS-EURJPY',sym:'EURJPY',strat:'VWAP-MR',phase:'PROBATION',eq:'$500',pnl:'OOS n=22',wr:'77.3%',dd:'0.0%',kill:'OFF',days:'needs data',status:'⚠️ Near-Miss',pnlVal:0,wrVal:77.3,ddVal:0.0},
-];
-
-// KPIs
-const shadow = demos.filter(d => d.phase === 'SHADOW').length;
-const quarantine = demos.filter(d => d.phase === 'QUARANTINE').length;
-const probation = demos.filter(d => d.phase === 'PROBATION').length;
-const avgWR = (demos.filter(d=>d.phase==='SHADOW').reduce((s,d)=>s+d.wrVal,0)/shadow).toFixed(1);
-
-const kpiData = [
-  {label:'Active Shadow', value:shadow, sub:'Promoted to shadow trading', cls:'green'},
-  {label:'Quarantined / Retired', value:quarantine, sub:'Kill switch ON', cls:'red'},
-  {label:'Near-Miss (Probation)', value:probation, sub:'Insufficient OOS sample', cls:'amber'},
-  {label:'Avg Shadow Win Rate', value:avgWR+'%', sub:'Across 5 shadow accounts', cls:'blue'},
-  {label:'Pairs Surveyed', value:'30', sub:'Symbol-TF combinations', cls:'blue'},
-  {label:'Research Date', value:'2026-03-17', sub:'Multi-track OOS validation', cls:'amber'},
-];
-
-document.getElementById('kpis').innerHTML = kpiData.map(k =>
-  `<div class="kpi ${k.cls}"><div class="label">${k.label}</div><div class="value">${k.value}</div><div class="sub">${k.sub}</div></div>`
-).join('');
-
-// Demo table
-const phaseClass = {SHADOW:'pos',QUARANTINE:'neg',PROBATION:'warn'};
-const phaseBadge = {SHADOW:'badge-shadow',QUARANTINE:'badge-quarantine',PROBATION:'badge-probation'};
-document.getElementById('demoBody').innerHTML = demos.map(d => `
-  <tr>
-    <td><strong>${d.acct}</strong></td>
-    <td>${d.sym}</td>
-    <td>${d.strat}</td>
-    <td><span class="badge ${phaseBadge[d.phase]||''}">${d.phase}</span></td>
-    <td>${d.eq}</td>
-    <td class="${d.pnlVal>=0?'pos':'neg'}">${d.pnl}</td>
-    <td class="${d.wrVal>=50?'pos':'neg'}">${d.wr}</td>
-    <td class="${d.ddVal>1?'neg':d.ddVal>0.5?'warn':'pos'}">${d.dd}</td>
-    <td class="${d.kill==='ON'?'neg':'pos'}">${d.kill}</td>
-    <td style="color:var(--muted)">${d.days}</td>
-    <td>${d.status}</td>
-  </tr>
-`).join('');
-</script>
+<p style="color:#4b5563;font-size:11px;margin-top:24px;">
+  Live dashboard: localhost:3000 (production/dashboard/) |
+  Repo: github.com/StylereTech/VWAP-trading- |
+  Research: /research/summary.md
+</p>
 </body>
 </html>

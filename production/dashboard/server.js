@@ -95,6 +95,29 @@ app.get('/api/risk', (req, res) => {
   });
 });
 
+// Detailed health check
+app.get('/api/health/detailed', (req, res) => {
+  res.json({
+    components: [
+      {name: 'Dashboard API',    status: 'HEALTHY',      latency_ms: 1},
+      {name: 'Strategy Engine',  status: 'SHADOW_MODE',  note: 'No live strategies approved'},
+      {name: 'Data Feed',        status: 'DISCONNECTED', note: 'TraderLocker blocked from WSL2 sandbox'},
+      {name: 'Broker Adapter',   status: 'DISCONNECTED', note: 'TraderLocker API unreachable — 403 from WSL2'},
+      {name: 'Account 703060',   status: 'STALE',        note: '17+ days since last sync', last_sync: null},
+      {name: 'Account 703062',   status: 'STALE',        note: '17+ days since last sync', last_sync: null},
+      {name: 'Integrity Reset',  status: 'IN_PROGRESS',  note: 'JPY cross corrected backtest pending'},
+      {name: 'Track A Demo',     status: 'NOT_CREATED',  note: 'Jefe must create OPTION_A_XAUUSD_5M_SHADOW at gatesfx.com'},
+    ],
+    integrity_reset: {
+      status: 'IN_PROGRESS',
+      started: '2026-03-17',
+      bug_found: 'expanding VWAP + inverted dist filter in vectorized backtest',
+      symbols_pending: ['CHFJPY', 'GBPJPY', 'AUDJPY', 'USDJPY', 'CADJPY', 'NZDJPY', 'EURJPY', 'AUDCAD'],
+      estimated_completion: 'Requires corrected backtest run (15-min compute job)',
+    }
+  });
+});
+
 // Health check
 app.get('/health', (req, res) => {
   res.json({status: 'ok', timestamp: new Date().toISOString(), mode: 'SHADOW'});
