@@ -43,7 +43,20 @@
         "max_dd_pct": 15,
         "consecutive_losses": 10
       },
-      "created": "2026-03-17"
+      "created": "2026-03-17",
+      "demo_account_number": "2017802",
+      "demo_server": "GATESFX",
+      "demo_currency": "USD",
+      "demo_created": "2026-03-17",
+      "demo_status": "CREATED \u2014 ready for strategy load",
+      "shadow_start_date": "2026-03-17",
+      "shadow_end_date": "2026-05-15",
+      "shadow_kill_switch": {
+        "max_dd_pct": 15,
+        "consecutive_losses": 10,
+        "action": "full_stop"
+      },
+      "notes": "Track A frozen params. 60-day shadow validation. No param changes allowed during shadow period."
     },
     {
       "id": "VWAP-MR-CHFJPY-1H",
@@ -179,5 +192,15 @@
     "captcha_key": "MISSING \u2014 gate inactive",
     "eb_version": "stylere-10point0-20260317-190203",
     "security_score": "9.8/10"
+  },
+  "shadow_readiness": {
+    "track_a_demo": "CREATED",
+    "demo_account_number": "2017802",
+    "demo_server": "GATESFX",
+    "accounts_703060_audit": "PENDING \u2014 manual login required",
+    "accounts_703062_audit": "PENDING \u2014 manual login required",
+    "recaptcha_key": "MISSING",
+    "atlas_ip_restricted": "PENDING",
+    "verdict": "PARTIALLY READY \u2014 Track A demo done, 3 items remaining"
   }
 }

@@ -57,7 +57,7 @@
 
 | Field | Value |
 |-------|-------|
-| Status | **NOT CREATED** |
+| Status | ✅ CREATED |
 | Required action | gatesfx.com → New Demo Account → Name: OPTION_A_XAUUSD_5M_SHADOW |
 | Strategy | VWAP-MR-XAUUSD-5M (frozen params at `production/strategy_registry.json`) |
 | Purpose | 60-day shadow validation before live promotion |
@@ -131,3 +131,33 @@
 
 Once B3 + B4 are done: → **SHADOW READY**  
 Once B5 + B6 are done: → **FULLY HARDENED (10/10)**
+
+---
+
+## UPDATE — 2026-03-17 19:41 CDT
+
+### Track A Demo Account — CREATED ✅
+
+| Field | Value |
+|-------|-------|
+| Account Name | OPTION_A_XAUUSD_5M_SHADOW |
+| Account Number | **2017802** |
+| Server | GATESFX |
+| Currency | USD |
+| Created | 2026-03-17 |
+| Shadow Start | 2026-03-17 |
+| Shadow End | 2026-05-15 (60 days) |
+| Status | ✅ READY — load frozen strategy params |
+
+### Next step for Track A:
+Load `VWAP-MR-XAUUSD-5M` strategy onto account 2017802 with frozen params:
+- TP: 1.0×ATR | SL: 1.5×ATR | Band: 0.4σ
+- Session: all hours | RSI: 25–75 | Range exp: 1.5×
+- Kill switch: 15% DD → full stop, 10 consecutive losses → stop
+- FROZEN — no param changes for 60 days
+
+### Updated Verdict: B4 COMPLETE — 3 items remaining
+- ✅ B4 Track A demo created (2017802)
+- ⏳ B3 Accounts 703060 + 703062 still need manual audit
+- ⏳ B5 RECAPTCHA key still missing
+- ⏳ B6 Atlas IP still unrestricted
