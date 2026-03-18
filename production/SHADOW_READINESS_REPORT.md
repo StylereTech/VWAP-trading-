@@ -161,3 +161,66 @@ Load `VWAP-MR-XAUUSD-5M` strategy onto account 2017802 with frozen params:
 - ⏳ B3 Accounts 703060 + 703062 still need manual audit
 - ⏳ B5 RECAPTCHA key still missing
 - ⏳ B6 Atlas IP still unrestricted
+
+---
+
+## ACCOUNT AUDIT — 2026-03-17 21:30 CDT (Browser scrape via secure.gatesfx.com)
+
+### Account 703060 — 🔴 BLOWN / QUARANTINED
+
+| Field | Value |
+|-------|-------|
+| Initial Balance | $450.00 |
+| Current Balance | **$0.70** |
+| Equity | $0.70 |
+| Floating PL | $0.00 |
+| Open Positions | None |
+| Drawdown vs Initial | **99.8%** |
+| Loss vs Initial | **$449.30** |
+| Classification | **BLOWN** |
+| Action Required | QUARANTINE — do not fund, do not trade |
+
+> Account is effectively wiped. $449.30 lost from initial $450. Strategy (D1, S3+S4, GBPJPY/EURUSD/XAUUSD) consumed the account.
+
+---
+
+### Account 703062 — 🟡 DRIFTED / RESTRICTED
+
+| Field | Value |
+|-------|-------|
+| Initial Balance | $350.00 |
+| Current Balance | **$264.01** |
+| Equity | **$120.71** |
+| Floating PL | **-$143.30** |
+| Margin In Use | $66.78 |
+| Free Margin | $53.93 |
+| Drawdown (equity vs balance) | **54.3%** |
+| Drawdown vs Initial | 24.6% |
+| Open Positions | YES — multiple |
+| Classification | **DRIFTED** |
+| Kill-Switch Rule | DD ≥ 12% → PAUSE | DD ≥ 15% → FULL STOP |
+| Action Required | RESTRICTED — apply 60% size reduction; consider closing open positions given -$143.30 floating |
+
+> Open positions with large floating loss. Equity has dropped 54% below balance. Kill rules require intervention.
+
+---
+
+### Demo Account 2017802 — ✅ CLEAN
+
+| Field | Value |
+|-------|-------|
+| Balance | $1,000.00 |
+| Equity | $1,000.00 |
+| Open Positions | None |
+| Status | ✅ Ready for Track A strategy load |
+
+---
+
+### Updated Verdict: **NOT SHADOW READY — IMMEDIATE ACTION REQUIRED**
+
+| Priority | Action |
+|----------|--------|
+| 🔴 IMMEDIATE | 703060 — QUARANTINE. Do not fund or trade. |
+| 🔴 IMMEDIATE | 703062 — Evaluate open positions. Close if floating loss worsens. |
+| 🟡 NEXT | 703062 — Decide: close all positions, withdraw, or let play out with strict limits |
+| ✅ READY | 2017802 — Track A demo clean, ready to load strategy |

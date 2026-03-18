@@ -145,20 +145,33 @@
       "timeframe": "1H",
       "family": "GatesFX-Live",
       "status": "LIVE",
-      "live_status": "ACTIVE",
+      "live_status": "QUARANTINED",
       "reason": "Live account \u2014 17+ days without audit. Status UNKNOWN.",
       "live_account": "703060",
-      "balance": 450,
+      "balance": 0.7,
       "kill_switch": {
         "10pct_dd": "reduce 60%",
         "12pct_dd": "pause",
         "15pct_dd": "full_stop"
       },
-      "last_audited": null,
+      "last_audited": "2026-03-17",
       "audit_needed": true,
-      "audit_status": "BLOCKED \u2014 TraderLocker DNS unreachable from WSL2",
+      "audit_status": "AUDITED",
       "audit_method": "MANUAL REQUIRED: gatesfx.com login",
-      "stale_days": 17
+      "stale_days": 17,
+      "equity": 0.7,
+      "credit": 0.0,
+      "floating_pl": 0.0,
+      "margin": 0.0,
+      "free_margin": 0.7,
+      "drawdown_pct": 99.8,
+      "initial_balance": 450.0,
+      "loss_vs_initial": 449.3,
+      "open_positions": 0,
+      "audit_source": "Browser scrape \u2014 secure.gatesfx.com/accounts",
+      "classification": "BLOWN",
+      "classification_reason": "Balance $0.70 vs initial $450 \u2014 99.8% drawdown. Account effectively wiped.",
+      "notes": "DO NOT fund. Account blown \u2014 $449.30 lost from initial $450."
     },
     {
       "id": "GFX-LIVE-703062",
@@ -166,20 +179,33 @@
       "timeframe": "1H",
       "family": "GatesFX-Live",
       "status": "LIVE",
-      "live_status": "ACTIVE",
+      "live_status": "RESTRICTED",
       "reason": "Live account \u2014 17+ days without audit. Status UNKNOWN.",
       "live_account": "703062",
-      "balance": 350,
+      "balance": 264.01,
       "kill_switch": {
         "10pct_dd": "reduce 60%",
         "12pct_dd": "pause",
         "15pct_dd": "full_stop"
       },
-      "last_audited": null,
+      "last_audited": "2026-03-17",
       "audit_needed": true,
-      "audit_status": "BLOCKED \u2014 TraderLocker DNS unreachable from WSL2",
+      "audit_status": "AUDITED",
       "audit_method": "MANUAL REQUIRED: gatesfx.com login",
-      "stale_days": 17
+      "stale_days": 17,
+      "equity": 120.71,
+      "credit": 0.0,
+      "floating_pl": -143.3,
+      "margin": 66.78,
+      "free_margin": 53.93,
+      "drawdown_pct": 54.3,
+      "initial_balance": 350.0,
+      "loss_vs_initial": 85.99,
+      "open_positions": "YES \u2014 floating PL -$143.30 with margin in use",
+      "audit_source": "Browser scrape \u2014 secure.gatesfx.com/accounts",
+      "classification": "DRIFTED",
+      "classification_reason": "Balance $264.01 (down from $350 initial), equity $120.71, floating PL -$143.30. DD 54.3% equity vs balance.",
+      "notes": "Open positions with $143.30 floating loss. DD exceeds 10% kill rule. Reduce size 60% immediately."
     }
   ],
   "production_verified": {
@@ -197,10 +223,10 @@
     "track_a_demo": "CREATED",
     "demo_account_number": "2017802",
     "demo_server": "GATESFX",
-    "accounts_703060_audit": "PENDING \u2014 manual login required",
-    "accounts_703062_audit": "PENDING \u2014 manual login required",
+    "accounts_703060_audit": "COMPLETE \u2014 BLOWN (99.8% DD, $0.70 remaining)",
+    "accounts_703062_audit": "COMPLETE \u2014 DRIFTED (54.3% equity DD, open positions -$143.30 floating)",
     "recaptcha_key": "MISSING",
     "atlas_ip_restricted": "PENDING",
-    "verdict": "PARTIALLY READY \u2014 Track A demo done, 3 items remaining"
+    "verdict": "NOT SHADOW READY \u2014 accounts need action before any live trading"
   }
 }
