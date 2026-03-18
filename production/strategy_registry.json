@@ -5,7 +5,7 @@
     "promote_to_live": "OOS PF >= 1.20, EV > 0, n >= 25, MaxDD < 15%, robustness_check_pass",
     "promote_to_shadow": "OOS PF >= 1.00, EV > 0, n >= 15",
     "reject": "OOS PF < 1.00 or EV <= 0 or n < 15",
-    "near_miss": "n < 25 but OOS PF >= 1.20 — needs more data"
+    "near_miss": "n < 25 but OOS PF >= 1.20 \u2014 needs more data"
   },
   "strategies": [
     {
@@ -15,14 +15,14 @@
       "family": "VWAP-MR",
       "status": "SHADOW",
       "live_status": "BLOCKED",
-      "reason": "Track A 60-day shadow validation in progress — demo only",
+      "reason": "Track A 60-day shadow validation in progress \u2014 demo only",
       "backtest": {
         "is_wr": 70.8,
         "is_pf": 1.37,
         "oos_wr": null,
         "oos_pf": null,
         "oos_n": 24,
-        "note": "OOS n=24 below 25 threshold — near-miss, promoting to shadow only",
+        "note": "OOS n=24 below 25 threshold \u2014 near-miss, promoting to shadow only",
         "validated": true,
         "engine": "strategy_module_direct",
         "bug_affected": "unknown"
@@ -39,7 +39,10 @@
       },
       "live_account": null,
       "demo_account": "OPTION_A_XAUUSD_5M_SHADOW",
-      "kill_switch": {"max_dd_pct": 15, "consecutive_losses": 10},
+      "kill_switch": {
+        "max_dd_pct": 15,
+        "consecutive_losses": 10
+      },
       "created": "2026-03-17"
     },
     {
@@ -49,14 +52,14 @@
       "family": "VWAP-MR",
       "status": "PROVISIONAL",
       "live_status": "BLOCKED",
-      "reason": "Backtest logic bug found — daily-reset VWAP and dist filter were wrong. Results not re-validated with corrected engine.",
+      "reason": "Backtest logic bug found \u2014 daily-reset VWAP and dist filter were wrong. Results not re-validated with corrected engine.",
       "backtest": {
         "is_wr": null,
         "is_pf": null,
         "oos_wr": 65.2,
         "oos_pf": 5.86,
         "oos_n": 66,
-        "note": "PROVISIONAL — corrected backtest pending. OOS PF=5.86 may be inflated by engine bug.",
+        "note": "PROVISIONAL \u2014 corrected backtest pending. OOS PF=5.86 may be inflated by engine bug.",
         "validated": false,
         "engine": "vectorized_buggy",
         "bug_affected": true
@@ -82,7 +85,7 @@
       "family": "VWAP-MR",
       "status": "PROVISIONAL",
       "live_status": "BLOCKED",
-      "reason": "Same vectorized engine bug as CHFJPY — re-validation pending",
+      "reason": "Same vectorized engine bug as CHFJPY \u2014 re-validation pending",
       "backtest": {
         "oos_pf": 2.81,
         "oos_n": 76,
@@ -98,7 +101,7 @@
       "family": "VWAP-MR",
       "status": "PROVISIONAL",
       "live_status": "BLOCKED",
-      "reason": "Same vectorized engine bug — re-validation pending",
+      "reason": "Same vectorized engine bug \u2014 re-validation pending",
       "backtest": {
         "oos_pf": 2.07,
         "oos_n": 33,
@@ -114,7 +117,7 @@
       "family": "VWAP-MR",
       "status": "REJECTED",
       "live_status": "BLOCKED",
-      "reason": "IS WR=82.1% but OOS PF=0.49 — negative EV, structural deadlock confirmed",
+      "reason": "IS WR=82.1% but OOS PF=0.49 \u2014 negative EV, structural deadlock confirmed",
       "backtest": {
         "oos_pf": 0.49,
         "oos_wr": 82.1,
@@ -130,12 +133,19 @@
       "family": "GatesFX-Live",
       "status": "LIVE",
       "live_status": "ACTIVE",
-      "reason": "Live account — 17+ days without audit. Status UNKNOWN.",
+      "reason": "Live account \u2014 17+ days without audit. Status UNKNOWN.",
       "live_account": "703060",
       "balance": 450,
-      "kill_switch": {"10pct_dd": "reduce 60%", "12pct_dd": "pause", "15pct_dd": "full_stop"},
+      "kill_switch": {
+        "10pct_dd": "reduce 60%",
+        "12pct_dd": "pause",
+        "15pct_dd": "full_stop"
+      },
       "last_audited": null,
-      "audit_needed": true
+      "audit_needed": true,
+      "audit_status": "BLOCKED \u2014 TraderLocker DNS unreachable from WSL2",
+      "audit_method": "MANUAL REQUIRED: gatesfx.com login",
+      "stale_days": 17
     },
     {
       "id": "GFX-LIVE-703062",
@@ -144,12 +154,30 @@
       "family": "GatesFX-Live",
       "status": "LIVE",
       "live_status": "ACTIVE",
-      "reason": "Live account — 17+ days without audit. Status UNKNOWN.",
+      "reason": "Live account \u2014 17+ days without audit. Status UNKNOWN.",
       "live_account": "703062",
       "balance": 350,
-      "kill_switch": {"10pct_dd": "reduce 60%", "12pct_dd": "pause", "15pct_dd": "full_stop"},
+      "kill_switch": {
+        "10pct_dd": "reduce 60%",
+        "12pct_dd": "pause",
+        "15pct_dd": "full_stop"
+      },
       "last_audited": null,
-      "audit_needed": true
+      "audit_needed": true,
+      "audit_status": "BLOCKED \u2014 TraderLocker DNS unreachable from WSL2",
+      "audit_method": "MANUAL REQUIRED: gatesfx.com login",
+      "stale_days": 17
     }
-  ]
+  ],
+  "production_verified": {
+    "timestamp": "2026-03-17T19:26:00Z",
+    "health": "HEALTHY",
+    "db": "CONNECTED",
+    "memory_mb": 53,
+    "2fa_endpoints": "LIVE",
+    "account_lockout": "ACTIVE",
+    "captcha_key": "MISSING \u2014 gate inactive",
+    "eb_version": "stylere-10point0-20260317-190203",
+    "security_score": "9.8/10"
+  }
 }
