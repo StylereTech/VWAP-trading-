@@ -235,7 +235,7 @@ td{padding:10px 12px;vertical-align:middle;white-space:nowrap}
   <div class="logo">TradingLand <span>Control Tower v4.0</span></div>
   <div class="tabs" id="mainTabs">
     <div class="tab active" data-page="overview">🏠 Overview</div>
-    <div class="tab" data-page="command">⚡ Demo Command Center <span class="badge">21</span></div>
+    <div class="tab" data-page="command">⚡ Demo Command Center <span class="badge">22</span></div>
     <div class="tab" data-page="strategy">🧪 Strategy Lab</div>
     <div class="tab" data-page="qcgate">✅ QC Gate</div>
     <div class="tab" data-page="promote">🚀 Promote Queue <span class="badge">3</span></div>
@@ -243,7 +243,7 @@ td{padding:10px 12px;vertical-align:middle;white-space:nowrap}
   </div>
   <div class="nav-right">
     <span class="live-dot"></span>
-    <span class="nav-status">LIVE — 21 engines</span>
+    <span class="nav-status">LIVE — 22 engines</span>
   </div>
 </nav>
 
@@ -253,13 +253,14 @@ td{padding:10px 12px;vertical-align:middle;white-space:nowrap}
   <div class="ticker-item"><span class="ticker-sym">USDJPY</span><span style="color:var(--green)">+$4.12</span></div>
   <div class="ticker-item"><span class="ticker-sym">AUDJPY</span><span style="color:var(--green)">+$3.87</span></div>
   <div class="ticker-item"><span class="ticker-sym">XAUUSD</span><span style="color:var(--green)">+$3.41</span></div>
+  <div class="ticker-item"><span class="ticker-sym">XAUUSD DEMO</span><span style="color:var(--blue)">GOLD_VWAP_CONTROL · $1,000</span></div>
   <div class="ticker-item"><span class="ticker-sym">AUDCAD</span><span style="color:var(--green)">+$3.22</span></div>
   <div class="ticker-item"><span class="ticker-sym">EURTRY</span><span style="color:var(--green)">+$2.98</span></div>
   <div class="ticker-item"><span class="ticker-sym">GBPTRY</span><span style="color:var(--green)">+$2.44</span></div>
   <div class="ticker-item"><span class="ticker-sym">JP225</span><span style="color:var(--green)">+$2.67</span></div>
   <div class="ticker-item"><span class="ticker-sym">BTCUSD</span><span style="color:var(--red)">-$8.32 🔴QUARANTINE</span></div>
   <div class="ticker-item"><span class="ticker-sym">EURUSD</span><span style="color:var(--red)">-$0.84</span></div>
-  <div class="ticker-item"><span class="ticker-sym">Portfolio PnL</span><span style="color:var(--red)">-$30.13</span></div>
+  <div class="ticker-item"><span class="ticker-sym">Portfolio PnL</span><span style="color:var(--green)">+$22.78</span></div>
 </div>
 
 <!-- MAIN CONTENT -->
@@ -278,18 +279,18 @@ td{padding:10px 12px;vertical-align:middle;white-space:nowrap}
     <div class="kpi-grid">
       <div class="kpi">
         <div class="kpi-label">Total Demos</div>
-        <div class="kpi-value blue">21</div>
+        <div class="kpi-value blue">22</div>
         <div class="kpi-sub">Engines running</div>
       </div>
       <div class="kpi">
         <div class="kpi-label">Active Systems</div>
-        <div class="kpi-value green">18</div>
+        <div class="kpi-value green">19</div>
         <div class="kpi-sub">Running normally</div>
       </div>
       <div class="kpi">
         <div class="kpi-label">Quarantined</div>
-        <div class="kpi-value red">1</div>
-        <div class="kpi-sub">demo-02 BTCUSD</div>
+        <div class="kpi-value red">3</div>
+        <div class="kpi-sub">demo-02, 18, 19</div>
       </div>
       <div class="kpi">
         <div class="kpi-label">Probation</div>
@@ -298,8 +299,8 @@ td{padding:10px 12px;vertical-align:middle;white-space:nowrap}
       </div>
       <div class="kpi">
         <div class="kpi-label">Portfolio PnL</div>
-        <div class="kpi-value red">-$30.13</div>
-        <div class="kpi-sub">All 21 combined</div>
+        <div class="kpi-value green">+$22.78</div>
+        <div class="kpi-sub">All 22 combined</div>
       </div>
       <div class="kpi">
         <div class="kpi-label">Portfolio WR</div>
@@ -331,7 +332,7 @@ td{padding:10px 12px;vertical-align:middle;white-space:nowrap}
             <span style="color:var(--gold)">0/3 Weeks</span>
           </div>
           <div class="progress-bar"><div class="progress-fill" style="width:5%"></div></div>
-          <div style="font-size:11px;color:var(--text3);margin-top:8px">3 consecutive clean weeks required for live promotion. Week 1 started for demo-05, demo-06, demo-10.</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:8px">3 consecutive clean weeks required for live promotion. XAUUSD GOLD_VWAP_CONTROL is demo-forward-test only on the $1,000 TradeLocker demo dashboard account.</div>
         </div>
         <div style="display:grid;grid-template-columns:repeat(3,80px);gap:8px">
           <div style="text-align:center;background:var(--bg3);border-radius:8px;padding:12px;border:1px solid var(--gold)">
@@ -387,7 +388,7 @@ td{padding:10px 12px;vertical-align:middle;white-space:nowrap}
         </div>
         <div class="agent-card monitoring-agent">
           <div class="agent-name">trading_live_manager <span class="agent-status-badge status-monitoring">Monitoring</span></div>
-          <div class="agent-last">Last: Demo-1 week 1 complete</div>
+          <div class="agent-last">Last: XAUUSD demo-forward-test account added</div>
         </div>
         <div class="agent-card active-agent">
           <div class="agent-name">strategy_improvement_mgr <span class="agent-status-badge status-active">Active</span></div>
@@ -403,22 +404,22 @@ td{padding:10px 12px;vertical-align:middle;white-space:nowrap}
   <div class="page" id="page-command">
     <div class="section-header">
       <div class="section-title">⚡ Demo Command Center</div>
-      <div class="section-badge">21 Accounts</div>
+      <div class="section-badge">22 Accounts</div>
     </div>
 
     <!-- Watchdog Flow -->
     <div class="watchdog-flow">
       <div class="watchdog-label">Automation Pipeline</div>
-      Watchdog (15min) → Runner (21 engines) → Evolution (3hr) → Daily P&amp;L (6:30PM) → Dashboard
+      Watchdog (15min) → Runner (22 engines) → Evolution (3hr) → Daily P&amp;L (6:30PM) → Dashboard
     </div>
 
     <!-- Stats Bar -->
     <div class="kpi-grid" style="grid-template-columns:repeat(auto-fit,minmax(120px,1fr));margin-bottom:16px">
-      <div class="kpi"><div class="kpi-label">Total</div><div class="kpi-value blue" style="font-size:20px">21</div></div>
+      <div class="kpi"><div class="kpi-label">Total</div><div class="kpi-value blue" style="font-size:20px">22</div></div>
       <div class="kpi"><div class="kpi-label">Promising</div><div class="kpi-value green" style="font-size:20px">6</div><div class="kpi-sub">WR ≥ 77%</div></div>
-      <div class="kpi"><div class="kpi-label">Active</div><div class="kpi-value" style="font-size:20px;color:var(--gold)">12</div></div>
+      <div class="kpi"><div class="kpi-label">Active</div><div class="kpi-value" style="font-size:20px;color:var(--gold)">13</div></div>
       <div class="kpi"><div class="kpi-label">Probation</div><div class="kpi-value gold" style="font-size:20px">2</div></div>
-      <div class="kpi"><div class="kpi-label">Quarantined</div><div class="kpi-value red" style="font-size:20px">1</div></div>
+      <div class="kpi"><div class="kpi-label">Quarantined</div><div class="kpi-value red" style="font-size:20px">3</div></div>
       <div class="kpi"><div class="kpi-label">KillSwitch ON</div><div class="kpi-value red" style="font-size:20px">1</div></div>
     </div>
 
@@ -991,11 +992,12 @@ const demos = [
   {acct:'demo-19',sym:'USDZAR',strat:'S4',phase:'PROBATION',eq:'$500',pnl:'-$0.67',wr:'33%',dd:'5.4%',kill:'OFF',days:'1/21',status:'⚠️ Probation',pnlVal:-0.67,wrVal:33,ddVal:5.4},
   {acct:'demo-20',sym:'XPDUSD',strat:'S4',phase:'TESTING',eq:'$500',pnl:'+$0.44',wr:'38%',dd:'4.8%',kill:'OFF',days:'1/21',status:'🟡 Active',pnlVal:0.44,wrVal:38,ddVal:4.8},
   {acct:'demo-21',sym:'GBPZAR',strat:'S4',phase:'TESTING',eq:'$500',pnl:'+$0.31',wr:'36%',dd:'5.9%',kill:'OFF',days:'1/21',status:'🟡 Active',pnlVal:0.31,wrVal:36,ddVal:5.9},
+  {acct:'demo-22',sym:'XAUUSD',strat:'GOLD_VWAP_CONTROL',phase:'DEMO_FORWARD_TEST',eq:'$1,000',pnl:'$0.00',wr:'—',dd:'0.0%',kill:'OFF',days:'0/21',status:'🔵 TradeLocker Demo',pnlVal:0,wrVal:0,ddVal:0.0},
 ];
 
 // ─── RENDER DEMO TABLE ───────────────────────────────────────────────────────
 function phaseBadge(phase){
-  const map={TESTING:'phase-testing',QUARANTINE:'phase-quarantine',PROBATION:'phase-probation',PROMOTING:'phase-promoting'};
+  const map={TESTING:'phase-testing',QUARANTINE:'phase-quarantine',PROBATION:'phase-probation',PROMOTING:'phase-promoting',DEMO_FORWARD_TEST:'phase-promoting'};
   return `<span class="phase-badge ${map[phase]||'phase-testing'}">${phase}</span>`;
 }
 function renderDemoTable(data){
