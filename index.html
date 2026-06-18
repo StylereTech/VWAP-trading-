@@ -458,6 +458,13 @@ td{padding:10px 12px;vertical-align:middle;white-space:nowrap}
       <div class="section-badge">4 Active Strategies</div>
     </div>
 
+    <div class="card" style="margin-bottom:18px;border-color:rgba(88,166,255,0.35)">
+      <div class="card-title">ℹ️ Current System Truth</div>
+      <div style="font-size:13px;color:var(--text2);line-height:1.6;margin-top:8px">
+        Only the XAUUSD sandbox optimizer is currently alive on cron, running read-only every 30 minutes. The legacy February strategies are historical/archived, and the demo strategy table is orchestration state, not proof of live order placement.
+      </div>
+    </div>
+
     <!-- Skill Library Stats -->
     <div class="skill-library">
       <div class="skill-library-header">
@@ -507,7 +514,7 @@ td{padding:10px 12px;vertical-align:middle;white-space:nowrap}
         </div>
         <div class="strat-skills">Skills applied: <span>SM01–SM15</span> (15 skills active)</div>
         <div class="strat-status-bar">
-          <span class="strat-status promoting">🚀 PROMOTING</span>
+          <span class="strat-status validating">🟢 PROMISING · DATA STALE</span>
           <button class="btn">View Details</button>
         </div>
       </div>
@@ -533,7 +540,7 @@ td{padding:10px 12px;vertical-align:middle;white-space:nowrap}
         </div>
         <div class="strat-skills">Skills applied: <span>SI01–SI25</span> (25 skills active)</div>
         <div class="strat-status-bar">
-          <span class="strat-status testing">🧪 TESTING</span>
+          <span class="strat-status testing">🟡 ACTIVE DEMO STATE</span>
           <button class="btn">View Details</button>
         </div>
       </div>
@@ -559,7 +566,7 @@ td{padding:10px 12px;vertical-align:middle;white-space:nowrap}
         </div>
         <div class="strat-skills">Skills applied: <span>SE01–SE10</span> (10 skills active)</div>
         <div class="strat-status-bar">
-          <span class="strat-status testing">🧪 TESTING</span>
+          <span class="strat-status testing">⚠️ PROBATION</span>
           <button class="btn">View Details</button>
         </div>
       </div>
@@ -585,7 +592,7 @@ td{padding:10px 12px;vertical-align:middle;white-space:nowrap}
         </div>
         <div class="strat-skills">Skills applied: <span>SV01–SV20</span> (20 skills active)</div>
         <div class="strat-status-bar">
-          <span class="strat-status validating">🔬 VALIDATING</span>
+          <span class="strat-status validating">🔬 RESEARCH ONLY</span>
           <button class="btn">View Details</button>
         </div>
       </div>
@@ -971,10 +978,10 @@ td{padding:10px 12px;vertical-align:middle;white-space:nowrap}
 <script>
 // ─── DATA ───────────────────────────────────────────────────────────────────
 const demos = [
-  {acct:'demo-01',sym:'GBPJPY',strat:'S3+S4',phase:'TESTING',eq:'$500',pnl:'+$2.14',wr:'45%',dd:'2.1%',kill:'OFF',days:'3/21',status:'🟡 Active',pnlVal:2.14,wrVal:45,ddVal:2.1},
+  {acct:'demo-01',sym:'GBPJPY',strat:'S3+S4',phase:'PROBATION',eq:'$500',pnl:'$0.00',wr:'0%',dd:'0.0%',kill:'OFF',days:'0/21',status:'⚠️ Probation',pnlVal:0,wrVal:0,ddVal:0.0},
   {acct:'demo-02',sym:'BTCUSD',strat:'QUARANTINE',phase:'QUARANTINE',eq:'$500',pnl:'-$8.32',wr:'22%',dd:'18.0%',kill:'ON',days:'—',status:'🔴 Quarantined',pnlVal:-8.32,wrVal:22,ddVal:18.0},
-  {acct:'demo-03',sym:'EURUSD',strat:'SCALP',phase:'TESTING',eq:'$500',pnl:'-$0.84',wr:'33%',dd:'1.5%',kill:'OFF',days:'3/21',status:'🟡 Active',pnlVal:-0.84,wrVal:33,ddVal:1.5},
-  {acct:'demo-04',sym:'XAUUSD',strat:'S3+S4',phase:'TESTING',eq:'$500',pnl:'+$3.41',wr:'52%',dd:'1.8%',kill:'OFF',days:'3/21',status:'🟡 Active',pnlVal:3.41,wrVal:52,ddVal:1.8},
+  {acct:'demo-03',sym:'EURUSD',strat:'SCALP',phase:'PROBATION',eq:'$500',pnl:'-$0.84',wr:'33%',dd:'1.5%',kill:'OFF',days:'0/21',status:'⚠️ Probation',pnlVal:-0.84,wrVal:33,ddVal:1.5},
+  {acct:'demo-04',sym:'XAUUSD',strat:'GOLD_VWAP_CONTROL',phase:'DEMO_FORWARD_TEST',eq:'$500',pnl:'+$3.41',wr:'52%',dd:'1.8%',kill:'OFF',days:'7/21',status:'🔵 Demo Forward Test',pnlVal:3.41,wrVal:52,ddVal:1.8},
   {acct:'demo-05',sym:'USDJPY',strat:'MIDAS',phase:'TESTING',eq:'$500',pnl:'+$4.12',wr:'85%',dd:'0.9%',kill:'OFF',days:'3/21',status:'🟢 Promising',pnlVal:4.12,wrVal:85,ddVal:0.9},
   {acct:'demo-06',sym:'AUDJPY',strat:'MIDAS',phase:'TESTING',eq:'$500',pnl:'+$3.87',wr:'84%',dd:'1.1%',kill:'OFF',days:'3/21',status:'🟢 Promising',pnlVal:3.87,wrVal:84,ddVal:1.1},
   {acct:'demo-07',sym:'BTCEUR',strat:'S4',phase:'TESTING',eq:'$500',pnl:'+$1.23',wr:'46%',dd:'5.2%',kill:'OFF',days:'1/21',status:'🟡 Active',pnlVal:1.23,wrVal:46,ddVal:5.2},
