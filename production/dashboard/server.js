@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
+const { readRuntimeSnapshot, configuredConnections } = require('../adapters/tradelocker_token_api');
 const app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -12,40 +13,49 @@ app.get('/api/strategies', (req, res) => {
   res.json(registry);
 });
 
-// Runtime state (would connect to TraderLocker API in production)
-app.get('/api/runtime', (req, res) => {
-  res.json({
+function accountsFromFilters() {
+  return configuredConnections().flatMap((connection) => {
+    const accountFilter = connection.accountFilter || '';
+    return accountFilter.split(',').map((value) => value.trim()).filter(Boolean).map((id) => ({
+      id,
+      name: `${connection.label} ${id}`,
+      broker: connection.label,
+      environment: connection.environment,
+      symbols: ["XAUUSD"],
+      balance: null,
+      equity: null,
+      drawdown_pct: null,
+      positions_count: 0,
+      orders_count: 0,
+      status: "AUTH_BLOCKED",
+      last_seen: null,
+      kill_switch: {dd_10: "reduce", dd_12: "pause", dd_15: "stop"},
+      broker_connected: false,
+      note: "TradeLocker token API auth blocked. Refresh credentials/token before trusting account state."
+    }));
+  });
+}
+
+function fallbackRuntime(error) {
+  const environments = configuredConnections().map((connection) => ({
+    id: connection.id,
+    label: connection.label,
+    environment: connection.environment,
+    baseUrl: connection.baseUrl,
+    status: 'AUTH_BLOCKED',
+    visible_accounts: 0,
+    total_accounts: null,
+    account_filter: connection.accountFilter || 'ALL',
+    last_sync: null,
+    error: error.message,
+    accounts: [],
+  }));
+
+  return {
     timestamp: new Date().toISOString(),
-    accounts: [
-      {
-        id: "703060",
-        name: "GFX-D1-S3S4",
-        broker: "GATESFX",
-        symbols: ["GBPJPY", "EURUSD", "XAUUSD"],
-        balance: null,
-        equity: null,
-        drawdown_pct: null,
-        status: "UNKNOWN — NEEDS AUDIT",
-        last_seen: null,
-        kill_switch: {dd_10: "reduce", dd_12: "pause", dd_15: "stop"},
-        broker_connected: false,
-        note: "TraderLocker API blocked from current environment. Manual audit required at gatesfx.com"
-      },
-      {
-        id: "703062",
-        name: "GFX-D17-S4",
-        broker: "GATESFX",
-        symbols: ["BTCEUR"],
-        balance: null,
-        equity: null,
-        drawdown_pct: null,
-        status: "UNKNOWN — NEEDS AUDIT",
-        last_seen: null,
-        kill_switch: {dd_10: "reduce", dd_12: "pause", dd_15: "stop"},
-        broker_connected: false,
-        note: "TraderLocker API blocked from current environment. Manual audit required at gatesfx.com"
-      }
-    ],
+    source: 'fallback_static',
+    accounts: accountsFromFilters(),
+    environments,
     engine: {
       status: "RUNNING",
       mode: "SHADOW",
@@ -57,12 +67,52 @@ app.get('/api/runtime', (req, res) => {
       note: "JPY cross backtest integrity reset in progress. No live strategies active from this engine."
     },
     alerts: [
-      {level: "CRITICAL", msg: "Live accounts 703060 + 703062 have not been audited for 17+ days"},
+      {level: "CRITICAL", msg: "TradeLocker live/demo account sync is auth-blocked"},
       {level: "HIGH", msg: "JPY cross backtest integrity unresolved — 3 strategies PROVISIONAL"},
-      {level: "HIGH", msg: "TraderLocker API unreachable from current environment"},
-      {level: "MEDIUM", msg: "Track A demo account OPTION_A_XAUUSD_5M_SHADOW not yet created by Jefe"}
+      {level: "HIGH", msg: `TradeLocker token API unavailable: ${error.message}`},
+      {level: "MEDIUM", msg: "Dashboard is deployed read-only; no broker execution route exists"}
     ]
-  });
+  };
+}
+
+function withEngineState(snapshot) {
+  const riskyAccounts = snapshot.accounts.filter((account) => account.positions_count > 0 || account.orders_count > 0);
+  const connected = snapshot.environments.filter((environment) => environment.status === 'CONNECTED');
+  const blocked = snapshot.environments.filter((environment) => environment.status !== 'CONNECTED');
+  return {
+    ...snapshot,
+    engine: {
+      status: "RUNNING",
+      mode: "SHADOW",
+      approved_live: 0,
+      shadow_count: 1,
+      provisional_count: 3,
+      rejected_count: 1,
+      pending_integrity_reset: true,
+      note: "Dashboard is reading TradeLocker directly through JWT token auth. Execution remains disabled."
+    },
+    alerts: [
+      ...(connected.length
+        ? [{level: "HIGH", msg: `TradeLocker read-only connected: ${connected.map((environment) => `${environment.environment} ${environment.visible_accounts}/${environment.total_accounts}`).join(', ')}`}]
+        : [{level: "CRITICAL", msg: "No TradeLocker environment is currently authenticated"}]),
+      ...blocked.map((environment) => ({level: "HIGH", msg: `${environment.environment} auth blocked: ${environment.error}`})),
+      {level: "HIGH", msg: "JPY cross backtest integrity unresolved — 3 strategies PROVISIONAL"},
+      ...(riskyAccounts.length
+        ? [{level: "CRITICAL", msg: `Open TradeLocker risk detected on ${riskyAccounts.length} account(s)`}]
+        : []),
+      {level: "MEDIUM", msg: "Kill switch buttons only log dashboard intent; broker execution remains disabled"}
+    ]
+  };
+}
+
+// Runtime state from TradeLocker token API. Read-only only.
+app.get('/api/runtime', async (req, res) => {
+  try {
+    const snapshot = await readRuntimeSnapshot();
+    res.json(withEngineState(snapshot));
+  } catch (error) {
+    res.json(fallbackRuntime(error));
+  }
 });
 
 // Kill switch API
@@ -74,37 +124,67 @@ app.post('/api/kill', (req, res) => {
     account_id,
     action,
     timestamp: new Date().toISOString(),
-    note: 'Kill switch command logged. TraderLocker execution requires API access.'
+    note: 'Kill switch command logged. TradeLocker execution remains disabled.'
   });
 });
 
 // Risk state
-app.get('/api/risk', (req, res) => {
+app.get('/api/risk', async (req, res) => {
+  let accounts = accountsFromFilters();
+  try {
+    const snapshot = await readRuntimeSnapshot();
+    if (snapshot.accounts.length) accounts = snapshot.accounts;
+  } catch {
+    // Static account filters are enough for guardrail rendering during auth outages.
+  }
+  const guardrails = accounts.flatMap((account) => [
+    {rule: "10% account DD -> reduce size 60%", status: "ARMED", account: account.id, environment: account.environment},
+    {rule: "12% account DD -> pause all signals", status: "ARMED", account: account.id, environment: account.environment},
+    {rule: "15% account DD -> full stop", status: "ARMED", account: account.id, environment: account.environment},
+  ]);
   res.json({
     global_kill_armed: false,
     max_daily_loss_pct: 5,
     max_position_exposure_pct: 10,
-    guardrails: [
-      {rule: "10% account DD → reduce size 60%", status: "ARMED", account: "703060"},
-      {rule: "12% account DD → pause all signals", status: "ARMED", account: "703060"},
-      {rule: "15% account DD → full stop", status: "ARMED", account: "703060"},
-      {rule: "10% account DD → reduce size 60%", status: "ARMED", account: "703062"},
-      {rule: "12% account DD → pause all signals", status: "ARMED", account: "703062"},
-      {rule: "15% account DD → full stop", status: "ARMED", account: "703062"}
-    ]
+    guardrails
   });
 });
 
 // Detailed health check
-app.get('/api/health/detailed', (req, res) => {
+app.get('/api/health/detailed', async (req, res) => {
+  let brokerStatus = {
+    status: 'DISCONNECTED',
+    note: 'TradeLocker token API unavailable',
+    accountStatus: 'STALE',
+    lastSync: null,
+  };
+
+  try {
+    const snapshot = await readRuntimeSnapshot();
+    const connected = snapshot.environments.filter((environment) => environment.status === 'CONNECTED');
+    const blocked = snapshot.environments.filter((environment) => environment.status !== 'CONNECTED');
+    const accountNote = snapshot.environments.map((environment) => (
+      environment.status === 'CONNECTED'
+        ? `${environment.environment}: ${environment.visible_accounts}/${environment.total_accounts} visible`
+        : `${environment.environment}: ${environment.error}`
+    )).join(' | ');
+    brokerStatus = {
+      status: connected.length ? (blocked.length ? 'DEGRADED' : 'HEALTHY') : 'DISCONNECTED',
+      note: accountNote,
+      accountStatus: snapshot.accounts.length ? 'HEALTHY' : 'STALE',
+      lastSync: snapshot.timestamp,
+    };
+  } catch (error) {
+    brokerStatus.note = `TradeLocker token API unavailable: ${error.message}`;
+  }
+
   res.json({
     components: [
       {name: 'Dashboard API',    status: 'HEALTHY',      latency_ms: 1},
       {name: 'Strategy Engine',  status: 'SHADOW_MODE',  note: 'No live strategies approved'},
-      {name: 'Data Feed',        status: 'DISCONNECTED', note: 'TraderLocker blocked from WSL2 sandbox'},
-      {name: 'Broker Adapter',   status: 'DISCONNECTED', note: 'TraderLocker API unreachable — 403 from WSL2'},
-      {name: 'Account 703060',   status: 'STALE',        note: '17+ days since last sync', last_sync: null},
-      {name: 'Account 703062',   status: 'STALE',        note: '17+ days since last sync', last_sync: null},
+      {name: 'Data Feed',        status: brokerStatus.status, note: brokerStatus.note},
+      {name: 'Broker Adapter',   status: brokerStatus.status, note: 'TradeLocker JWT token API, read-only endpoints'},
+      {name: 'TradeLocker Accounts', status: brokerStatus.accountStatus, note: brokerStatus.note, last_sync: brokerStatus.lastSync},
       {name: 'Integrity Reset',  status: 'IN_PROGRESS',  note: 'JPY cross corrected backtest pending'},
       {name: 'Track A Demo',     status: 'NOT_CREATED',  note: 'Jefe must create OPTION_A_XAUUSD_5M_SHADOW at gatesfx.com'},
     ],

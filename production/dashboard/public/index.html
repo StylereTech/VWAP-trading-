@@ -53,6 +53,7 @@ body { background: #0a0e1a; color: #e2e8f0; font-family: 'SF Mono', 'Fira Code',
 .hbadge-healthy { background: #064e3b; color: #34d399; }
 .hbadge-shadow { background: #1e3a5f; color: #60a5fa; }
 .hbadge-disconnected { background: #450a0a; color: #f87171; }
+.hbadge-degraded { background: #451a03; color: #f97316; }
 .hbadge-stale { background: #451a03; color: #f97316; }
 .hbadge-inprogress { background: #1c1f2e; color: #a78bfa; }
 .hbadge-notcreated { background: #1c1917; color: #f59e0b; }
@@ -100,6 +101,12 @@ body { background: #0a0e1a; color: #e2e8f0; font-family: 'SF Mono', 'Fira Code',
     <div id="alerts-container">Loading...</div>
   </div>
 
+  <!-- TRADELOCKER ENVIRONMENTS -->
+  <div class="card" style="grid-column: 1/-1;">
+    <div class="card-title">🔌 TradeLocker Token API Environments</div>
+    <div id="environments-container">Loading...</div>
+  </div>
+
   <!-- ENGINE STATUS -->
   <div class="card">
     <div class="card-title">⚙ Engine Status</div>
@@ -118,9 +125,9 @@ body { background: #0a0e1a; color: #e2e8f0; font-family: 'SF Mono', 'Fira Code',
     <div id="strategies-container">Loading...</div>
   </div>
 
-  <!-- LIVE ACCOUNTS -->
+  <!-- LIVE + TEST ACCOUNTS -->
   <div class="card" style="grid-column: 1/-1;">
-    <div class="card-title">💼 Live Accounts (GatesFX)</div>
+    <div class="card-title">💼 Live + Test Accounts (GatesFX)</div>
     <div id="accounts-container">Loading...</div>
   </div>
 
@@ -161,6 +168,23 @@ async function fetchAll() {
       `<div class="alert alert-${a.level.toLowerCase()}">[${a.level}] ${a.msg}</div>`
     ).join('');
 
+    // TradeLocker environments
+    document.getElementById('environments-container').innerHTML = (runtime.environments || []).map(e => `
+      <div class="account-card">
+        <div class="account-header">
+          <div>
+            <div class="account-id">${e.environment} - ${e.label}</div>
+            <div style="color:#6b7280;font-size:11px;margin-top:2px;">${e.baseUrl}</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="unknown-badge">${e.status}</div>
+            <div style="color:#6b7280;font-size:11px;margin-top:4px;">visible ${e.visible_accounts} / total ${e.total_accounts ?? 'unknown'}</div>
+          </div>
+        </div>
+        <div style="margin-top:8px;font-size:11px;color:#9ca3af;">Filter: ${e.account_filter || 'ALL'}${e.error ? ` | ${e.error}` : ''}</div>
+      </div>
+    `).join('');
+
     // Engine status
     const eng = runtime.engine;
     document.getElementById('engine-status').innerHTML = `
@@ -183,7 +207,7 @@ async function fetchAll() {
     document.getElementById('risk-container').innerHTML = risk.guardrails.map(g =>
       `<div style="padding:6px 0;border-bottom:1px solid #1f2937;font-size:11px;">
         <span style="color:#34d399;">✓</span> ${g.rule}
-        <span style="float:right;color:#4b5563;">[${g.account}]</span>
+        <span style="float:right;color:#4b5563;">[${g.environment || 'ENV'} ${g.account}]</span>
       </div>`
     ).join('') + `
     <div style="margin-top:12px;">
@@ -225,17 +249,23 @@ async function fetchAll() {
     `).join('');
 
     // Accounts
-    document.getElementById('accounts-container').innerHTML = runtime.accounts.map(a => `
+    document.getElementById('accounts-container').innerHTML = runtime.accounts.length ? runtime.accounts.map(a => `
       <div class="account-card">
         <div class="account-header">
           <div>
-            <div class="account-id">${a.id} — ${a.name}</div>
-            <div style="color:#9ca3af;font-size:11px;margin-top:2px;">${a.symbols.join(' | ')} | ${a.broker}</div>
+            <div class="account-id">${a.environment || 'ENV'} ${a.id} - ${a.name}</div>
+            <div style="color:#9ca3af;font-size:11px;margin-top:2px;">${(a.symbols || []).join(' | ')} | ${a.broker}</div>
           </div>
           <div style="text-align:right;">
             <div class="unknown-badge">⚠ ${a.status}</div>
             <button class="kill-btn" style="margin-top:6px;" onclick="killAccount('${a.id}')">PAUSE ACCOUNT</button>
           </div>
+        </div>
+        <div style="margin-top:8px;font-size:11px;">
+          <span class="metric"><span class="metric-label">Balance: </span><span class="metric-val">${a.balance ?? 'unknown'}</span></span>
+          <span class="metric"><span class="metric-label">Equity: </span><span class="metric-val">${a.equity ?? 'unknown'}</span></span>
+          <span class="metric"><span class="metric-label">Positions: </span><span class="metric-val">${a.positions_count ?? 0}</span></span>
+          <span class="metric"><span class="metric-label">Orders: </span><span class="metric-val">${a.orders_count ?? 0}</span></span>
         </div>
         <div style="margin-top:8px;font-size:11px;color:#6b7280;">${a.note}</div>
         <div style="margin-top:8px;font-size:11px;">
@@ -243,7 +273,7 @@ async function fetchAll() {
           ${Object.entries(a.kill_switch).map(([k,v]) => `<span style="margin-left:8px;color:#9ca3af;">${k}: ${v}</span>`).join('')}
         </div>
       </div>
-    `).join('');
+    `).join('') : '<div class="alert alert-critical">[CRITICAL] No TradeLocker accounts visible. Refresh live/demo credentials or JWT tokens.</div>';
 
     document.getElementById('last-updated').textContent = `Last updated: ${new Date().toISOString()}`;
 
@@ -280,7 +310,7 @@ async function fetchHealth() {
     const badgeClass = s => {
       const map = {
         HEALTHY: 'hbadge-healthy', SHADOW_MODE: 'hbadge-shadow',
-        DISCONNECTED: 'hbadge-disconnected', STALE: 'hbadge-stale',
+        DISCONNECTED: 'hbadge-disconnected', DEGRADED: 'hbadge-degraded', STALE: 'hbadge-stale',
         IN_PROGRESS: 'hbadge-inprogress', NOT_CREATED: 'hbadge-notcreated'
       };
       return map[s] || 'hbadge-stale';
@@ -331,13 +361,13 @@ function renderBlockers() {
      detail: 'CHFJPY/GBPJPY/AUDJPY/USDJPY/CADJPY/NZDJPY/EURJPY/AUDCAD results provisional',
      owner: 'Agent 007', release: 'Run corrected backtest via real strategy module'},
     {id: 'B2', severity: 'CRITICAL', category: 'BROKER_ACCESS',
-     title: 'TraderLocker API blocked from WSL2',
-     detail: '403 from live.traderlocker.com — DNS/Cloudflare blocking WSL2 egress',
-     owner: 'Infrastructure', release: 'Access from non-WSL environment or TraderLocker API key + VPN'},
+     title: 'TradeLocker token auth blocked',
+     detail: 'Saved live token has no access token, demo refresh expired July 7, 2026 UTC, and saved credentials return Incorrect email or password',
+     owner: 'Jefe / 007', release: 'Refresh TradeLocker credentials or install fresh live/demo JWT tokens'},
     {id: 'B3', severity: 'HIGH', category: 'ACCOUNT_STATE',
-     title: 'Accounts 703060 + 703062 unaudited 17+ days',
-     detail: 'Current balance, equity, positions unknown. Kill switch rules unenforced.',
-     owner: 'Jefe', release: 'Manual audit at gatesfx.com — login and verify each account'},
+     title: 'Accounts hidden until auth refresh',
+     detail: 'Dashboard is wired for live accounts 703060/703062 plus all demo/test accounts, but TradeLocker auth must succeed before balances and positions are trusted.',
+     owner: 'Jefe / 007', release: 'Refresh auth, then verify /api/runtime account list'},
     {id: 'B4', severity: 'HIGH', category: 'VALIDATION',
      title: 'Track A demo account not created',
      detail: 'OPTION_A_XAUUSD_5M_SHADOW must be created on GatesFX demo',
