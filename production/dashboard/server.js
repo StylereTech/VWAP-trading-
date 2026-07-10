@@ -8,9 +8,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 function requireDashboardToken(req, res, next) {
-  const expected = process.env.DASHBOARD_ACCESS_TOKEN;
+  const expected = process.env.DASHBOARD_ACCESS_TOKEN?.trim();
   if (!expected) return next();
-  const supplied = req.get('x-dashboard-token') || req.query.token;
+  const supplied = String(req.get('x-dashboard-token') || req.query.token || '').trim();
   if (supplied === expected) return next();
   return res.status(401).json({ error: 'dashboard access token required' });
 }
