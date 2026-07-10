@@ -154,13 +154,31 @@ body { background: #0a0e1a; color: #e2e8f0; font-family: 'SF Mono', 'Fira Code',
 <div class="timestamp" id="last-updated"></div>
 
 <script>
+function dashboardToken() {
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('token') || window.location.hash.replace(/^#token=/, '');
+  if (token) localStorage.setItem('dashboard_access_token', token);
+  return token || localStorage.getItem('dashboard_access_token') || '';
+}
+
+function apiFetch(url, options = {}) {
+  const token = dashboardToken();
+  const headers = {...(options.headers || {})};
+  if (token) headers['x-dashboard-token'] = token;
+  return fetch(url, {...options, headers});
+}
+
 async function fetchAll() {
   try {
     const [strategies, runtime, risk] = await Promise.all([
-      fetch('/api/strategies').then(r => r.json()),
-      fetch('/api/runtime').then(r => r.json()),
-      fetch('/api/risk').then(r => r.json())
+      apiFetch('/api/strategies').then(r => r.json()),
+      apiFetch('/api/runtime').then(r => r.json()),
+      apiFetch('/api/risk').then(r => r.json())
     ]);
+
+    if (strategies.error || runtime.error || risk.error) {
+      throw new Error(strategies.error || runtime.error || risk.error);
+    }
 
     // Alerts
     const alertsEl = document.getElementById('alerts-container');
@@ -289,7 +307,7 @@ function updateTime() {
 
 function globalKill() {
   if (!confirm('GLOBAL KILL: Pause all strategies on all accounts?')) return;
-  fetch('/api/kill', {method: 'POST', headers: {'Content-Type':'application/json'},
+  apiFetch('/api/kill', {method: 'POST', headers: {'Content-Type':'application/json'},
     body: JSON.stringify({account_id: 'ALL', action: 'GLOBAL_KILL'})})
     .then(r => r.json())
     .then(d => alert('Kill switch triggered: ' + d.note));
@@ -297,7 +315,7 @@ function globalKill() {
 
 function killAccount(id) {
   if (!confirm('Pause account ' + id + '?')) return;
-  fetch('/api/kill', {method: 'POST', headers: {'Content-Type':'application/json'},
+  apiFetch('/api/kill', {method: 'POST', headers: {'Content-Type':'application/json'},
     body: JSON.stringify({account_id: id, action: 'PAUSE'})})
     .then(r => r.json())
     .then(d => alert(d.note));
@@ -306,7 +324,8 @@ function killAccount(id) {
 // === SYSTEM HEALTH ===
 async function fetchHealth() {
   try {
-    const data = await fetch('/api/health/detailed').then(r => r.json());
+    const data = await apiFetch('/api/health/detailed').then(r => r.json());
+    if (data.error) throw new Error(data.error);
     const badgeClass = s => {
       const map = {
         HEALTHY: 'hbadge-healthy', SHADOW_MODE: 'hbadge-shadow',

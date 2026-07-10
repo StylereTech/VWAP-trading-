@@ -7,6 +7,16 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
+function requireDashboardToken(req, res, next) {
+  const expected = process.env.DASHBOARD_ACCESS_TOKEN;
+  if (!expected) return next();
+  const supplied = req.get('x-dashboard-token') || req.query.token;
+  if (supplied === expected) return next();
+  return res.status(401).json({ error: 'dashboard access token required' });
+}
+
+app.use('/api', requireDashboardToken);
+
 // Strategy registry API
 app.get('/api/strategies', (req, res) => {
   const registry = JSON.parse(fs.readFileSync(path.join(__dirname, '../strategy_registry.json'), 'utf8'));
