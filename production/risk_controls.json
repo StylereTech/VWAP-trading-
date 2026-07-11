@@ -2,7 +2,7 @@
   "global": {
     "kill_switch": true,
     "max_daily_loss_pct": 5,
-    "max_open_positions": 3,
+    "max_open_positions": 0,
     "approved_live_only": true,
     "blocked_in_integrity_reset": true,
     "sandbox_mode": true,
