@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "last_updated": "2026-03-17",
+  "last_updated": "2026-07-11",
   "governance_rules": {
     "promote_to_live": "OOS PF >= 1.20, EV > 0, n >= 25, MaxDD < 15%, robustness_check_pass",
     "promote_to_shadow": "OOS PF >= 1.00, EV > 0, n >= 15",
@@ -13,9 +13,9 @@
       "symbol": "XAUUSD",
       "timeframe": "5M",
       "family": "VWAP-MR",
-      "status": "SHADOW",
-      "live_status": "BLOCKED",
-      "reason": "Track A 60-day shadow validation in progress \u2014 demo only",
+      "status": "SANDBOX",
+      "live_status": "DISARMED",
+      "reason": "Sandbox-only during live-trade forensic audit. No broker routing or live promotion permitted.",
       "backtest": {
         "is_wr": 70.8,
         "is_pf": 1.37,
@@ -56,16 +56,20 @@
         "consecutive_losses": 10,
         "action": "full_stop"
       },
-      "notes": "Track A frozen params. 60-day shadow validation. No param changes allowed during shadow period."
+      "notes": "Track A frozen params. 60-day shadow validation. No param changes allowed during shadow period.",
+      "prior_status": "SHADOW",
+      "prior_live_status": "BLOCKED",
+      "sandbox_only": true,
+      "broker_execution_allowed": false
     },
     {
       "id": "VWAP-MR-CHFJPY-1H",
       "symbol": "CHFJPY",
       "timeframe": "1H",
       "family": "VWAP-MR",
-      "status": "PROVISIONAL",
-      "live_status": "BLOCKED",
-      "reason": "Backtest logic bug found \u2014 daily-reset VWAP and dist filter were wrong. Results not re-validated with corrected engine.",
+      "status": "SANDBOX",
+      "live_status": "DISARMED",
+      "reason": "Sandbox-only during live-trade forensic audit. No broker routing or live promotion permitted.",
       "backtest": {
         "is_wr": null,
         "is_pf": null,
@@ -89,64 +93,80 @@
       },
       "live_account": null,
       "demo_account": null,
-      "created": "2026-03-17"
+      "created": "2026-03-17",
+      "prior_status": "PROVISIONAL",
+      "prior_live_status": "BLOCKED",
+      "sandbox_only": true,
+      "broker_execution_allowed": false
     },
     {
       "id": "VWAP-MR-GBPJPY-1H",
       "symbol": "GBPJPY",
       "timeframe": "1H",
       "family": "VWAP-MR",
-      "status": "PROVISIONAL",
-      "live_status": "BLOCKED",
-      "reason": "Same vectorized engine bug as CHFJPY \u2014 re-validation pending",
+      "status": "SANDBOX",
+      "live_status": "DISARMED",
+      "reason": "Sandbox-only during live-trade forensic audit. No broker routing or live promotion permitted.",
       "backtest": {
         "oos_pf": 2.81,
         "oos_n": 76,
         "validated": false,
         "bug_affected": true
       },
-      "created": "2026-03-17"
+      "created": "2026-03-17",
+      "prior_status": "PROVISIONAL",
+      "prior_live_status": "BLOCKED",
+      "sandbox_only": true,
+      "broker_execution_allowed": false
     },
     {
       "id": "VWAP-MR-AUDJPY-1H",
       "symbol": "AUDJPY",
       "timeframe": "1H",
       "family": "VWAP-MR",
-      "status": "PROVISIONAL",
-      "live_status": "BLOCKED",
-      "reason": "Same vectorized engine bug \u2014 re-validation pending",
+      "status": "SANDBOX",
+      "live_status": "DISARMED",
+      "reason": "Sandbox-only during live-trade forensic audit. No broker routing or live promotion permitted.",
       "backtest": {
         "oos_pf": 2.07,
         "oos_n": 33,
         "validated": false,
         "bug_affected": true
       },
-      "created": "2026-03-17"
+      "created": "2026-03-17",
+      "prior_status": "PROVISIONAL",
+      "prior_live_status": "BLOCKED",
+      "sandbox_only": true,
+      "broker_execution_allowed": false
     },
     {
       "id": "VWAP-MR-XAUUSD-1H",
       "symbol": "XAUUSD",
       "timeframe": "1H",
       "family": "VWAP-MR",
-      "status": "REJECTED",
-      "live_status": "BLOCKED",
-      "reason": "IS WR=82.1% but OOS PF=0.49 \u2014 negative EV, structural deadlock confirmed",
+      "status": "SANDBOX",
+      "live_status": "DISARMED",
+      "reason": "Sandbox-only during live-trade forensic audit. No broker routing or live promotion permitted.",
       "backtest": {
         "oos_pf": 0.49,
         "oos_wr": 82.1,
         "validated": true,
         "bug_affected": false
       },
-      "created": "2026-03-17"
+      "created": "2026-03-17",
+      "prior_status": "REJECTED",
+      "prior_live_status": "BLOCKED",
+      "sandbox_only": true,
+      "broker_execution_allowed": false
     },
     {
       "id": "GFX-LIVE-703060",
       "symbol": "GBPJPY/EURUSD/XAUUSD",
       "timeframe": "1H",
       "family": "GatesFX-Live",
-      "status": "LIVE",
-      "live_status": "QUARANTINED",
-      "reason": "Live account \u2014 17+ days without audit. Status UNKNOWN.",
+      "status": "SANDBOX",
+      "live_status": "DISARMED",
+      "reason": "Sandbox-only during live-trade forensic audit. No broker routing or live promotion permitted.",
       "live_account": "703060",
       "balance": 0.7,
       "kill_switch": {
@@ -171,16 +191,20 @@
       "audit_source": "Browser scrape \u2014 secure.gatesfx.com/accounts",
       "classification": "BLOWN",
       "classification_reason": "Balance $0.70 vs initial $450 \u2014 99.8% drawdown. Account effectively wiped.",
-      "notes": "DO NOT fund. Account blown \u2014 $449.30 lost from initial $450."
+      "notes": "DO NOT fund. Account blown \u2014 $449.30 lost from initial $450.",
+      "prior_status": "LIVE",
+      "prior_live_status": "QUARANTINED",
+      "sandbox_only": true,
+      "broker_execution_allowed": false
     },
     {
       "id": "GFX-LIVE-703062",
       "symbol": "BTCEUR",
       "timeframe": "1H",
       "family": "GatesFX-Live",
-      "status": "LIVE",
-      "live_status": "RESTRICTED",
-      "reason": "Live account \u2014 17+ days without audit. Status UNKNOWN.",
+      "status": "SANDBOX",
+      "live_status": "DISARMED",
+      "reason": "Sandbox-only during live-trade forensic audit. No broker routing or live promotion permitted.",
       "live_account": "703062",
       "balance": 264.01,
       "kill_switch": {
@@ -205,7 +229,11 @@
       "audit_source": "Browser scrape \u2014 secure.gatesfx.com/accounts",
       "classification": "DRIFTED",
       "classification_reason": "Balance $264.01 (down from $350 initial), equity $120.71, floating PL -$143.30. DD 54.3% equity vs balance.",
-      "notes": "Open positions with $143.30 floating loss. DD exceeds 10% kill rule. Reduce size 60% immediately."
+      "notes": "Open positions with $143.30 floating loss. DD exceeds 10% kill rule. Reduce size 60% immediately.",
+      "prior_status": "LIVE",
+      "prior_live_status": "RESTRICTED",
+      "sandbox_only": true,
+      "broker_execution_allowed": false
     }
   ],
   "production_verified": {
@@ -228,5 +256,11 @@
     "recaptcha_key": "MISSING",
     "atlas_ip_restricted": "PENDING",
     "verdict": "NOT SHADOW READY \u2014 accounts need action before any live trading"
+  },
+  "operating_mode": {
+    "mode": "SANDBOX_SHADOW",
+    "effective_at": "2026-07-11T10:00:53.051974+00:00",
+    "broker_execution_allowed": false,
+    "reason": "User-directed two-month live-trade audit and loss-pattern investigation; all strategies are disarmed pending evidence-based sandbox validation."
   }
 }

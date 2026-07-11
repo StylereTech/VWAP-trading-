@@ -1,23 +1,27 @@
 {
   "global": {
-    "kill_switch": false,
+    "kill_switch": true,
     "max_daily_loss_pct": 5,
     "max_open_positions": 3,
     "approved_live_only": true,
-    "blocked_in_integrity_reset": true
+    "blocked_in_integrity_reset": true,
+    "sandbox_mode": true,
+    "execution_mode": "SANDBOX_SHADOW",
+    "broker_mutations_allowed": false,
+    "sandbox_reason": "User-directed live-trade audit; strategies disarmed pending sandbox validation."
   },
   "account_rules": {
     "703060": {
-      "dd_10pct_action": "reduce_size_60pct",
-      "dd_12pct_action": "pause_signals",
+      "dd_10pct_action": "pause_signals",
+      "dd_12pct_action": "full_stop",
       "dd_15pct_action": "full_stop",
-      "max_concurrent_trades": 2
+      "max_concurrent_trades": 0
     },
     "703062": {
-      "dd_10pct_action": "reduce_size_60pct",
-      "dd_12pct_action": "pause_signals",
+      "dd_10pct_action": "pause_signals",
+      "dd_12pct_action": "full_stop",
       "dd_15pct_action": "full_stop",
-      "max_concurrent_trades": 1
+      "max_concurrent_trades": 0
     }
   },
   "live_approval_gate": {
